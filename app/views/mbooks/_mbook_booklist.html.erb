@@ -1,9 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml>
 	<%@mbooks.each do |mb| %>
+	
+	<%
+	zero_string = ""
+	
+	i = 0
+	while (8 - mb.id.to_s.length) > i
+		zero_string = zero_string + "0"
+		i += 1
+	end
+	
+	
+	%>
+	
 	<item>
 		<type>book</type>
-		<id><%= mb.id %></id>
+		<id><%= zero_string + mb.id.to_s %></id>
 		<thumbnail><%= mb.thumbnail_name %></thumbnail>
 		<preview>mbook/<%= mb.id %>/<%= mb.coverimage_name %></preview>
 		<download>mbook/<%= mb.id %>.mbook.zip</download>
