@@ -2,7 +2,11 @@
 	<div id="header">
 		<h1>mBook</h1>
 		<ul>
-			<li><a href="/login"><img src="images/main/bt_loginpage.png" alt="로그인/회원가입"></a></li>
+			<li>
+				<%if not signed_in? %>
+				<a href="/login"><img src="images/main/bt_loginpage.png" alt="로그인/회원가입"></a>
+				<%end %>
+			</li>
 		</ul>
 	</div>
 	
