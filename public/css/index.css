@@ -1,0 +1,147 @@
+/* index */
+
+body {
+	background: url("../images/main/bg_body.png") repeat-x top;
+	background-color: #070e42;
+	color: #fff;
+}
+body a {
+	color: #fff;
+}
+#header, #content, #footer {
+	width: 700px;
+	margin-left:auto; margin-right:auto;
+}
+
+/* header */
+#header {
+	height: 220px;
+	background: url("../images/main/bg_header.png") repeat-x top;
+}
+#header h1 {
+	height: 150px;
+	text-indent: -5000px;
+	background: url("../images/main/logo.png") no-repeat;
+}
+#header ul {
+	text-align: right;
+}
+
+/* content */
+#content {
+	margin-top: -30px;
+	margin-bottom: 30px;
+}
+
+/* content root_index */
+.root_index ul {
+	height: 30px;
+}
+.root_index ul li {
+	float: left;
+	height: 30px;
+	line-height: 30px;
+	vertical-align: middle;
+	padding-right: 4px;
+}
+.root_index ul li img {
+	margin-top: -4px;
+}
+
+/* content box */
+#box_category {
+	clear: both;
+	height: 450px;
+	border-top: 2px dotted #26318f;
+	border-bottom: 2px dotted #26318f;
+	background: url("../images/main/bg_category.png") no-repeat top;
+	padding-left: 74px;
+	padding-top: 20px;
+	padding-bottom: 10px;
+	overflow: auto;
+}
+#box_category ul {
+	clear: both;
+}
+#box_category ul li {
+	float: left;
+	padding-right: 66px;
+	height: 132px;
+	text-align: center;
+	line-height: 24px;
+	padding-bottom: 20px;
+}
+#box_category ul li img {
+	padding: 2px;
+}
+#box_login, #box_join {
+	padding-left: 120px;
+	padding-top: 30px;
+	border-top: 2px dotted #26318f;
+	border-bottom: 2px dotted #26318f;	
+}
+#box_login {
+	height: 70px;
+	background: url("../images/main/bg_login.png") no-repeat top;
+	margin-bottom: 16px;
+	padding-bottom: 30px;
+}
+#box_join {
+	height: 260px;
+	background: url("../images/main/bg_join.png") no-repeat top;
+}
+#box_login table, #box_join table {
+	width: 580px;
+}
+#box_login table tr td, #box_join table tr td {
+	height: 36px;
+	vertical-align: middle;
+}
+#box_login table tr.id td.input_name, #box_join table tr.name td.input_name {
+	width: 120px;
+}
+#box_login table tr.id td.input_data, #box_join table tr.name td.input_data {
+	width: 130px;
+}
+#box_login table tr td.bt, #box_join table tr td.bt {
+	width: 140px;
+	text-align: center;
+}
+#box_join table tr td.box_join_bt {
+	height: 70px;
+	text-align: center;
+}
+#box_login table tr td.input_name, #box_join table tr td.input_name {
+	text-indent: -5000px;
+	background: url("../images/main/input_name_login.png") no-repeat;
+}
+#box_login table tr.id td, #box_join table tr.id td {
+	background-position: 0px -40px;
+}	
+#box_login table tr.pw td, #box_join table tr.pw td {
+	background-position: 0px -82px;
+}	
+#box_join table tr.name td {
+	background-position: 0px 0px;
+}	
+#box_join table tr.email td {
+	background-position: 0px -122px;
+}	
+#box_join table tr.publisher td {
+	background-position: 0px -162px;
+}
+.error {
+	color: #ed539d;
+	font-size: 10px;
+}
+
+/* footer */
+#footer {
+	height: 30px;
+	text-align: center;
+}
+
+
+
+
+

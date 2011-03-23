@@ -1,0 +1,16 @@
+<%if @section == "booklist" %>
+	<%= render :partial => "#{@board}_#{@section}", :object => @mbooks %>
+<%else %>
+	<body id="sub" class="sub_mbook_in_store_guest">
+		<div id="header">
+			<%= render :partial => "/shared/menu" %>
+		</div>
+	
+		<%= render :partial => "#{@board}_#{@section}", :object => @total_count %>
+
+		<!-- footer -->
+		<div id="footer">
+			<%= render :partial => "/shared/footer" %>
+		</div>
+	</body>
+<%end %>

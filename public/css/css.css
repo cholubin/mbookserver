@@ -1,0 +1,931 @@
+/* default */
+.clearboth {
+	*zoom: 1;
+}
+.clearboth:after {
+	content: "";
+	display: block;
+	clear: both;
+}
+body {
+	font-family: NanumGothic,MalgunGothic,Dotum,sans-serif;
+	font-size: 12px;
+	line-height: 1.4;
+}
+a {
+	text-decoration: none;
+	color: #000;
+}
+select {
+	vertical-align: top;
+	margin-top: 6px;
+}
+img {
+	vertical-align: middle;
+}
+
+
+
+
+
+
+/* index */
+body#index {
+	background: url("../images/main/bg_body.png") repeat-x top;
+	background-color: #070e42;
+	color: #fff;
+}
+body#index a {
+	color: #fff;
+}
+#index #header, #index #content, #index #footer {
+	width: 700px;
+	margin-left:auto; margin-right:auto;
+}
+
+/* index header */
+#index #header {
+	height: 220px;
+	background: url("../images/main/bg_header.png") repeat-x top;
+}
+#index #header h1 {
+	height: 150px;
+	text-indent: -5000px;
+	background: url("../images/main/logo.png") no-repeat;
+}
+#index #header ul {
+	text-align: right;
+}
+
+/* index content */
+#index #content {
+	margin-top: -30px;
+	margin-bottom: 30px;
+}
+
+/* index content root_index */
+#index .root_index ul {
+	height: 30px;
+}
+#index .root_index ul li {
+	float: left;
+	height: 30px;
+	line-height: 30px;
+	vertical-align: middle;
+	padding-right: 4px;
+}
+#index .root_index ul li img {
+	margin-top: -4px;
+}
+
+/* index content box */
+#box_category {
+	clear: both;
+	height: 450px;
+	border-top: 2px dotted #26318f;
+	border-bottom: 2px dotted #26318f;
+	background: url("../images/main/bg_category.png") no-repeat top;
+	padding-left: 74px;
+	padding-top: 20px;
+	padding-bottom: 10px;
+	overflow: auto;
+}
+#box_category ul {
+	clear: both;
+}
+#box_category ul li {
+	float: left;
+	padding-right: 66px;
+	height: 132px;
+	text-align: center;
+	line-height: 24px;
+	padding-bottom: 20px;
+}
+#box_category ul li img {
+	padding: 2px;
+}
+#box_login, #box_join {
+	padding-left: 120px;
+	padding-top: 30px;
+	border-top: 2px dotted #26318f;
+	border-bottom: 2px dotted #26318f;	
+}
+#box_login {
+	height: 70px;
+	background: url("../images/main/bg_login.png") no-repeat top;
+	margin-bottom: 16px;
+	padding-bottom: 30px;
+}
+#box_join {
+	height: 260px;
+	background: url("../images/main/bg_join.png") no-repeat top;
+}
+#box_login table, #box_join table {
+	width: 580px;
+}
+#box_login table tr td, #box_join table tr td {
+	height: 36px;
+	vertical-align: middle;
+}
+#box_login table tr.id td.input_name, #box_join table tr.name td.input_name {
+	width: 120px;
+}
+#box_login table tr.id td.input_data, #box_join table tr.name td.input_data {
+	width: 130px;
+}
+#box_login table tr td.bt, #box_join table tr td.bt {
+	width: 140px;
+	text-align: center;
+}
+#box_join table tr td.box_join_bt {
+	height: 70px;
+	text-align: center;
+}
+#box_login table tr td.input_name, #box_join table tr td.input_name {
+	text-indent: -5000px;
+	background: url("../images/main/input_name_login.png") no-repeat;
+}
+#box_login table tr.id td, #box_join table tr.id td {
+	background-position: 0px -40px;
+}	
+#box_login table tr.pw td, #box_join table tr.pw td {
+	background-position: 0px -82px;
+}	
+#box_join table tr.name td {
+	background-position: 0px 0px;
+}	
+#box_join table tr.email td {
+	background-position: 0px -122px;
+}	
+#box_join table tr.publisher td {
+	background-position: 0px -162px;
+}
+#index table tr td.error {
+	color: #ed539d;
+	font-size: 10px;
+	width: 150px;
+}
+
+/* index footer */
+#index #footer {
+	height: 30px;
+	text-align: center;
+}
+
+
+
+
+
+
+
+/* sub */
+body#sub {
+	background: url("../images/header/bg_header.png") repeat-x top;	
+}
+#sub #header, #sub #content_header, #sub #content, #sub #footer {
+	width: 980px;
+	margin-left:auto; margin-right:auto;
+}
+
+/* sub header */
+#sub #header {
+	height: 38px;
+	padding-left: 10px;
+	padding-top: 6px;
+	padding-bottom: 6px;
+	vertical-align: middle;
+}
+#sub #header h1 {
+	height: 34px;
+	width: 100px;
+	padding-top: 4px;
+	background-color: #fff;
+	float: left;
+}
+#sub #header ul {
+	height: 34px;
+	width: 870px;
+	padding-left: 100px;
+	padding-top: 4px;
+}
+#sub #header ul li {
+	float: left;
+}
+#sub #header ul li a {
+	height: 30px;
+	text-indent: -5000px;
+	display: block;
+}
+
+/* sub header nav_guest */
+#sub #header ul#nav_guest li {
+	width: 870px;
+	text-align: right;
+}
+#sub #header ul#nav_guest li a {
+	text-indent: 0;
+}
+
+/* sub header nav_admin */
+#sub #header ul#nav_admin li a {
+	background: url("../images/header/menu_admin.png") no-repeat;
+}
+#sub #header ul#nav_admin li a:hover {
+	background: url("../images/header/menu_admin_over.png") no-repeat;
+}
+#sub #header ul#nav_admin li a.on {
+	background: url("../images/header/menu_admin_over.png") no-repeat;
+}
+#sub #header ul#nav_admin li.mbook_in_store a {
+	background-position: 10px 0;
+	width: 134px;
+}
+#sub #header ul#nav_admin li.waiting a {
+	background-position: -152px 0;
+	width: 116px;
+}
+#sub #header ul#nav_admin li.request a {
+	background-position: -294px 0;
+	width: 114px;
+}
+#sub #header ul#nav_admin li.category a {
+	background-position: -430px 0;
+	width: 84px;
+}
+#sub #header ul#nav_admin li.history a {
+	background-position: -538px 0;
+	width: 126px;
+}
+#sub #header ul#nav_admin li.user a {
+	background-position: -686px 0;
+	width: 174px;
+}
+#sub #header ul#nav_admin li.logout a {
+	background-position: -880px 0;
+	width: 100px;
+}
+
+/* sub header nav_writer */
+#sub #header ul#nav_writer li a {
+	background: url("../images/header/menu_writer.png") no-repeat;
+}
+#sub #header ul#nav_writer li a:hover {
+	background: url("../images/header/menu_writer_over.png") no-repeat;
+}
+#sub #header ul#nav_writer li a.on {
+	background: url("../images/header/menu_writer_over.png") no-repeat;
+}
+#sub #header ul#nav_writer li.main a {
+	background-position: 14px 0;
+	width: 80px;
+}
+#sub #header ul#nav_writer li.mbook_in_store a {
+	background-position: -98px 0;
+	width: 132px;
+}
+#sub #header ul#nav_writer li.upload a {
+	background-position: -256px 0;
+	width: 114px;
+}
+#sub #header ul#nav_writer li.my_mbook a {
+	background-position: -398px 0;
+	width: 110px;
+}
+#sub #header ul#nav_writer li.my_mbook_in_store a {
+	background-position: -536px 0;
+	width: 160px;
+}
+#sub #header ul#nav_writer li.statistics a {
+	background-position: -724px 0;
+	width: 64px;
+}
+#sub #header ul#nav_writer li.user_information a {
+	background-position: -820px 0;
+	width: 86px;
+}
+#sub #header ul#nav_writer li.logout a {
+	background-position:-932px 0;
+	width: 70px;
+}
+
+/* sub content_header sub_title */
+#content_header h2.sub_title {
+	height: 60px;
+	width: 980px;
+	text-indent: -5000px;
+}
+.sub_mbook_in_store_guest h2.sub_title, .sub_mbook_in_store_admin h2.sub_title, .sub_mbook_in_store_writer h2.sub_title {
+	background: url("../images/title/title_mbook_in_store.png") no-repeat center center;
+}
+.sub_detail_guest h2.sub_title, .sub_detail_admin h2.sub_title, .sub_detail_writer h2.sub_title {
+	background: url("../images/title/title_detail.png") no-repeat center center;
+}
+.sub_waiting h2.sub_title {
+	background: url("../images/title/title_waiting.png") no-repeat center center;
+}
+.sub_request h2.sub_title {
+	background: url("../images/title/title_request.png") no-repeat center center;
+}
+.sub_user_mbook h2.sub_title {
+	background: url("../images/title/title_user_mbook.png") no-repeat center center;
+}
+.sub_my_mbook_in_store h2.sub_title {
+	background: url("../images/title/title_my_mbook_in_store.png") no-repeat center center;
+}
+.sub_my_mbook h2.sub_title {
+	background: url("../images/title/title_my_mbook.png") no-repeat center center;
+}
+.sub_upload h2.sub_title {
+	background: url("../images/title/title_upload.png") no-repeat center center;
+}
+.sub_category h2.sub_title {
+	background: url("../images/title/title_category.png") no-repeat center center;
+}
+.sub_user_information h2.sub_title {
+	background: url("../images/title/title_user_information.png") no-repeat center center;
+}
+.sub_user h2.sub_title {
+	background: url("../images/title/title_user.png") no-repeat center center;
+}
+
+/* sub content 공통 */
+#sub #content {
+	margin-bottom: 30px;	
+}
+#sub .error {
+	color: #red;
+	font-size: 10px;
+	text-align: right;
+}
+#sub ul.error .error {
+	text-align: center;
+}
+#sub ul.state .error {
+	text-align: left;
+}
+#sub .input_info {
+	color: #7e85be;
+	position: relative;
+	font-size: 10px;
+}
+
+/* sub content 리스트 root, sort */
+#sub .root_list, #sub .sort_list {
+	width: 490px;
+	height: 30px;
+}
+#sub .root_list {
+	float: left;
+}
+#sub .sort_list {
+	float: right;
+	text-align: right;
+}
+#sub .root_list ul li {
+	float: left;
+	height: 30px;
+	background: url("../images/root/bg_root.png") repeat-x;
+	line-height: 30px;
+	padding-right: 4px;
+	vertical-align: middle;
+	color: #fff;
+}
+#sub .root_list ul li.root_last {
+	background: none;
+} 
+#sub .root_list ul li img {
+	margin-top: -4px;
+}
+#sub .sub_category .root_list, .sub_user .sort_list {
+	width: 980px;
+}
+
+/* sub content 리스트 title, data */
+.list_title ul, .list_data ul {
+	float: left;
+	vertical-align: middle;
+}
+.list_title ul li, .list_data ul li {
+	float: left;
+	padding: 4px;
+	border-right: 2px solid #fff;
+	text-align: center;
+	vertical-align: middle;
+}
+.list_title ul li.no, .list_data ul li.no {
+	width: 40px;
+}
+.list_title ul li.book, .list_data ul li.book {
+	width: 54px;
+}
+.list_title ul li.category, .list_data ul li.category {
+	width: 80px;
+}
+.list_title ul li.id, .list_data ul li.id {
+	width: 90px;
+}
+.list_title ul li.date, .list_data ul li.date {
+	width: 110px;
+}
+.list_title ul li.price, .list_data ul li.price {
+	width: 70px;
+}
+.list_title ul li.state, .list_data ul li.state {
+	width: 90px;
+}
+.list_title ul li.reupload, .list_data ul li.reupload {
+	width: 60px;
+}
+.list_title ul li.check, .list_data ul li.check {
+	width: 44px;
+}
+/* sub content 리스트 페이지별 mBook width 사이즈 다름 */
+.sub_mbook_in_store_guest .list_title ul li.mbook, .sub_mbook_in_store_guest .list_data ul li.mbook {
+	width: 456px;
+}
+.sub_mbook_in_store_writer .list_title ul li.mbook, .sub_mbook_in_store_writer .list_data ul li.mbook {
+	width: 456px;
+}
+.sub_mbook_in_store_admin .list_title ul li.mbook, .sub_mbook_in_store_admin .list_data ul li.mbook {
+	width: 402px;
+}
+.sub_waiting .list_title ul li.mbook, .sub_waiting .list_data ul li.mbook {
+	width: 396px;
+}
+.sub_request .list_title ul li.mbook, .sub_request .list_data ul li.mbook {
+	width: 412px;
+}
+.sub_user_mbook .list_title ul li.mbook, .sub_user_mbook .list_data ul li.mbook {
+	width: 466px;
+}
+.sub_my_mbook_in_store .list_title ul li.mbook, .sub_my_mbook_in_store .list_data ul li.mbook {
+	width: 412px;
+}
+.sub_my_mbook .list_title ul li.mbook, .sub_my_mbook .list_data ul li.mbook {
+	width: 342px;
+}
+.list_title ul li {
+	height: 18px;
+	color: #fff;
+	background-color: #8a94de;
+}
+.list_data ul {
+	border-bottom: 1px solid #8a94de;
+}
+.list_data ul li {
+	height: 68px;
+	line-height:66px;
+}
+.list_data ul li.no {
+	background: url("../images/icon_number.png") no-repeat center center;
+}
+.list_data ul.list_data_white_deac li.no, .list_data ul.list_data_blue_deac li.no {
+	background: url("../images/icon_number_deac.png") no-repeat center center;
+}
+.list_data ul.list_data_blue li, .list_data ul.list_data_blue_deac li, .list_data ul.list_data_blue_deac li.no {
+	background-color: #ecedff;
+	border-right: 2px solid #ecedff;
+}
+.list_data ul li.book img {
+	width: 44px;
+	height: 64px;
+}
+.list_data ul li.mbook {
+	text-align: left;
+	color: #888;
+}
+.list_data ul li.mbook, .list_data ul li.category {
+	line-height:22px;
+	overflow: hidden;
+}
+.list_data ul.list_data_white li.mbook b, .list_data ul.list_data_blue li.mbook b {
+	color: #000;
+}
+.list_data ul.list_data_white_deac li, .list_data ul.list_data_blue_deac li {
+	color:#aaa;
+}
+
+/* sub content 리스트 title, data 사용자 관리 */
+.sub_user .list_title ul li.user_id, .sub_user .list_data ul li.user_id {
+	width: 158px;
+}
+.sub_user .list_title ul li.user_type, .sub_user .list_data ul li.user_type {
+	width: 158px;
+}
+.sub_user .list_title ul li.user_detail, .sub_user .list_data ul li.user_detail {
+	width: 260px;
+}
+.sub_user .list_title ul li.user_mbook, .sub_user .list_data ul li.user_mbook {
+	width: 260px;
+}
+.sub_user .list_data ul li {
+	height: 34px;
+	line-height: 34px;
+}
+#pop_user {
+	width: 320px;
+	position: absolute;
+	left: 64%;
+	top: 25%;
+}
+#pop_user table.box_pop_user {
+	width: 320px;
+	text-align: center;
+}
+#pop_user table.box_pop_user tr td {
+	background: url("../images/pop/bg_pop.png") repeat-y center center;
+}
+#pop_user table.box_pop_user tr.bt td {
+	padding-bottom: 10px;
+}
+#pop_user table.box_pop_user tr.close_pop td {
+	background: url("../images/pop/bg_pop_top.png") no-repeat top center;
+	text-align: right;
+	padding: 0;
+	padding-top: 10px;
+	padding-right: 10px;
+}
+#pop_user table.box_pop_user tr.error td {
+	background: url("../images/pop/bg_pop_bottom.png") no-repeat bottom center;
+	padding-bottom: 20px;
+}
+#pop_user table.box_pop_user .error {
+	text-align: center;
+}
+#pop_user table.box_pop_user_input {
+	width: 280px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 10px;
+	margin-bottom: 20px;
+	border-bottom: 3px solid #eca2c5;
+	border-top: 3px solid #eca2c5;
+}
+#pop_user table.box_pop_user_input tr td {
+	background: none;
+	background-color: #ffd2e7;
+	line-height: 30px;
+	height: 30px;
+	vertical-align: middle;
+	border-bottom: 1px solid #eaa3c5;
+	padding: 4px;
+}
+#pop_user table.box_pop_user_input tr td.input_name {
+	width: 100px;
+	text-indent: -5000px;
+	background: url("../images/input_name/input_name_user_information_pop.png") no-repeat bottom center;
+	background-color: #ffd2e7;
+}
+#pop_user table.box_pop_user_input tr.name td.input_name {
+	background-position: 0 -16px;
+}
+#pop_user table.box_pop_user_input tr.id td.input_name {
+	background-position: 0 -56px;
+}
+#pop_user table.box_pop_user_input tr.pw td.input_name {
+	background-position: 0 -96px;
+}
+#pop_user table.box_pop_user_input tr.email td.input_name {
+	background-position: 0 -136px;
+}
+#pop_user table.box_pop_user_input tr.publisher td.input_name {
+	background-position: 0 -176px;
+}
+#pop_user table.box_pop_user_input tr td.input_data {
+	text-align: left;
+}
+
+/* sub content 리스트 select */
+.select_list {
+	float: left;
+	width: 100%;
+	text-align: right;
+}
+
+/* sub content 리스트 paging*/
+.paging {
+	clear: both;
+	text-align: center;
+	padding-top: 40px;
+}
+.paging b.totalpage {
+	background-color: #aaa;
+	color: #fff;
+}
+.paging a {
+	background-color:#b2b9ed ;
+}
+.paging a, .paging b.totalpage {
+	padding: 6px;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+.paging a.nowpage {
+	background-color:#212958;
+	color: #fff;
+}
+.paging a.firstpage, .paging a.prevpage, .paging a.nextpage, .paging a.lastpage {
+	padding-left: 2px;
+	padding-right: 2px;
+	background-color: transparent;
+}
+
+/* sub content 리스트 search */
+.search {
+	float: left;
+	width: 100%;
+	text-align: center;
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
+
+/* sub content 등록 */
+#upload_form {
+	border: 4px solid #EBEDFE;
+	padding: 6px;
+	padding-bottom: 20px;
+	width: 800px;
+	margin-left: auto;
+	margin-right: auto;
+}
+#upload_form table {
+	width: 800px;
+	border-top: 3px solid #8A94DE;
+	border-bottom: 3px solid #8A94DE;
+	vertical-align: middle;
+	margin-bottom: 20px;
+}
+#upload_form table tr td{
+	padding: 4px;
+	height: 30px;
+	border-bottom: 2px solid #fff;
+	vertical-align: middle;
+}
+#upload_form table tr td.input_name {
+	width: 140px;
+	text-indent: -5000px;
+	background: url("../images/input_name/input_name_upload.png") no-repeat;
+	background-color: #ebedfe;
+}
+#upload_form table tr.bookform td.input_name {
+	background-position: 0 -12px;
+}
+#upload_form table tr.category1 td.input_name {
+	background-position: 0 -52px;
+}
+#upload_form table tr.category2 td.input_name {
+	background-position: 0 -92px;
+}
+#upload_form table tr.bookdate td.input_name {
+	background-position: 0 -132px;
+}
+#upload_form table tr.price td.input_name {
+	background-position: 0 -172px;
+}
+#upload_form table tr.mbookzip td.input_name {
+	background-position: 0 -212px;
+}
+#upload_form table tr td.input_data, #upload_form table tr td.error {
+	border-bottom: 1px solid #cbd1ff;
+}
+#upload_form table tr td.input_data {
+	width: 410px;
+}
+#upload_form table tr td.error {
+	width: 120px;
+}
+#upload_form p {
+	text-align: center;
+}
+
+/* sub content 상세보기 */
+#detail_form {
+	border: 4px solid #EBEDFE;
+	padding: 6px;
+	padding-bottom: 20px;
+	margin-left: auto;
+	margin-right: auto;
+}
+#detail_form table {
+	width: 100%;
+	vertical-align: middle;
+	margin-bottom: 20px;
+}
+#detail_form table tr.state {
+	border-bottom: 3px solid #8A94DE;
+}
+#detail_form table tr td.book {
+	vertical-align: top;
+	text-align: center;
+	width: 150px;
+	padding-top: 0;
+}
+#detail_form table tr td.book img {
+	width: 150px;
+	height: 210px;
+}
+#detail_form table tr td.mbook {
+	height:40px;
+	color: #fff;
+	font-size: 18px;
+	background-color: #8a94de;
+	padding: 0;
+}
+#detail_form table tr td {
+	padding: 4px;
+	height: 30px;
+	border-bottom: 2px solid #fff;
+	vertical-align: middle;
+}
+#detail_form table tr td.input_name {
+	width: 140px;
+	text-indent: -5000px;
+	background: url("../images/input_name/input_name_detail.png") no-repeat;
+	background-color: #ebedfe;
+}
+#detail_form table tr.description td.input_name {
+	background: url("../images/input_name/input_name_description.png") no-repeat center left;
+	background-color: #ebedfe;
+}
+#detail_form table tr.state td.input_name {
+	background: url("../images/input_name/input_name_state.png") no-repeat center left;
+	background-color: #ebedfe;
+}
+#detail_form table tr.id td.input_name {
+	background-position: 0 -8px;
+}
+#detail_form table tr.bookform td.input_name {
+	background-position: 0 -48px;
+}
+#detail_form table tr.category1 td.input_name {
+	background-position: 0 -88px;
+}
+#detail_form table tr.category2 td.input_name {
+	background-position: 0 -128px;
+}
+#detail_form table tr.writer td.input_name {
+	background-position: 0 -208px;
+}
+#detail_form table tr.publisher td.input_name {
+	background-position: 0 -248px;
+}
+#detail_form table tr.bookdate td.input_name {
+	background-position: 0 -288px;
+}
+#detail_form table tr.date td.input_name {
+	background-position: 0 -328px;
+}
+#detail_form table tr.price td.input_name {
+	background-position: 0 -408px;
+}
+#detail_form table tr.book_image td.input_name {
+	background-position: 0 -448px;
+}
+#detail_form table tr.mbookzip td.input_name {
+	background-position: 0 -488px;
+}
+#detail_form table tr td.input_data, #detail_form table tr td.error {
+	border-bottom: 1px solid #cbd1ff;
+}
+#detail_form table tr td.input_data {
+	width: 430px;
+}
+#detail_form table tr td.error {
+	width: 140px;
+}
+#detail_form table tr.description td.input_data {
+	line-height: 19px;
+}
+#detail_form p {
+	text-align: center;
+}
+.sub_detail_guest #detail_form table tr td.input_data, .sub_detail_admin #detail_form table tr td.input_data {
+	width: 570px;
+}
+.sub_detail_admin #detail_form table tr.state td {
+	line-height: 26px;
+	padding-bottom: 14px;
+}
+.sub_detail_admin #detail_form table tr.state td textarea {
+	margin-top: 6px;
+	width: 580px;
+	height: 100px;
+	overflow: auto;
+}
+
+/* sub content 분류 관리 */
+#list_category {
+	float: left;
+	width: 980px;
+	border-top: 3px solid #8A94DE;
+	border-bottom: 3px solid #8A94DE;
+}
+#list_category ul {
+	float: left;
+	text-align: center;
+	width: 163px;
+	line-height: 28px;
+	padding-top: 30px;
+	padding-bottom: 30px;
+	border-bottom: 1px solid #cbd1ff;
+}
+#list_category ul.list_first {
+	clear: both;
+}
+#box_upload table {
+	width: 980px;
+	border-top: 3px solid #8A94DE;
+	border-bottom: 3px solid #8A94DE;
+	vertical-align: middle;
+	margin-bottom: 10px;
+}
+#box_upload table tr td {
+	padding: 4px;
+	height: 22px;
+	border-bottom: 2px solid #fff;
+}
+#box_upload table tr td.input_name {
+	width: 140px;
+	text-indent: -5000px;
+	background: url("../images/input_name/input_name_category.png") no-repeat;
+	background-color: #ebedfe;
+}
+#box_upload table tr.category_name td.input_name {
+	background-position: 0 -14px;
+}
+#box_upload table tr.category_icon td.input_name {
+	background-position: 0 -56px;
+}
+#box_upload table tr td.input_data {
+	border-bottom: 1px solid #cbd1ff;
+}
+#box_upload table tr td.upload_ok {
+	text-align: center;
+	vertical-align: middle;
+	background-color: #ebedfe;
+	width: 140px;
+}
+
+/* sub content 나의 정보 수정 */
+#box_user_information {
+	border: 4px solid #EBEDFE;
+	padding: 6px;
+	padding-bottom: 20px;
+	width: 700px;
+	margin-left: auto;
+	margin-right: auto;
+}
+#box_user_information table {
+	width: 700px;
+	border-top: 3px solid #8A94DE;
+	border-bottom: 3px solid #8A94DE;
+	vertical-align: middle;
+	margin-bottom: 20px;
+}
+#box_user_information table tr td{
+	padding: 4px;
+	height: 30px;
+	border-bottom: 2px solid #fff;
+	vertical-align: middle;
+}
+#box_user_information table tr td.input_name {
+	width: 140px;
+	text-indent: -5000px;
+	background: url("../images/input_name/input_name_user_information.png") no-repeat;
+	background-color: #ebedfe;
+}
+#box_user_information table tr.name td.input_name {
+	background-position: 0 -12px;
+}
+#box_user_information table tr.id td.input_name {
+	background-position: 0 -52px;
+}
+#box_user_information table tr.pw td.input_name {
+	background-position: 0 -92px;
+}
+#box_user_information table tr.email td.input_name {
+	background-position: 0 -132px;
+}
+#box_user_information table tr.publisher td.input_name {
+	background-position: 0 -172px;
+}
+#box_user_information table tr td.input_data {
+	width: 360px;
+}
+#box_user_information table tr td.error {
+	width: 200px;
+}
+#box_user_information table tr td.input_data, #box_user_information table tr td.error {
+	border-bottom: 1px solid #cbd1ff;
+}
+#box_user_information p {
+	text-align: center;
+}
+
+/* sub footer */
+#sub #footer {
+	clear: both;
+	height: 30px;
+	color: #ccc;
+	text-align: center;
+}

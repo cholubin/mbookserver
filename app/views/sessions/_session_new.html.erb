@@ -1,0 +1,116 @@
+<div id="content">
+	<!-- Root Login -->
+	<div class="root_index">
+		<ul>
+			<li class="main"><a href=""><img src="images/root/bt_root_main_blue.png" alt="main"></a></li>
+			<li>로그인</li>
+		</ul>
+	</div>
+
+	<!-- Box Login -->
+	<% form_for(:session, :url => sessions_path) do |f| %>
+	<input type="hidden" name="session[uri]" value="<%= params[:uri] %>">
+	<div id="box_login">
+		
+		<table>
+			<tr>
+				<td class="id">아이디</td>
+				<td><input name="session[userid]" id="login_id" type="text" value="<%= @input_user_id %>"></td>
+				<td rowspan="2">
+					<%= image_submit_tag("/images/main/bt_login.png") %>
+				</td>
+				<td class="error"><span id="login_validation_string"></span></td>
+			</tr>
+			<tr>
+				<td class="pw">비밀번호</td>
+				<td><input name="session[password]" id="login_pw" type="password"></td>
+				<td class="error" id="login_pass_validation_string"> <%= flash.now[:error] %><!-- ※ 정확한 비밀번호를 입력하세요. --></td>
+			</tr>		
+		</table>
+	</div>
+	
+	<div style="height:20px">
+	</div>
+	<!-- Root Join -->
+	<div class="root_index">
+		<ul>
+			<li class="main"><a href=""><img src="images/root/bt_root_main_blue.png" alt="main"></a></li>
+			<li>회원가입</li>
+		</ul>
+	</div>
+	<!-- Box Join -->
+	<%end %>
+	
+	<div id="box_join">
+		<table>
+			<tr>
+				<td class="name">이름</td>
+				<td><input name="join_name" id="join_id" type="text"></td>
+				<td></td>
+				<td class="error">※ 이름을 입력하세요.</td>
+			</tr>
+			<tr>
+				<td class="id">아이디</td>
+				<td><input name="join_id" id="join_id" type="text"></td>
+				<td><a href=""><img src="images/main/bt_idcheck.png" alt="아이디중복확인"></a></td>
+				<td class="error">※ 사용할 수 없는 아이디입니다.</td>
+			</tr>
+			<tr>
+				<td class="pw">비밀번호</td>
+				<td><input name="join_pw" id="login_pw" type="password"></td>
+				<td></td>					
+				<td class="error">※ 비밀번호를 입력하세요.</td>
+			</tr>		
+			<tr>
+				<td class="email">이메일</td>
+				<td><input name="join_email" id="join_email" type="text"></td>
+				<td></td>					
+				<td class="error">※ 정확한 이메일을 입력하세요.</td>
+			</tr>		
+			<tr>
+				<td class="publisher">필명/출판사명</td>
+				<td><input name="join_publisher" id="join_publisher" type="text"></td>
+				<td></td>					
+				<td class="error">※ 필명/출판사명을 입력하세요.</td>
+			</tr>		
+			<tr>
+				<td colspan="3">
+					<a href=""><img src="images/main/bt_join.png" alt="가입완료"></a>
+					<a href=""><img src="images/main/bt_cancel.png" alt="취소"></a>
+				</td>
+				<td></td>
+			</tr>
+		</table>
+	</div>
+</div>
+
+<script language="javascript">
+$(document).ready(function(){
+	$('#login_id').focus();
+})
+
+$('#login_id').live("click", function(){
+	$('#login_validation_string').text("");
+	$('#login_pass_validation_string').text("");
+})
+
+$('#login_id').live("blur",function(){
+	var $id = $(this).val();
+	
+	$.ajax({
+		data:'id='+ $id, 
+		dataType:'script', 
+		type:'post', 
+		url:'/sessions/check_login_id',
+		success: function(request){
+			if(request == "success"){
+				$('#login_validation_string').text("");
+				$('#login_id').css("background-color","");
+			}else if(request == "fail"){
+				$('#login_id').css("background-color","yellow");
+				$('#login_validation_string').html("&nbsp;&nbsp;존재하지 않는 아이디입니다.");
+			}
+		}
+	});
+})
+</script>

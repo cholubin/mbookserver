@@ -1,0 +1,13 @@
+
+<body id="sub">
+	<div id="header">
+		<%= render :partial => "/shared/menu", :object => @board, :object => @section %>
+	</div>
+	
+	<%= render :partial => "#{@board}_#{@section}", :object => @total_count %>
+
+	<!-- footer -->
+	<div id="footer">
+		<%= render :partial => "/shared/footer" %>
+	</div>
+</body>

@@ -1,0 +1,20 @@
+<%if signed_in? %>
+	<h1 class="logo"><a href="/"><img src="/images/header/logo.png" alt="mBook"></a></h1>
+	<ul id="nav_writer">
+		<li class="main"><a href="/">main</a></li>
+		<li class="mbook_in_store"><a href="">mBook in Store</a></li>
+		<li class="upload"><a href="/mbooks/new">mBook 등록</a></li>
+		<li class="my_mbook"><a href="/mbooks">나의 mBook</a></li>
+		<li class="my_mbook_in_store"><a href="/mbooks?store=y">나의 mBook in Store</a></li>
+		<li class="statistics"><a href="">통계</a></li>
+		<li class="user_information"><a href="/users/<%= current_user.id %>/edit" class="<%= "on" if @board == "user" and @section == "edit"%>">나의 정보 수정</a></li>
+		<li class="logout"><a href="/logout">로그아웃</a></li>
+	</ul>
+<%else %>
+	<h1 class="logo"><a href="/"><img src="/images/header/logo.png" alt="mBook"></a></h1>
+	<ul id="nav_guest">
+		<a href="/login?uri=<%= "/mbooks" %>"><img src="/images/main/bt_loginpage.png" alt="로그인/회원가입" ></a>
+	</ul>
+<%end %>
+
+

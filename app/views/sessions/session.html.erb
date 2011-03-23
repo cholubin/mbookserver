@@ -1,0 +1,15 @@
+<body id="index" class="index_login">
+	<div id="header">
+		<h1>mBook</h1>
+		<ul>
+			<li><img src="images/main/info_login.png" alt="멤버쉽서비스"></li>
+		</ul>
+	</div>
+	
+	<%= render :partial => "#{@board}_#{@section}", :object => @total_count %>
+
+	<!-- footer -->
+	<div id="footer">
+		<%= render :partial => "/shared/footer" %>
+	</div>
+</body>

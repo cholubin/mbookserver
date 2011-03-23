@@ -1,0 +1,37 @@
+<div id="content_header"  class="sub_user_information">
+	<h2 class="sub_title">나의 정보 수정</h2>
+</div>
+<div id="content" class="sub_user_information">
+	<!-- Box User Information -->
+	<div id="box_user_information">
+		<table>
+			<tr class="name">
+				<td class="input_name">이름</td>
+				<td class="input_data"><%= @user.name %></td>
+				<td class="error"><!-- <img src="/images//icon_error.png" alt="error"> 이름을 입력하세요. --></td>
+			</tr>
+			<tr class="id">
+				<td class="input_name">아이디</td>
+				<td class="input_data"><%= @user.userid %></td>
+				<td class="error"></td>
+			</tr>
+			<tr class="pw">
+				<td class="input_name">비밀번호</td>
+				<td class="input_data"><input name="password" type="pw"></td>
+				<td class="error"><img src="/images//icon_error.png" alt="error"> 비밀번호를 입력하세요.</td>
+			</tr>
+			<tr class="email">
+				<td class="input_name">이메일</td>
+				<td class="input_data"><input name="email" type="text" value="<%= @user.email %>"></td>
+				<td class="error"><img src="/images//icon_error.png" alt="error"> 이메일을 입력하세요.</td>
+			</tr>
+			<tr class="publisher">
+				<td class="input_name">필명/출판사명</td>
+				<td class="input_data"><input name="publisher" type="text" value="<%= @user.publisher %>"></td>
+				<td class="error"><img src="/images//icon_error.png" alt="error"> 필명/출판사명을 입력하세요.</td>
+			</tr>
+		</table>
+		<p><a href=""><img src="/images//bt/bt_upload_re_ok.png" alt="수정완료"></a>
+		<a href=""><img src="/images//bt/bt_cancel.png" alt="취소"></a></p>
+	</div>
+</div>

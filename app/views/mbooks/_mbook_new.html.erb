@@ -1,0 +1,103 @@
+<div id="content_header">
+	<h2 class="sub_title">mBook 등록</h2>
+</div>
+<div id="content">
+	<div id="upload_form">
+		<% form_for @mbook, :html => {:multipart => true} do |f| %>
+		<table>
+			<tr class="bookform">
+				<td class="input_name">형태</td>
+				<td class="input_data">
+					<select id="select_category" name="category_id">
+						<%@categories.each do |cat| %>
+						<option value="<%= cat.id %>" ><%= cat.name %></option>
+						<%end %>
+					</select>
+				</td>
+				<td class="error"><!-- <img src="/images/icon_error.png" alt="error"> 형태를 선택하세요. --></td>
+			</tr>
+			<tr class="category1">
+				<td class="input_name">분류 (필수)</td>
+				<td class="input_data">
+					<span id="subcategories1">
+					<select id="select_subcategory1" name="subcategory1_id">
+						<% @subcategories.each do |subcat| %>
+						<option value="<%= subcat.id %>" ><%= subcat.name %></option>
+						<%end %>
+					</select>
+					</span>	
+				</td>
+				<td class="error"><!-- <img src="/images/icon_error.png" alt="error"> 분류를 선택하세요. --></td>
+			</tr>
+			<tr class="category2">
+				<td class="input_name">분류 (선택)</td>
+				<td class="input_data">
+					<span id="subcategories2">
+					<select id="select_subcategory2" name="subcategory2_id">
+						<option value="">선택안함</option>
+						<% @subcategories.each do |subcat| %>
+						<option value="<%= subcat.id %>" ><%= subcat.name %></option>
+						<%end %>
+					</select>
+					</span>					
+				</td>
+				<td class="error"></td>
+			</tr>
+			<tr class="bookdate">
+				<td class="input_name">발행일</td>
+				<td class="input_data">
+					<a href=""><img src="/images/bt/bt_date.png" alt="발행일 선택"></a> 
+					2011/04/01
+				</td>
+				<td class="error"><!-- <img src="/images/icon_error.png" alt="error"> 발행일을 선택하세요. --></td>
+			</tr>
+			<tr class="price">
+				<td class="input_name">가격</td>
+				<td class="input_data">
+					<img src="/images/icon_dollar.png" alt="달러">
+					<input id="price" name="price" type="text" value="">
+				</td>
+				<td class="error"><span id="price_msg"></span></td>
+			</tr>
+			<tr class="mbookzip">
+				<td class="input_name">mBook Zip 파일</td>
+				<td class="input_data">
+					<img src="/images/bt/bt_mbook.png" alt="mBook Zip 파일 등록"><input type="file" name="mbook_file">	
+				</td>
+				<td><span class="input_info">※ Zip 파일 최대 용량 : 000MB</span></td>
+			</tr>
+		</table>
+		<p>
+			<input type="image" id="submit_btn" src="/images/bt/bt_upload_ok.png" alt="등록완료">
+			<!-- <img src="/images/bt/bt_cancel.png" alt="취소"> -->
+		</p>	
+		<%end %>
+	</div>
+</div>
+
+
+
+
+
+<script language="Javascript">
+$('#select_category').live("change", function(){
+	var $value = $(this,'option:selected').val();
+	
+	$.ajax({
+		data:'category_id='+ $value, 
+		dataType:'script', 
+		type:'post', 
+		url:'/mbooks/update_subcategories'
+	});
+	
+})
+
+$('#submit_btn').click(function(){
+	if($('#price').val() == ""){
+		$('#price').focus();
+		$('#price').css("background-color", "yellow");
+		$('#price_msg').html("<img src='/images/icon_error.png' alt='error'> 가격을 입력하세요.");
+		return false;
+	}
+})
+</script>

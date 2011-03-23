@@ -1,0 +1,14 @@
+<body id="index" class="index_main">
+	<div id="header">
+		<h1>mBook</h1>
+		<ul>
+			<li><a href=""><img src="images/main/bt_loginpage.png" alt="로그인/회원가입"></a></li>
+		</ul>
+	</div>
+	
+	<%= render :partial => "#{@title}_#{@menu}", :object => @total_count %>
+
+	<div id="footer">
+		<%= render :partial => "/shared/footer" %>
+	</div>
+</body>

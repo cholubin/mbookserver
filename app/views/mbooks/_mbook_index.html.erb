@@ -1,0 +1,135 @@
+<div id="content_header">
+	<h2 class="sub_title">mBook in Store</h2>
+</div>
+<div id="content">
+	<!-- Root Category -->
+	<div class="root_list">
+		<ul>
+			<li><img src="/images/root/root_first.png"></li>
+			<li><a href=""><img src="/images/root/bt_root_total_pink.png" alt="전체분류"></a></li>
+			<li>
+				<select id="select_category" name="category_id">
+					<%@categories.each do |cat| %>
+					<option value="<%= cat.id %>" <%= "selected" if cat.id.to_s == params[:cat].to_s %>><%= cat.name %></option>
+					<%end %>
+				</select>
+			</li>
+			<li><img src="/images/root/root_arrow_pink.png"></li>
+			<li>
+				<span id="subcategories1">
+				<select id="select_subcategory1" name="subcategory1_id">
+					<% Subcategory.all(:category_id => params[:cat].to_i).each do |subcat| %>
+					<option value="<%= subcat.id %>" <%= "selected" if subcat.id.to_s == params[:sub].to_s %>><%= subcat.name %></option>
+					<%end %>
+				</select>
+			</li>
+			<li class="root_last"><img src="/images/root/root_last.png"></li>
+		</ul>
+	</div>
+	<!-- Sort list -->		
+	<div class="sort_list">
+		<img src="/images/input_title/input_title_state.png" alt="상태별 보기">	
+		<select name="sort_list">
+			<option value="1">승인완료</option>
+			<option value="2">삭제대기</option>
+		</select>
+	</div>
+	<!-- List -->
+	<div class="list_title">
+		<ul>
+			<li class="no">NO</li>
+			<li class="book">책표지</li>
+			<li class="mbook">mBook</li>
+			<li class="id">아이디</li>
+			<li class="date">등록일</li>
+			<li class="price">가격</li>
+			<li class="state">상태</li>
+		</ul>
+	</div>
+	<div class="list_data">	
+		<% 	if params[:page].to_i == 0 or params[:page].to_i == 1
+				@temp_page = 0
+			else
+				@temp_page = params[:page].to_i - 1
+			end
+			@page_num = @total_count - (10 * @temp_page) %>
+				
+		<%puts_message @mbooks.count.to_s
+		@mbooks.each do |mb| %>
+		<ul class="list_data_white">
+			<li class="no"><%= @page_num %></li>
+			<li class="book"><img src="<%= mb.thumbnail_url %>" alt="책표지"></li>
+			<a href="/mbooks/<%= mb.id %>">
+				<li class="mbook">
+				<b><%= mb.title %></b><br/>
+				▶ 저자 : <b><%= mb.writer %></b> | 출판사 : <b>출판사<%= mb.publisher %></b> | 발행일 : <b>출판사<%= mb.issue_date %></b>
+				</li>
+			</a>
+			<li class="id"><%=User.get(mb.user_id).userid %></li>
+			<li class="date">2011/04/01</li>
+			<li class="price"><img src="/images/icon_dollar.png" alt="달러"> <%= mb.price %></li>
+			<li class="state"><%= mb.status %></li>
+		</ul>
+		<%@page_num -= 1
+		end %>
+
+	</div>
+	<!-- Paging -->
+	<div class="paging">	
+		<b class="totalpage">15 / 7</b>
+			<a href="" class="firstpage"><img src="/images/arrow_first.png" alt="처음으로"></a>
+			<a href="" class="prevpage"><img src="/images/arrow_prev.png" alt="이전"></a>
+			<a href="">1</a>
+			<a href="">2</a>
+			<a href="">3</a>
+			<a href="">4</a>
+			<a href="" class="nowpage"><b>5</b></a>
+			<a href="">6</a>
+			<a href="">7</a>
+			<a href="">8</a>
+			<a href="">9</a>
+			<a href="">10</a>
+			<a href="" class="nextpage"><img src="/images/arrow_next.png" alt="다음"></a>
+			<a href="" class="lastpage"><img src="/images/arrow_last.png" alt="끝으로"></a>
+	</div> 
+	<!-- Search -->
+	<div class="search">
+		<img src="/images/input_title/input_title_search.png" alt="조건별 검색">
+		<select name="src_con1">
+			<option value="1">mBook</option>
+			<option value="2">저자</option>
+			<option value="3">출판사</option>
+			<option value="4">발행일</option>
+			<option value="5">아이디</option>
+			<option value="6">등록일</option>
+			<option value="7">가격</option>
+			<option value="8">상태</option>
+		</select>
+    	<input type="text" name="src_con2" value="src_con2">
+    	<a href=""><img src="/images/bt/bt_search.png" alt="검색"></a>
+	</div>
+</div>
+
+<script language="Javascript">
+$('#select_category').live("change", function(){
+	var $value = $(this,'option:selected').val();
+	
+	$.ajax({
+		data:'category_id='+ $value, 
+		dataType:'script', 
+		type:'post', 
+		url:'/mbooks/update_subcategories'
+	});
+	
+	location.href = "/mbooks?cat="+$value;
+	
+})
+
+$('#select_subcategory1').live("change", function(){
+	var $cat = $('#select_category :selected').val();
+	var $sub = $(this,'option:selected').val();
+	location.href = "/mbooks?cat="+$cat+"&sub="+$sub;
+	
+})
+
+</script>

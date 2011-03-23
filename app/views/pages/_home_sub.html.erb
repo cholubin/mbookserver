@@ -1,0 +1,19 @@
+<div id="content">
+	<!-- Root Category-->
+	<div class="root_index">
+		<ul>
+			<li class="total"><a href=""><img src="images/root/bt_root_total_blue.png" alt="전체분류"></a></li>
+			<li><a href="/">형태</a></li>
+			<li><img src="images/root/root_arrow_blue.png"></li>
+			<li><a href="">분류</a></li>
+		</ul>
+	</div>
+	<!-- Box Category -->
+	<div id="box_category">
+		<ul class="list">
+			<%@subcategories.each do |cat| %>
+				<li><%= cat.name %><br/><a href="/mbooks?cat=<%= params[:cat] %>&sub=<%= cat.id %>"><img src="images/icon_category.png" alt="분류명"></a><!-- <br/><a href=""><img src="images/main/bt_list.png" alt="리스트"></a> --></li>
+			<%end %>
+		</ul>
+	</div>
+</div>

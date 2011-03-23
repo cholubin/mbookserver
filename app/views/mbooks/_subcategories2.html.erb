@@ -1,0 +1,6 @@
+<select id="select_subcategory2" name="subcategory2_id">
+	<option value="">선택안함</option>
+	<% @subcategories.each do |subcat| %>
+	<option value="<%= subcat.id %>" ><%= subcat.name %></option>
+	<%end %>
+</select>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml>
+	<%@mbooks.each do |mb| %>
+	<item>
+		<type>book</type>
+		<id><%= mb.id %></id>
+		<thumbnail><%= mb.thumbnail_name %></thumbnail>
+		<preview>mbook/<%= mb.id %>/<%= mb.coverimage_name %></preview>
+		<download>mbook/<%= mb.id %>.mbook.zip</download>
+		<title><%= mb.title %></title>
+		<author><%= mb.writer %></author>
+		<publisher><%= mb.publisher %></publisher>
+		<pages><%= mb.pages %></pages>
+		<issue_date><%= mb.issue_date %></issue_date>
+		<price><%= mb.price %></price>
+		<description><%= mb.description %></description>
+        <product_identifier></product_identifier>
+	</item>
+    <%end %>
+</xml>

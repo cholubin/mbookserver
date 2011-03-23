@@ -1,0 +1,144 @@
+<div id="content_header">
+	<h2 class="sub_title">mBook 자세히 보기</h2>
+</div>
+<div id="content">
+	<div id="detail_form">
+		<% form_for @mbook, :url => { :action => "update" }, :html => {:multipart => true} do |f| %>
+		<input type="hidden" name="id" value="<%= @mbook.id %>">
+		<table>
+			<tr class="book">
+				<td rowspan="15" class="book"><img src="<%= @mbook.coverimage_url %>" alt="책표지"></td>
+				<td colspan="3" class="mbook"><img src="/images/icon_book.png" alt="책아이콘">mBook 제목</td>
+			</tr>
+			<tr class="id">
+				<td class="input_name">아이디</td>
+				<td class="input_data" colspan="2">idmbook</td>
+			</tr>
+			<tr class="bookform">
+				<td class="input_name">형태</td>
+				<td class="input_data">
+					<select id="select_category" name="category_id">
+						<%@categories.each do |cat| %>
+						<option value="<%= cat.id %>" <%= "selected" if cat.id.to_s == @mbook.category_id.to_s %> ><%= cat.name %></option>
+						<%end %>
+					</select>
+				</td>
+				<td class="error"><!-- <img src="/images/icon_error.png" alt="error"> 형태를 선택하세요. --></td>
+			</tr>
+			<tr class="category1">
+				<td class="input_name">분류 (필수)</td>
+				<td class="input_data">
+					<span id="subcategories1">
+					<select id="select_subcategory1" name="subcategory1_id">
+						<% @subcategories.each do |subcat| %>
+						<option value="<%= subcat.id %>" <%= "selected" if subcat.id.to_s == @mbook.subcategory1_id.to_s %>><%= subcat.name %></option>
+						<%end %>
+					</select>
+					</span>		
+				</td>
+				<td class="error"><!-- <img src="/images/icon_error.png" alt="error"> 분류를 선택하세요. --></td>
+			</tr>
+			<tr class="category2">
+				<td class="input_name">분류 (선택)</td>
+				<td class="input_data">
+					<span id="subcategories2">
+					<select id="select_subcategory2" name="subcategory2_id">
+						<option value="">선택안함</option>
+						<% @subcategories.each do |subcat| %>
+						<option value="<%= subcat.id %>" <%= "selected" if subcat.id.to_s == @mbook.subcategory2_id.to_s %> ><%= subcat.name %></option>
+						<%end %>
+					</select>
+					</span>					
+				</td>
+				<td class="error"></td>
+			</tr>
+			<tr class="pages">
+				<td class="input_name">페이지</td>
+				<td class="input_data" colspan="2"><%= @mbook.pages %></td>
+			</tr>
+			<tr class="writer">
+				<td class="input_name">저자</td>
+				<td class="input_data" colspan="2"><%= @mbook.writer %></td>
+			</tr>
+			<tr class="publisher">
+				<td class="input_name">출판사</td>
+				<td class="input_data" colspan="2"><%= @mbook.publisher %></td>
+			</tr>			
+			<tr class="bookdate">
+				<td class="input_name">발행일</td>
+				<td class="input_data">
+					<a href=""><img src="/images/bt/bt_date.png" alt="발행일 선택"></a> 
+					<%= @mbook.issue_date %>
+				</td>
+				<td class="error"><!-- <img src="/images/icon_error.png" alt="error"> 발행일을 선택하세요. --></td>
+			</tr>
+			<tr class="date">
+				<td class="input_name">등록일</td>
+				<td class="input_data"  colspan="2"><%= @mbook.created_at.strftime('%Y-%m-%d') %></td>
+			</tr>
+			<tr class="description">
+				<td class="input_name">mBook 소개</td>
+				<td class="input_data" colspan="2">
+				<%= @mbook.description %>
+				</td>
+			</tr>
+			<tr class="price">
+				<td class="input_name">가격</td>
+				<td class="input_data">
+					<img src="/images/icon_dollar.png" alt="달러">
+					<input id="price" name="price" type="text" value="<%= @mbook.price %>">
+				</td>
+				<td class="error"><span id="price_msg"></span></td>
+			</tr>
+			<!-- <tr class="book_image">
+				<td class="input_name">책표지 이미지 파일</td>
+				<td class="input_data" colspan="2">image.jpg</td>
+			</tr>			 -->
+			<tr class="mbookzip">
+				<td class="input_name">mBook Zip 파일</td>
+				<td class="input_data">
+					<img src="/images/bt/bt_mbook.png" alt="mBook Zip 파일 등록"><input type="file" name="mbook_file">	
+				</td>
+				<td class="error"><span class="input_info">※ Zip 파일 최대 용량 : 000MB</span></td>
+			</tr>
+			<tr class="state">
+				<td class="input_name">상태</td>
+				<td class="input_data" colspan="2">승인완료</td>
+			</tr>
+		</table>
+		
+		<table>
+			<tr>
+				<td width="170">&nbsp;</td>
+				<td width="300"><a href=""><img src="/images/bt/bt_store_request.png" alt="Store로 등록 신청"></a></td>
+				<td align="left"><input id="submit_btn" type="image" src="/images/bt/bt_upload_re_ok.png" alt="수정완료" style="cursor:pointer;">
+				<!-- <a href="Javascript:history.back(-1);"><img src="/images/bt/bt_cancel.png" alt="취소"></a> --></td>
+			</tr>
+		</table>
+		<%end %>
+		
+	</div>
+</div>
+
+<script language="Javascript">
+$('#select_category').live("change", function(){
+	var $value = $(this,'option:selected').val();
+	
+	$.ajax({
+		data:'category_id='+ $value, 
+		dataType:'script', 
+		type:'post', 
+		url:'/mbooks/update_subcategories'
+	});
+	
+})
+
+$('#submit_btn').click(function(){
+	if($('#price').val() == ""){
+		$('#price').focus();
+		$('#price').css("background-color", "yellow");
+		$('#price_msg').html("<img src='/images/icon_error.png' alt='error'> 가격을 입력하세요.");
+		return false;
+	}
+})
+</script>
