@@ -45,7 +45,7 @@ class MbooksController < ApplicationController
     @board = "mbook"
     @section = "booklist"
     
-    @mbooks = Mbook.all(:order => [:created_at])
+    @mbooks = Mbook.all(:order => [:created_at.desc])
     
     render 'mbook', :layout => "no_layout"
   end
