@@ -147,7 +147,9 @@ class MbooksController < ApplicationController
      puts_message path
      puts_message zip_name
      
-     system "zip #{MBOOK_PATH+zip_name} #{path}/*.*"
+     # system "zip #{MBOOK_PATH+zip_name} #{mbook.id.to_s}/*.*"
+     
+     system "cd #{MBOOK_PATH}; pwd; zip #{zip_name} #{mbook.id.to_s}/*.*" 
    end
    
    def get_xml_data_update(mbook)
