@@ -10,4 +10,5 @@ log/*
 db/*
 config/environment.rb
 public/sharedimage/*
+public/mbook/*
 public/pdf_admin/*
