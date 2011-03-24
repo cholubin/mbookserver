@@ -149,7 +149,7 @@ class MbooksController < ApplicationController
      
      # system "zip #{MBOOK_PATH+zip_name} #{mbook.id.to_s}/*.*"
      
-     system "cd #{MBOOK_PATH}; pwd; zip #{zip_name} #{mbook.id.to_s}/*.*" 
+     system "cd #{MBOOK_PATH}; pwd; zip -r #{zip_name} #{mbook.id.to_s}/*.*" 
    end
    
    def get_xml_data_update(mbook)
