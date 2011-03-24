@@ -763,6 +763,9 @@ body#sub {
 #detail_form table tr.category2 td.input_name {
 	background-position: 0 -128px;
 }
+#detail_form table tr.pages td.input_name {
+	background-position: 0 -168px;
+}
 #detail_form table tr.writer td.input_name {
 	background-position: 0 -208px;
 }

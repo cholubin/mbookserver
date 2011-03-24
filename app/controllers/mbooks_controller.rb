@@ -109,6 +109,7 @@ class MbooksController < ApplicationController
     
     if @mbook.save
       unzip_uploaded_file(@mbook)
+      rezip_uploaded_file(@mbook)
       redirect_to '/mbooks'
     else
       puts_message "실패!"
@@ -137,6 +138,16 @@ class MbooksController < ApplicationController
        get_xml_data_update(mbook)
                  
      end
+   end
+   
+   def rezip_uploaded_file(mbook)
+     path = mbook.zip_path
+     zip_name = mbook.id.to_s + ".zip"
+     
+     puts_message path
+     puts_message zip_name
+     
+     system "zip #{MBOOK_PATH+zip_name} #{path}/*.*"
    end
    
    def get_xml_data_update(mbook)
