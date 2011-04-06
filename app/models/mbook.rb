@@ -27,8 +27,7 @@ class Mbook
   property :issue_date,         String
   property :description,        Text
   property :price,              String
-  property :status,             String
-  
+  property :status,             String, :default => "대기"  # (status; "대기", "승인완료", "승인거부", "승인대기", "삭제대기")
   property :coverimage_name,    String
   property :thumbnail_name,     String
 
@@ -62,7 +61,7 @@ class Mbook
   end
   
   def zipfile
-    zip_path = MBOOK_PATH + "#{self.id.to_s}.mBook.zip"
+    zip_path = MBOOK_PATH + "#{self.id.to_s}.mbook.zip"
     return zip_path
   end
 

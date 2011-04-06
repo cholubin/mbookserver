@@ -1,5 +1,11 @@
 <%if @section == "booklist" %><?xml version="1.0" encoding="UTF-8"?>
 <xml><%@mbooks.each do |mb| 
+		if File.exists?(mb.zip_path + "/midium.jpg")
+			thumb_name = "midium.jpg"
+		else
+			thumb_name = "thumb.jpg"
+		end
+		
 	zero_string = ""
 	i = 0
 	while (8 - mb.id.to_s.length) > i
@@ -9,7 +15,7 @@
 <item>
 <type>book</type>
 <id><%= zero_string + mb.id.to_s %></id>
-<thumbnail>mbook/<%= mb.id %>/<%= mb.coverimage_name %></thumbnail>
+<thumbnail>mbook/<%= mb.id %>/<%= thumb_name %></thumbnail>
 <preview>mbook/<%= mb.id %>/<%= mb.coverimage_name %></preview>
 <download>mbook/<%= mb.id %>.zip</download>
 <title><%= mb.title %></title>
@@ -23,12 +29,17 @@
 </item><%end %>
 </xml>
 <%else %>
-	<body id="sub" class="sub_mbook_in_store_guest">
+	<%if @menu_on == "mb_store" and signed_in? %>
+		<body id="sub" class="sub_mbook_in_store_guest">
+	<%else %>
+		<body id="sub" class="sub_mbook_in_store_<%= signed_in? ? "writer":"guest" %>">
+	<%end %>
+	
 		<div id="header">
-			<%= render :partial => "/shared/menu" %>
+			<%= render :partial => "/shared/menu", :object =>@menu_on %>
 		</div>
 	
-		<%= render :partial => "#{@board}_#{@section}", :object => @total_count %>
+		<%= render :partial => "#{@board}_#{@section}", :object => @total_count, :object => @menu_on %>
 
 		<!-- footer -->
 		<div id="footer">

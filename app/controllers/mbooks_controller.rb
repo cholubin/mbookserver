@@ -9,33 +9,69 @@ class MbooksController < ApplicationController
     @board = "mbook"
     @section = "index"
     
-    @mbooks = Mbook.all
+    @mbooks = Mbook.all()
     
-    if params[:me] == "y"
-      @mbooks = @mbooks.all(:user_id => current_user.id)
-    end
+    # 로그인 한 경우 
+    if signed_in?
+      
+      if (params[:me] == nil or params[:me] == "") and (params[:store] == nil or params[:store] == "")
+        params[:me] = "n"
+        params[:store] = "y"
+      end
+      # 내가 올린 mbook중 스토어에 등록된 책 
+      if params[:me] == "y" and params[:store] == "y"
+        @mbooks = @mbooks.all(:user_id => current_user.id, :status => "승인완료")
+        @menu_on = "my_mb_store"
+      # 내가 올린 모든 책 
+      elsif params[:me] == "y" and params[:store] == "n"
+        @mbooks = @mbooks.all(:user_id => current_user.id)
+        @menu_on = "my_mb"
+      # 스토어에 등록된 모든 책 
+      elsif params[:me] == "n" and params[:store] == "y"
+        @mbooks = @mbooks.all(:status => "승인완료")
+        @menu_on = "mb_store"
+      end
+
+      if params[:st] != nil and params[:st] != ""
+        if params[:st] == "1"
+          strStatus = "승인완료"
+        elsif params[:st] == "2"
+          strStatus = "삭제대기"
+        end 
+        @mbooks = @mbooks.all(:status   => strStatus)
+      end
     
-    if params[:cat] != nil and params[:cat] != ""
-      @mbooks = @mbooks.all(:category_id => params[:cat].to_i)
-    end
+      if params[:cat] != nil and params[:cat] != ""
+        @mbooks = @mbooks.all(:category_id => params[:cat].to_i)
+      end
     
-    if params[:sub] != nil and params[:sub] != ""
-      @mbooks = (@mbooks.all(:subcategory1_id => params[:sub].to_i) + @mbooks.all(:subcategory2_id => params[:sub].to_i))
-    end
-    
-    if params[:keyword] != nil and params[:keyword] != ""
+      if params[:subcat] != nil and params[:subcat] != ""
+        @mbooks = (@mbooks.all(:subcategory1_id => params[:sub].to_i) + @mbooks.all(:subcategory2_id => params[:sub].to_i))
+      end
+      
       @total_count = @mbooks.search(params[:keyword], params[:search],"").count
       @mbooks = @mbooks.search(params[:keyword], params[:search], params[:page])
+      
+    # 로그인 하지 않은 경우 (스토어에 등록된 책만 보여준다.)
+    else
+      
+      @menu_on = "mb_store"
+      
+      if params[:in_store] == "y"
+        @mbooks = @mbooks.all(:status => "승인완료")
+      end
+      @total_count = @mbooks.search(params[:keyword], params[:search],"").count
+      @mbooks = @mbooks.search(params[:keyword], params[:search], params[:page])
+      
     end
-    
-    @total_count = @mbooks.search(params[:keyword], params[:search],"").count
+
     
     @categories = Category.all(:gubun => "template", :order => :priority)
-    
-    
+      
     render 'mbook'  
   end
-  
+
+
   def booklist
     puts_message "good"
     
@@ -59,11 +95,21 @@ class MbooksController < ApplicationController
     @board = "mbook"
     @section = "show"
     
+    if params[:me] == "y" and params[:store] == "y"
+      @menu_on = "my_mb_store"
+    # 내가 올린 모든 책 
+    elsif params[:me] == "y" and params[:store] == "n"
+      @menu_on = "my_mb"
+    # 스토어에 등록된 모든 책 
+    elsif params[:me] == "n" and params[:store] == "y"
+      @menu_on = "mb_store"
+    end
+    
     @categories = Category.all(:gubun => "template", :order => :priority)    
     category_id = @mbook.category_id
     @subcategories = Subcategory.all(:category_id => category_id, :order => [:priority])
     
-    render 'mbook' 
+    render 'mbook'
   end
 
   # GET /mbooks/new
@@ -73,6 +119,8 @@ class MbooksController < ApplicationController
       @menu = "mbook"
       @board = "mbook"
       @section = "new"
+      
+      @menu_on = "mb_reg"
       
       @mbook = Mbook.new
       @categories = Category.all(:gubun => "template", :order => :priority)    
@@ -96,6 +144,7 @@ class MbooksController < ApplicationController
     @mbook = Mbook.new()
     @mbook.category_id = params[:category_id]
     @mbook.subcategory1_id = params[:subcategory1_id]
+    @mbook.issue_date = params[:issue_date]
     if params[:subcategory2_id] != nil and params[:subcategory2_id] != ""
       @mbook.subcategory2_id = params[:subcategory2_id]
     else
@@ -198,6 +247,8 @@ class MbooksController < ApplicationController
     @mbook = Mbook.get(params[:id].to_i)
     @mbook.category_id = params[:category_id]
     @mbook.subcategory1_id = params[:subcategory1_id]
+    @mbook.issue_date = params[:issue_date]
+    
     if params[:subcategory2_id] != nil and params[:subcategory2_id] != ""
       @mbook.subcategory2_id = params[:subcategory2_id]
     else
@@ -246,5 +297,58 @@ class MbooksController < ApplicationController
         page.replace_html 'subcategories2', :partial => 'subcategories2', :object => @subcategories
       end
   end
+  
+  def deleteSelection 
+
+    chk_ids = params[:ids]
+    chks = chk_ids.split(",")
+
+    chks.each do |chk|
+      mbook = Mbook.get(chk.to_i)
+      if mbook != nil
+          puts_message mbook.zipfile
+          if File.exists?(mbook.zipfile)
+            FileUtils.rm_rf mbook.zipfile
+          end
+          
+          puts_message mbook.zip_path
+          if File.exists?(mbook.zip_path)
+            FileUtils.rm_rf mbook.zip_path
+          end
+          
+          puts_message MBOOK_PATH + mbook.id.to_s + ".zip"
+          if File.exists?(MBOOK_PATH + mbook.id.to_s + ".zip")
+            FileUtils.rm_rf MBOOK_PATH + mbook.id.to_s + ".zip"
+          end
+          
+          mbook.destroy 
+      end    
+    end
+    
+    redirect_to(mbooks_url)
+  end
+  
+  # Ajax:: mbook 상세페이지에서 스토어 등록 신청을 하는 경우 호출 
+  def registration_request_in_store
+    puts_message "registration_request_in_store process"
+    
+    if params[:mbook_id] != nil and params[:mbook_id] != ""
+      puts_message params[:mbook_id]
+      begin
+        mbook_id = params[:mbook_id].to_i
+        mbook = Mbook.get(mbook_id)
+        mbook.status = "승인대기"
+        mbook.save
+        
+        render :text => "success"
+        
+      rescue
+        render :text => "fail"
+      end
+      
+    else
+      render :text => "fail"
+    end
+  end  
   
 end

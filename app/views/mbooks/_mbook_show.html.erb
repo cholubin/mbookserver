@@ -12,7 +12,7 @@
 			</tr>
 			<tr class="id">
 				<td class="input_name">아이디</td>
-				<td class="input_data" colspan="2">idmbook</td>
+				<td class="input_data" colspan="2"><%= User.first(:id => @mbook.user_id).userid %></td>
 			</tr>
 			<tr class="bookform">
 				<td class="input_name">형태</td>
@@ -67,8 +67,7 @@
 			<tr class="bookdate">
 				<td class="input_name">발행일</td>
 				<td class="input_data">
-					<a href=""><img src="/images/bt/bt_date.png" alt="발행일 선택"></a> 
-					<%= @mbook.issue_date %>
+					<input type="text" id="issue_date" name="issue_date" value="<%= @mbook.issue_date %>"><img id="btn_issue_date" src="/images/bt/bt_date.png" alt="발행일 선택" style="cursor:pointer;">
 				</td>
 				<td class="error"><!-- <img src="/images/icon_error.png" alt="error"> 발행일을 선택하세요. --></td>
 			</tr>
@@ -99,19 +98,20 @@
 				<td class="input_data">
 					<img src="/images/bt/bt_mbook.png" alt="mBook Zip 파일 등록"><input type="file" name="mbook_file">	
 				</td>
-				<td class="error"><span class="input_info">※ Zip 파일 최대 용량 : 000MB</span></td>
+				<td class="error"><span class="input_info"><!-- ※ Zip 파일 최대 용량 : 000MB --></span></td>
 			</tr>
 			<tr class="state">
 				<td class="input_name">상태</td>
-				<td class="input_data" colspan="2">승인완료</td>
+				<td class="input_data" colspan="2"><span id="span_stuats" status="<%= @mbook.status %>"><%= @mbook.status %></span></td>
 			</tr>
 		</table>
 		
 		<table>
 			<tr>
 				<td width="170">&nbsp;</td>
-				<td width="300"><a href=""><img src="/images/bt/bt_store_request.png" alt="Store로 등록 신청"></a></td>
-				<td align="left"><input id="submit_btn" type="image" src="/images/bt/bt_upload_re_ok.png" alt="수정완료" style="cursor:pointer;">
+				<!-- <td width="300"><a href=""><img src="/images/bt/bt_store_request.png" id="store_req" alt="Store로 등록 신청" <%= "style=\"opacity:0.4;filter:alpha(opacity=40)\"" if @mbook.status == "승인대기" %>></a></td> -->
+				<td width="300"><a href=""><img src="/images/bt/bt_store_request.png" id="store_req" alt="Store로 등록 신청" <%= "class=\"img_disabled\"" if @mbook.status != "대기" %>></a></td>
+				<td align="left"><input id="submit_btn" type="image" src="/images/bt/bt_upload_re_ok.png" alt="수정완료" style="cursor:pointer;" <%= "disabled class=\"img_disabled\"" if @mbook.status != "대기" %> >
 				<!-- <a href="Javascript:history.back(-1);"><img src="/images/bt/bt_cancel.png" alt="취소"></a> --></td>
 			</tr>
 		</table>
@@ -121,6 +121,7 @@
 </div>
 
 <script language="Javascript">
+
 $('#select_category').live("change", function(){
 	var $value = $(this,'option:selected').val();
 	
@@ -141,4 +142,45 @@ $('#submit_btn').click(function(){
 		return false;
 	}
 })
+
+$('#store_req').live("click", function(){
+	if( $('#span_stuats').attr("status") == "승인대기" ){
+		alert("이미 승인대기 중 입니다!");
+		return false;
+	}else{
+		if( confirm("스토어에 등록을 신청하시겠습니까?") ){
+			$.ajax({
+				data:'mbook_id=<%= @mbook.id %>', 
+				dataType:'script', 
+				type:'post', 
+				url:'/mbooks/registration_request_in_store',
+				success: function(request){
+					if( request == "success"){
+						$('#span_stuats').text("승인대기");
+						$('#span_stuats').attr("status","승인대기");
+						$('#store_req').hide("slow", function(){
+							$(this).addClass("img_disabled");
+							$(this).show("slow");
+						})
+						alert("신청이 완료되었습니다.");
+					}else{return false;}
+
+				}
+			});
+		}else{return false;}
+	}
+	return false;
+})
+
+
+$('#btn_issue_date').live("click", function(){
+	$( "#issue_date" ).focus();
+})
+
+$(function(){
+	$( "#issue_date" ).datepicker();
+	$( "#issue_date" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+	$( "#issue_date" ).datepicker( $.datepicker.regional[ "ko" ] );
+})
+
 </script>

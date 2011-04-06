@@ -1,112 +1,108 @@
-
-<%= stylesheet_link_tag '/css/paginate.css' %>
-<div id="feature_wrapper">
-		<p1>가입한 사용자들의 정보입니다.</p1>
-		<% if ! flash[:notice].nil? %>
-			<br>
-			<span class="error_message_small"><%= flash[:notice].to_s %></span>
-		<% end %>		
-<br><br>
+<div id="content_header">
+	<h2 class="sub_title">사용자 관리</h2>
+</div>
+<div id="content">
+	<!-- Sort list -->		
+	<div class="sort_list" style="display:none;">
+		<img src="../images/input_title/input_title_user.png" alt="사용자 유형별 보기">	
+		<select name="sort_list">
+			<option value="1">admin</option>
+			<option value="2">writer</option>
+		</select>
+	</div>
+	<!-- List -->
+	<div class="list_title">
+		<ul>
+			<li class="no">NO</li>
+			<li class="user_id">사용자 아이디</li>
+			<li class="user_type">이름</li>
+			<li class="user_detail">사용자 정보 보기 / 수정</li>
+			<li class="user_mbook">사용자의 mBook 리스트 보기</li>
+			<li class="check" id="check_all" style="cursor:pointer;">선택</li>
+		</ul>
+	</div>
+	<div class="list_data">
+		<% 	if params[:page].to_i == 0 or params[:page].to_i == 1
+				@temp_page = 0
+			else
+				@temp_page = params[:page].to_i - 1
+			end
+			@page_num = @total_count - (12 * @temp_page) %>		
+		<% @users.each do |user| %>
+		<ul class="list_data_white">
+			<li class="no"><%= @page_num %></li>
+			<li class="user_id"><%= user.userid %></li>
+			<li class="user_type"><%= user.name %></li>				
+			<li class="user_detail"><img src="../images/bt/bt_user_detail.png" alt="사용자 정보 보기 / 수정" id="detail_<%= user.id %>" class="btn_user_detail" style="cursor:pointer;"></li>
+			<li class="user_mbook"><a href=""><img src="../images/bt/bt_user_mbook.png" alt="사용자의 mBook 리스트 보기"></a></li>
+			<li class="check"><input type="checkbox" class="chkbox" id="chk_<%= user.id %>"></li>
+		</ul>
+		<% @page_num -= 1
+		end %>
 
 	</div>
-	
-	<% form_tag :action => :deleteSelection, :method => 'post' do %>			
-	<input type="hidden" id="all_checked" value="false">
-	<table class="board_table">
-	    <thead class="board_thead">
-	        <tr>
-	            <th class="board_thead" width="60px">번호 </th>
-	            <td class="board_thead" width="60px"><center>아이디</center></td>
-				<td class="board_thead" width="60px"><center>이름</center></td>
-	            <td class="board_thead" width="80px"><center>이메일</center></td>
-				<td class="board_thead" width="80px"><center>소속</center></td>
-	            <td class="board_thead" width="100px"><center>연락처</center></td>
-				<td class="board_thead" width="80px"><center>비밀번호</center></td>
-				<td class="board_thead" width="30px"><center class="check_all" style="cursor:hand;">선택</center></td>
-	        </tr>
-	    </thead>
-	 
-	    <tbody class="board_tbody">
-			<% 	if params[:page].to_i == 0 or params[:page].to_i == 1
-					@temp_page = 0
-				else
-					@temp_page = params[:page].to_i - 1
-				end
-				@page_num = @total_count - (12 * @temp_page) %>
-				
-
-			<% @users.each do |user| %>
-	        <tr class="table_b","board_tbody">
-	            <th class="board_tbody" width="60px" onClick="location.href='/admin/users/<%= user.id.to_s %>'" style="cursor:hand;"><%= @page_num %></th>
-	            <td class="board_tbody" width="60px" onClick="location.href='/admin/users/<%= user.id.to_s %>'" style="cursor:hand;"><center><%= user.userid %></center></td>
-				<td class="board_tbody" width="60px" onClick="location.href='/admin/users/<%= user.id.to_s %>'" style="cursor:hand;"><center><%= user.name %></center></td>
-	            <td class="board_tbody" width="80px" onClick="location.href='/admin/users/<%= user.id.to_s %>'" style="cursor:hand;"><center><%= user.email %></center></td>
-	            <td class="board_tbody" width="100px" onClick="location.href='/admin/users/<%= user.id.to_s %>'" style="cursor:hand;"><center><%= user.tel %><br><%= user.mobile %></center></td>	
-				<td class="board_tbody" width="80px" ><center><input type="button" class="init_btn" id="init_<%= user.id %>" value="비밀번호 초기화" style="cursor:pointer;"></center></td>
-				<td class="board_tbody" width="30px"><center><input type="checkbox" class="chk_box" name="chk[<%= user.id %>]"></center></td>
-	        </tr>
-	        <% @page_num -= 1
-			end %>
-	        
-	    </tbody>
-	</table>
-	   
-
-	<div id="line_bottom1"></div>
-	<br>
-
-		<!-- dm-pager Pagination -->
-		<table width="730" >
-			<tr>
-				<td width="30">&nbsp;</td>
-				<td width="550" style="align:left">
-					<div class="pager">
-					<%=@users.pager.to_html "/admin/users?keyword=#{params[:keyword]}&search=#{params[:search]}" %>
-					</div>
-				</td>
-				<td width="150" align="right">
-					<% if @total_count > 0 %>
-						<%= image_submit_tag('/images/board/delete.jpg', { :onclick => 'return confirm(\'정말 삭제하시겠습니까?\');' }) %>				
-					<% end %>
-				</td>
+	<!-- list Action -->		
+	<div class="select_list">
+		<img src="../images/input_title/input_title_select.png" alt="선택한 항목을">
+		<img src="../images/bt/bt_delete.png" alt="삭제" id="btn_del" style="cursor:pointer;">
+		<span id="error_msg" style="display:none"><p class="error"><img src="../images/icon_error.png" alt="error"> 선택한 항목이 없습니다.</p></span>
+	</div>
+   	<!-- Box User Information Pop -->
+	<div id="pop_user" style="display:none;"></div>
+	<!-- Paging -->
+	<div>
+		<table width="900">
+			<tr height="20"></tr>
+			<tr align="center">
+				<td><%= @users.pager.to_html "/admin/users" %></td>
 			</tr>
-			<% end %>
-			<tr height="10">
-				<td align="center" colspan="3">
-						<% form_tag request.path + "?page=#{params[:page]}", :method => 'get' do %>								
-					    <select name="keyword">
-					    	<option value="userid" 	<%="selected" if params[:keyword] == "userid"%>	>아이디</option>
-							<option value="name" 	<%="selected" if params[:keyword] == "name"	%>	>이름</option>
-							<option value="email" 	<%="selected" if params[:keyword] == "email"%> 	>이메일</option>
-							<option value="group" 	<%="selected" if params[:keyword] == "group"%> 	>소속</option>
-							<option value="tel" 	<%="selected" if params[:keyword] == "tel"	%> 	>연락처</option>
-					    </select>
-						<%= text_field_tag :search, params[:search] %><%= image_submit_tag("/images/board/search.jpg", :align => "absmiddle") %>	
-						<% end %>
-				</td>
-			</tr>
-					
 		</table>
-		
-<script language="Javascript">
-$('.init_btn').live("click", function(){
-	var $id = $(this).attr("id").replace("init_","");
-	if(window.confirm("사용자의 비밀번호를 초기화 하시겠습니까?\n비밀번호는 1234 로 강제 초기화 됩니다!")){
-		$.ajax({
-			data:'id='+$id, 
-			dataType:'script', 
-			type:'post', 
-			url:'/admin/users/initialize_password',
-			success: function(request){
-				if(request == "success"){
-					alert("해당 사용자의 비밀번호가 1234로 초기화 되었습니다!");
-				}else{
-					alert("비밀번호 초기화에 실패했습니다.\n관리자에게 문의하여 주십시오!");
-				}
-			}
-		});
-	}else{
+	</div>
+
+	<!-- Search -->
+	<div class="search">
+		<img src="../images/input_title/input_title_search.png" alt="조건별 검색">
+		<select name="keyword" id="keyword">
+			<option value="userid">아이디</option>
+			<option value="name">이름</option>
+		</select>
+    	<input type="text" name="search" id="search" value="">
+    	<a href=""><img src="../images/bt/bt_search.png" alt="검색"></a>
+	</div>
+</div>
+
+<script>
+$('#check_all').live("click", function(){
+	$('.chkbox').each(function(){
+		$(this).attr("checked", !$(this).attr("checked"));
+	})
+})
+
+$('#btn_del').live("click", function(){
+	if($(':checkbox:checked').length < 1){
+		$('#error_msg').css("display", "block");
+		setTimeout(function(){$('#error_msg').css("display", "none");}, 3000);
 		return false;
 	}
 })
-</script>		
+
+$('.btn_user_detail').live("click", function(){
+	var $user_id = $(this).attr("id").replace("detail_", "");
+	var $btn_loc = $(this).offset() ;
+	// alert($btn_loc.left + "//" + $btn_loc.top);
+	$.ajax({
+		data:'user_id='+ $user_id, 
+		dataType:'script', 
+		type:'post', 
+		url:'/admin/users/pop_user',
+		success: function(request){
+			$('#pop_user').css("display", "block");
+			$('#pop_user').css("position", "absolute");
+			$('#pop_user').css("top", $btn_loc.top);
+			$('#pop_user').css("left", $btn_loc.left + 150);
+		}
+	});
+	
+	
+})
+</script>

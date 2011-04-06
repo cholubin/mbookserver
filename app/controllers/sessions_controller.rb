@@ -48,7 +48,11 @@ class SessionsController < ApplicationController
             if params[:session][:uri] == "/users"
               redirect_to '/'
             else
-              url = CGI::escape(params[:session][:uri]).gsub(/%2F/,'/').gsub(/%3F/,'?').gsub(/%3D/,'=')
+              if params[:session][:uri] == "/mbooks"
+                url = "/mbooks?me=y&store=n"
+              else
+                url = CGI::escape(params[:session][:uri]).gsub(/%2F/,'/').gsub(/%3F/,'?').gsub(/%3D/,'=')
+              end
               redirect_to url
             end
           else

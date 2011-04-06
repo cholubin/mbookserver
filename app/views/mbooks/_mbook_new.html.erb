@@ -46,8 +46,7 @@
 			<tr class="bookdate">
 				<td class="input_name">발행일</td>
 				<td class="input_data">
-					<a href=""><img src="/images/bt/bt_date.png" alt="발행일 선택"></a> 
-					2011/04/01
+					<input type="text" id="issue_date" name="issue_date"><img id="btn_issue_date" src="/images/bt/bt_date.png" alt="발행일 선택" style="cursor:pointer;">
 				</td>
 				<td class="error"><!-- <img src="/images/icon_error.png" alt="error"> 발행일을 선택하세요. --></td>
 			</tr>
@@ -62,7 +61,7 @@
 			<tr class="mbookzip">
 				<td class="input_name">mBook Zip 파일</td>
 				<td class="input_data">
-					<img src="/images/bt/bt_mbook.png" alt="mBook Zip 파일 등록"><input type="file" name="mbook_file">	
+					<img src="/images/bt/bt_mbook.png" alt="mBook Zip 파일 등록"><input type="file" name="mbook_file" id="mbook_file">	
 				</td>
 				<td><span class="input_info">※ Zip 파일 최대 용량 : 000MB</span></td>
 			</tr>
@@ -92,12 +91,32 @@ $('#select_category').live("change", function(){
 	
 })
 
+
+
 $('#submit_btn').click(function(){
+	if( $('#issue_date').val() == ""){
+		alert("발행일을 선택해주세요~");
+		return false;
+	}
 	if($('#price').val() == ""){
 		$('#price').focus();
 		$('#price').css("background-color", "yellow");
 		$('#price_msg').html("<img src='/images/icon_error.png' alt='error'> 가격을 입력하세요.");
 		return false;
 	}
+	if( $('#mbook_file').val() == ""){
+		alert("업로드할 파일을 선택해주세요!");
+		return false;
+	}
 })
+
+$('#btn_issue_date').live("click", function(){
+	$( "#issue_date" ).focus();
+})
+
+$(function(){
+	$( "#issue_date" ).datepicker();
+	$( "#issue_date" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+	$( "#issue_date" ).datepicker( $.datepicker.regional[ "ko" ] );
+})	
 </script>

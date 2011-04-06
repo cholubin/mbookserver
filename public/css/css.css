@@ -24,9 +24,15 @@ img {
 	vertical-align: middle;
 }
 
+img.img_disabled {
+	opacity:0.4;
+	filter:alpha(opacity=40);
+}
 
-
-
+input.img_disabled {
+	opacity:0.4;
+	filter:alpha(opacity=40);
+}
 
 
 /* index */
@@ -444,7 +450,7 @@ body#sub {
 	width: 456px;
 }
 .sub_mbook_in_store_writer .list_title ul li.mbook, .sub_mbook_in_store_writer .list_data ul li.mbook {
-	width: 456px;
+	width: 411px;
 }
 .sub_mbook_in_store_admin .list_title ul li.mbook, .sub_mbook_in_store_admin .list_data ul li.mbook {
 	width: 402px;
@@ -602,32 +608,57 @@ body#sub {
 	text-align: right;
 }
 
-/* sub content 리스트 paging*/
-.paging {
+/* sub content 리스트 pager*/
+.pager {
 	clear: both;
-	text-align: center;
+	position: relative;
+	margin-top: 20px;
 	padding-top: 40px;
+	text-align: center;
+	line-height: 26px;
+	height: 26px;
+	zoom:1;
 }
-.paging b.totalpage {
-	background-color: #aaa;
-	color: #fff;
-}
-.paging a {
-	background-color:#b2b9ed ;
-}
-.paging a, .paging b.totalpage {
-	padding: 6px;
+.pager li {
+	display: inline-block;
+	background-color:#b2b9ed;
+	line-height: 26px;
+	height: 26px;
 	padding-left: 10px;
 	padding-right: 10px;
+	margin: 1px;
 }
-.paging a.nowpage {
+.pager li.active {
 	background-color:#212958;
-	color: #fff;
 }
-.paging a.firstpage, .paging a.prevpage, .paging a.nextpage, .paging a.lastpage {
+.pager li.active a {
+	color: #fff;
+	font-weight: bold;
+}
+.pager li.jump {
 	padding-left: 2px;
 	padding-right: 2px;
-	background-color: transparent;
+	background-color: #fff;
+}
+.pager li.jump a {
+	display: block;
+	text-indent: -5000px;
+	width: 20px;
+}
+.pager li.first {
+	background: url("../images/arrow_first.png") no-repeat center center;
+}
+.pager li.previous {
+	background: url("../images/arrow_prev.png") no-repeat center center;
+}
+.pager li.next {
+	background: url("../images/arrow_next.png") no-repeat center center;
+}
+.pager li.last {
+	background: url("../images/arrow_last.png") no-repeat center center;
+}
+.pager .more {
+	color: #bbb;
 }
 
 /* sub content 리스트 search */

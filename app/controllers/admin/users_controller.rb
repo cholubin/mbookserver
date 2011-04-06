@@ -9,7 +9,7 @@ class Admin::UsersController < ApplicationController
     @users = User.search_admin(params[:keyword], params[:search], params[:page])
     @total_count = User.search_admin(params[:keyword], params[:search],"").count
         
-    @menu = "user"
+    @menu_on = "user"
     @board = "user"
     @section = "index"
     
@@ -136,5 +136,16 @@ class Admin::UsersController < ApplicationController
     else
       render :text => "fail"
     end
+  end
+  
+  def pop_user
+    user_id = params[:user_id]
+    
+    @user = User.get(user_id.to_i)
+    
+    render :update do |page|
+      page.replace_html 'pop_user', :partial => 'pop_user', :object => @user
+    end
+    
   end
 end
