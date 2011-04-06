@@ -1,0 +1,26 @@
+/* default */
+
+.clearboth {
+	*zoom: 1;
+}
+.clearboth:after {
+	content: "";
+	display: block;
+	clear: both;
+}
+body {
+	font-family: NanumGothic,MalgunGothic,Dotum,sans-serif;
+	font-size: 12px;
+	line-height: 1.4;
+}
+a {
+	text-decoration: none;
+	color: #000;
+}
+select {
+	vertical-align: top;
+	margin-top: 6px;
+}
+img {
+	vertical-align: middle;
+}

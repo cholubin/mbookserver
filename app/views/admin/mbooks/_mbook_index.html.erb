@@ -1,0 +1,109 @@
+<div id="content_header">
+	<h2 class="sub_title">mBook in Store</h2>
+</div>
+
+<div id="content">
+	<!-- Root Category -->
+	<div class="root_list">
+		<ul>
+			<li><img src="/images/root/root_first.png"></li>
+			<li><a href=""><img src="/images/root/bt_root_total_pink.png" alt="전체분류"></a></li>
+			<li>
+				<select id="select_category" name="category_id">
+					<%@categories.each do |cat| %>
+					<option value="<%= cat.id %>" <%= "selected" if cat.id.to_s == params[:cat].to_s %>><%= cat.name %></option>
+					<%end %>
+				</select>
+			</li>
+			<li><img src="/images/root/root_arrow_pink.png"></li>
+			<li>
+				<span id="subcategories1">
+				<select id="select_subcategory1" name="subcategory1_id">
+					<% Subcategory.all(:category_id => params[:cat].to_i).each do |subcat| %>
+					<option value="<%= subcat.id %>" <%= "selected" if subcat.id.to_s == params[:sub].to_s %>><%= subcat.name %></option>
+					<%end %>
+				</select>
+			</li>
+			<li class="root_last"><img src="/images/root/root_last.png"></li>
+		</ul>
+	</div>
+	<!-- Sort list -->		
+	<div class="sort_list">
+		<img src="../images/input_title/input_title_state.png" alt="상태별 보기">	
+		<select name="sort_list">
+			<option value="1">승인완료</option>
+			<option value="2">삭제대기</option>
+		</select>
+	</div>
+	<!-- List -->
+	<div class="list_title">
+		<ul>
+			<li class="no">NO</li>
+			<li class="book">책표지</li>
+			<li class="mbook">mBook</li>
+			<li class="id">아이디</li>
+			<li class="date">등록일</li>
+			<li class="price">가격</li>
+			<li class="state">상태</li>
+			<li class="check">선택</li>
+		</ul>
+	</div>
+	<div class="list_data">
+		<% 	if params[:page].to_i == 0 or params[:page].to_i == 1
+				@temp_page = 0
+			else
+				@temp_page = params[:page].to_i - 1
+			end
+			@page_num = @total_count - (10 * @temp_page) %>
+				
+		<%@mbooks.each do |mb| %>		
+			<ul class="list_data_white">
+				<li class="no"><%= @page_num %></li>
+				<li class="book"><img src="<%= mb.thumbnail_url %>" alt="책표지"></li>
+				<a href="">
+					<li class="mbook">
+					<b><%= mb.title %></b><br/>
+					▶ 저자 : <b><%= mb.writer %></b> | 출판사 : <b>출판사<%= mb.publisher %></b> | 발행일 : <b><%= mb.issue_date %></b>
+					</li>
+				</a>
+				<li class="id"><%= User.get(mb.user_id).userid %>(<%= User.get(mb.user_id).name %>)</li>
+				<li class="date"><%= mb.created_at.strftime('%Y-%m-%d') %></li>
+				<li class="price"><img src="../images/icon_dollar.png" alt="달러"> <%= mb.price %></li>
+				<li class="state"><%= mb.status %></li>
+				<li class="check"><input type="checkbox" value="10"></li>
+			</ul>
+		<%@page_num -= 1
+		end %>
+	</div>
+	<!-- list Action -->		
+	<div class="select_list">
+		<img src="../images/input_title/input_title_select.png" alt="선택한 항목을">
+		<a href=""><img src="../images/bt/bt_waiting.png" alt="승인대기 상태로 이동"></a>
+		<p class="error"><img src="../images/icon_error.png" alt="error"> 선택한 항목이 없습니다.</p>
+	</div>
+	<!-- Paging -->
+	<div>
+		<table width="900">
+			<tr height="20"></tr>
+			<tr align="center">
+				<td><%= @mbooks.pager.to_html "/admin/mbooks?me=#{params[:me]}&store=#{params[:store]}&cat=#{params[:cat]}&subcat=#{params[:subcat]}&keyword=#{params[:keyword]}&search=#{params[:search]}" %></td>
+			</tr>
+		</table>
+	</div>
+	<!-- Search -->
+	<div class="search">
+		<img src="../images/input_title/input_title_search.png" alt="조건별 검색">
+		<select name="src_con1">
+			<option value="1">mBook</option>
+			<option value="2">저자</option>
+			<option value="3">출판사</option>
+			<option value="4">발행일</option>
+			<option value="5">아이디</option>
+			<option value="6">등록일</option>
+			<option value="7">가격</option>
+			<option value="8">상태</option>
+		</select>
+    	<input type="text" name="src_con2" value="src_con2">
+    	<a href=""><img src="../images/bt/bt_search.png" alt="검색"></a>
+	</div>
+</div>

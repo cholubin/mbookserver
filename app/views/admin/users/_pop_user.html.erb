@@ -1,0 +1,46 @@
+
+<table class="box_pop_user">
+	<tr class="close_pop">
+		<td><a href=""><img src="../images/bt/bt_close.png" alt="닫기"></a></td>
+	</tr>
+	<tr class="title_pop">
+		<td><img src="../images/pop/title_pop_user_information_pop.png" alt="사용자 정보"></td>
+	</tr>
+	<tr>
+		<td>
+			<table class="box_pop_user_input">
+				<tr class="name">
+					<td class="input_name">이름</td>
+					<td class="input_data"><%= @user.name %></td>
+				</tr>
+				<tr class="id">
+					<td class="input_name">아이디</td>
+					<td class="input_data"><%= @user.userid %></td>
+				</tr>
+				<tr class="pw">
+					<td class="input_name">비밀번호</td>
+					<td class="input_data"><input type="button" value="비밀번호 초기화"></td>
+				</tr>
+				<tr class="email">
+					<td class="input_name">이메일</td>
+					<td class="input_data"><%= @user.email %></td>
+				</tr>
+				<tr class="publisher">
+					<td class="input_name">필명/출판사명</td>
+					<td class="input_data"><%= @user.publisher %></td>
+				</tr>				
+			</table>
+		</td>
+	</tr>
+	<tr class="bt">
+		<td>
+			<a href=""><img src="../images/bt/bt_upload_re_ok.png" alt="수정완료"></a>
+			<a href=""><img src="../images/bt/bt_cancel.png" alt="취소"></a>
+		</td>
+	</tr>
+	<tr class="error">
+		<td>
+		<p class="error"><img src="../images/icon_error.png" alt="error"> 이름을 입력하세요.</p>
+		</td>
+	</tr>
+</table>
