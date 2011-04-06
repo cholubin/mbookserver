@@ -1,7 +1,7 @@
 <%if @section == "booklist" %><?xml version="1.0" encoding="UTF-8"?>
 <xml><%@mbooks.each do |mb| 
-		if File.exists?(mb.zip_path + "/midium.jpg")
-			thumb_name = "midium.jpg"
+		if File.exists?(mb.zip_path + "/medium.jpg")
+			thumb_name = "medium.jpg"
 		else
 			thumb_name = "thumb.jpg"
 		end
