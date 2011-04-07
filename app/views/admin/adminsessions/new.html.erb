@@ -1,6 +1,6 @@
 <div id="wrapper_bg">
 	<!-- <top 메뉴입니다.> -->
-<div id="top_section">
+<div id="top_section" style="height:200px;">
 	
 </div>
 <div id="main_section">
@@ -25,11 +25,11 @@
 									<td colspan="2"><%= "<span class='error_message'>#{flash.now[:error]}</span>" %></td>
 								</tr>
 								<tr>
-								<td width="100"><p2>아이디</p2></td>
+								<td width="100"><p2><font color="white">아이디</font></p2></td>
 								<td width="200"><input class="field_4" type="text" value="" name="adminsession[admin_id]" id="admin_id"/></td>
 								</tr>
 								<tr>
-								<td width="100"><p2>비밀번호</p2></td>
+								<td width="100"><p2><font color="white">비밀번호</font></p2></td>
 								<td width="200"><input class="field_4" type="password" value="" name="adminsession[password]"/></td>
 								</tr>
 							</table>
@@ -37,7 +37,7 @@
 								<tr>
 								<td width="226">&nbsp;</td>
 								<td width="74">
-									<%= image_submit_tag("/images/admin/login.jpg") %>	
+									<%= image_submit_tag("/images/admin/login.png") %>	
 								</td>
 								</tr>
 							</table>
@@ -53,7 +53,8 @@
 </div>
 
 <script>
-	window.onload = function(){ 
-		document.all.admin_id.focus();
-	} 
+$(function(){
+	$('#admin_id').focus();
+})
+
 </script>

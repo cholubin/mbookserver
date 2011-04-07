@@ -112,13 +112,22 @@
 						</li>
 					</a>
 					<li class="date"><%= mb.created_at.strftime('%Y-%m-%d') %></li>
-					<li class="price"><img src="../images/icon_dollar.png" alt="달러"> <%= mb.price %></li>
+					<li class="price"><img src="/images/icon_dollar.png" alt="달러"> <%= mb.price %></li>
 					<li class="state"><%= mb.status %></li>
-					<%if mb.status != "대기" and mb.status != "승인거부" %>
-						<li class="check"><input type="checkbox"  disabled></li>
-					<%else %>
-						<li class="check"><input type="checkbox" class="chkbox" id="<%= mb.id %>" ></li>
-					<%end %>
+					
+					<% if params[:store] == "y" %>
+						<%if mb.status != "승인완료"%>
+							<li class="check"><input type="checkbox"  disabled></li>
+						<%else %>
+							<li class="check"><input type="checkbox" class="chkbox" id="<%= mb.id %>" ></li>
+						<%end %>
+					<% else %>
+						<%if mb.status != "대기" and mb.status != "승인거부" %>
+							<li class="check"><input type="checkbox"  disabled></li>
+						<%else %>
+							<li class="check"><input type="checkbox" class="chkbox" id="<%= mb.id %>" ></li>
+						<%end %>
+					<% end %>
 				</ul>
 			<%end %>
 		<%else %>
@@ -144,8 +153,13 @@
 	</div>
 	<%if @menu_on == "my_mb" %>
 		<div class="select_list">
-					<img src="../images/input_title/input_title_select.png" alt="선택한 항목을">
-					<img src="../images/bt/bt_delete.png" alt="삭제" id="btn_del" style="cursor:pointer;">
+			<img src="/images/input_title/input_title_select.png" alt="선택한 항목을">
+			<img src="/images/bt/bt_delete.png" alt="삭제" id="btn_del" style="cursor:pointer;">
+		</div>
+	<%elsif @menu_on == "my_mb_store" %>
+		<div class="select_list">
+			<img src="/images/input_title/input_title_select.png" alt="선택한 항목을">
+			<img src="/images/bt/bt_store_delete.png" alt="삭제" id="btn_del_from_store" style="cursor:pointer;">
 		</div>
 	<%end %>
 	<!-- 페이징 블럭 ======================-->
@@ -231,9 +245,38 @@ $('#btn_del').live("click", function(){
 				data:'ids='+ del_ids, 
 				dataType:'script', 
 				type:'post', 
-				url:'/mbooks/deleteSelection'
+				url:'/mbooks/deleteSelection',
+				success:function(){
+					window.location.href = "/mbooks?me=y&store=n";
+				}
 			});
-			
+		}else{
+			return false;
+		}
+	}else{
+		alert("대상을 선택해 주세요!");
+		return false;
+	}
+})
+
+$('#btn_del_from_store').live("click", function(){
+	if( $(':checkbox:checked').length > 0) {
+		var del_ids = "";
+		
+		if( confirm("선택하신 파일을 스토에서 삭제하도록 신청하시겠습니까?")){
+			$('.chkbox:checked').each(function(){
+				del_ids += $(this).attr("id") + ",";
+			})
+			// loadingView();
+			$.ajax({
+				data:'ids='+ del_ids, 
+				dataType:'script', 
+				type:'post', 
+				url:'/mbooks/req_del_from_store',
+				success:function(){
+					window.location.href = "/mbooks?me=y&store=y";
+				}
+			});
 		}else{
 			return false;
 		}

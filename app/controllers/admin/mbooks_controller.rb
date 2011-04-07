@@ -7,8 +7,6 @@ class Admin::MbooksController < ApplicationController
     @board = "mbook"
     @section = "index"
 
-    
-    
     if params[:st] != "all" and params[:st] != "" and params[:st] != nil
       if params[:st] == "승인대기"
         @menu_on = "mb_req"
@@ -23,6 +21,10 @@ class Admin::MbooksController < ApplicationController
     
     @mbooks = Mbook.all
 
+    if params[:user] != nil and params[:user] != ""
+      @mbooks = @mbooks.all(:user_id => params[:user].to_i)
+    end
+    
     if params[:st] != "all" and params[:st] != "" and params[:st] != nil
       @mbooks = @mbooks.all(:status => params[:st])
     end 
@@ -95,15 +97,59 @@ class Admin::MbooksController < ApplicationController
     end
   end
 
-  # DELETE /admin_mbooks/1
-  # DELETE /admin_mbooks/1.xml
-  def destroy
-    @mbook = Admin::Mbook.find(params[:id])
-    @mbook.destroy
+  def deleteSelection 
 
-    respond_to do |format|
-      format.html { redirect_to(admin_mbooks_url) }
-      format.xml  { head :ok }
+    chk_ids = params[:ids]
+    chks = chk_ids.split(",")
+
+    chks.each do |chk|
+      mbook = Mbook.get(chk.to_i)
+      if mbook != nil
+          puts_message mbook.zipfile
+          if File.exists?(mbook.zipfile)
+            FileUtils.rm_rf mbook.zipfile
+          end
+          
+          puts_message mbook.zip_path
+          if File.exists?(mbook.zip_path)
+            FileUtils.rm_rf mbook.zip_path
+          end
+          
+          puts_message MBOOK_PATH + mbook.id.to_s + ".zip"
+          if File.exists?(MBOOK_PATH + mbook.id.to_s + ".zip")
+            FileUtils.rm_rf MBOOK_PATH + mbook.id.to_s + ".zip"
+          end
+          
+          mbook_id = mbook.id
+          if mbook.destroy 
+            puts_message "mBook ("+mbook_id.to_s+") 삭제 성공"
+          else
+            puts_message "mBook ("+mbook_id.to_s+") 삭제 실패"
+          end
+      end    
     end
+
+    render :text => "success"
+  end
+
+  def change_status
+    chk_ids = params[:ids]
+    chks = chk_ids.split(",")
+
+    chks.each do |chk|
+      mbook = Mbook.get(chk.to_i)
+      if mbook != nil
+          
+          mbook_id = mbook.id
+          mbook.status = params[:str_status]
+          if mbook.save 
+            puts_message "mBook ("+mbook_id.to_s+") 상태변경 성공"
+          else
+            puts_message "mBook ("+mbook_id.to_s+") 상태변경 실패"
+          end
+      end    
+    end
+
+    render :text => "success"
   end
 end

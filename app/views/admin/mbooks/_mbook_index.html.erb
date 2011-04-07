@@ -33,6 +33,9 @@
 		<select name="sort_list">
 			<option value="1">승인완료</option>
 			<option value="2">삭제대기</option>
+			<option value="3">대기</option>
+			<option value="4">승인거부</option>
+			<option value="5">승인대기</option>
 		</select>
 	</div>
 	<!-- List -->
@@ -45,7 +48,7 @@
 			<li class="date">등록일</li>
 			<li class="price">가격</li>
 			<li class="state">상태</li>
-			<li class="check">선택</li>
+			<li class="check" id="check_all" style="cursor:pointer;">선택</li>
 		</ul>
 	</div>
 	<div class="list_data">
@@ -70,16 +73,22 @@
 				<li class="date"><%= mb.created_at.strftime('%Y-%m-%d') %></li>
 				<li class="price"><img src="../images/icon_dollar.png" alt="달러"> <%= mb.price %></li>
 				<li class="state"><%= mb.status %></li>
-				<li class="check"><input type="checkbox" value="10"></li>
+				<li class="check"><input type="checkbox" class="chkbox" id="<%= mb.id %>"></li>
 			</ul>
 		<%@page_num -= 1
 		end %>
 	</div>
-	<!-- list Action -->		
+	<!-- list Action -->	
 	<div class="select_list">
-		<img src="../images/input_title/input_title_select.png" alt="선택한 항목을">
-		<a href=""><img src="../images/bt/bt_waiting.png" alt="승인대기 상태로 이동"></a>
-		<p class="error"><img src="../images/icon_error.png" alt="error"> 선택한 항목이 없습니다.</p>
+		<img src="/images/input_title/input_title_select.png" alt="선택한 항목을">
+		<%if @menu_on == "mb_all" %>	
+			<img src="/images/bt/bt_delete.png" alt="삭제" class="btn_status" to_state="del" style="cursor:pointer;">
+		<%elsif @menu_on == "mb_del" %>	
+			<img src="/images/bt/bt_ready.png" alt="대기 상태로 이동" class="btn_status" to_state="ready" style="cursor:pointer;">
+		<%elsif @menu_on == "mb_req" %>
+			<img src="/images/bt/bt_store_upload.png" alt="Store로 등록 허용" class="btn_status" to_state="req_ready" style="cursor:pointer;">
+		<%end %>
+		<p class="error" id="msg_error" style="display:none;"><img src="../images/icon_error.png" alt="error"> 선택한 항목이 없습니다.</p>
 	</div>
 	<!-- Paging -->
 	<div>
@@ -93,7 +102,7 @@
 	<!-- Search -->
 	<div class="search">
 		<img src="../images/input_title/input_title_search.png" alt="조건별 검색">
-		<select name="src_con1">
+		<select name="keyword" id="keyword">
 			<option value="1">mBook</option>
 			<option value="2">저자</option>
 			<option value="3">출판사</option>
@@ -103,7 +112,65 @@
 			<option value="7">가격</option>
 			<option value="8">상태</option>
 		</select>
-    	<input type="text" name="src_con2" value="src_con2">
+    	<input type="text" name="search" value="<%= params[:search] %>">
     	<a href=""><img src="../images/bt/bt_search.png" alt="검색"></a>
 	</div>
 </div>
+
+<script>
+
+$('#check_all').live("click", function(){
+	$('.chkbox').each(function(){
+		$(this).attr("checked", !$(this).attr("checked"));
+	})
+})
+
+$('.btn_status').live("click", function(){
+	var $status = $(this).attr("to_state");
+	var $str_confirm = "";
+	
+	var $url = "";
+	if( $status == "del" ){
+		$url = '/admin/mbooks/deleteSelection';
+		$str_confirm = "정말 삭제사히겠습니까?";
+	}else if ($status == "ready") {
+		$url = '/admin/mbooks/change_status';
+		$str_status = "대기";
+		$str_confirm = "대기상태로 변경하시겠습니까?";
+	}else if ( $status == "req_ready" ){
+		$url = '/admin/mbooks/change_status';
+		$str_status = "승인완료";
+		$str_confirm = "스토어로의 등록을 허용하시겠습니까?";
+	}
+	
+	if ($(':checkbox:checked').length < 1){
+		$('#msg_error').css("display", "block");
+		setTimeout(function(){$('#msg_error').css("display", "none");}, 3000);
+	}else{
+		var $del_ids = "";
+		
+		if( confirm($str_confirm) ){
+			$('.chkbox:checked').each(function(){
+				$del_ids += $(this).attr("id") + ",";
+			})
+			// loadingView();
+			
+			
+			
+			$.ajax({
+				data:'ids='+ $del_ids + '&str_status='+$str_status, 
+				dataType:'script', 
+				type:'post', 
+				url:$url,
+				success: function(request){
+					window.location.href = "/admin/mbooks?st=<%=params[:st]%>&keyword=<%=params[:keyword]%>&search=<%=params[:search]%> >";
+				}
+			});
+			
+		}else{
+			return false;
+		}
+	}
+})
+
+</script>

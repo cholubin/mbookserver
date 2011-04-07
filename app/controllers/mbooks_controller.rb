@@ -159,7 +159,7 @@ class MbooksController < ApplicationController
     if @mbook.save
       unzip_uploaded_file(@mbook)
       rezip_uploaded_file(@mbook)
-      redirect_to '/mbooks'
+      redirect_to '/mbooks?me=y&store=n'
     else
       puts_message "실패!"
       redirect_to '/mybooks'
@@ -350,5 +350,20 @@ class MbooksController < ApplicationController
       render :text => "fail"
     end
   end  
+  
+  def req_del_from_store
+    chk_ids = params[:ids]
+    chks = chk_ids.split(",")
+
+    chks.each do |chk|
+      mbook = Mbook.get(chk.to_i)
+      if mbook != nil
+        mbook.status = "삭제대기"  
+        mbook.save
+      end    
+    end
+    
+    render :text => "success"
+  end
   
 end

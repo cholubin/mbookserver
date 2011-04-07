@@ -17,7 +17,7 @@
 			<li class="user_id">사용자 아이디</li>
 			<li class="user_type">이름</li>
 			<li class="user_detail">사용자 정보 보기 / 수정</li>
-			<li class="user_mbook">사용자의 mBook 리스트 보기</li>
+			<li class="user_mbook" id="loc_ref">사용자의 mBook 리스트 보기</li>
 			<li class="check" id="check_all" style="cursor:pointer;">선택</li>
 		</ul>
 	</div>
@@ -34,7 +34,7 @@
 			<li class="user_id"><%= user.userid %></li>
 			<li class="user_type"><%= user.name %></li>				
 			<li class="user_detail"><img src="../images/bt/bt_user_detail.png" alt="사용자 정보 보기 / 수정" id="detail_<%= user.id %>" class="btn_user_detail" style="cursor:pointer;"></li>
-			<li class="user_mbook"><a href=""><img src="../images/bt/bt_user_mbook.png" alt="사용자의 mBook 리스트 보기"></a></li>
+			<li class="user_mbook"><img src="../images/bt/bt_user_mbook.png" alt="사용자의 mBook 리스트 보기" class="to_user_mbook" id="to_user_mbook_<%= user.id %>" style="cursor:pointer;"></li>
 			<li class="check"><input type="checkbox" class="chkbox" id="chk_<%= user.id %>"></li>
 		</ul>
 		<% @page_num -= 1
@@ -88,21 +88,41 @@ $('#btn_del').live("click", function(){
 
 $('.btn_user_detail').live("click", function(){
 	var $user_id = $(this).attr("id").replace("detail_", "");
-	var $btn_loc = $(this).offset() ;
-	// alert($btn_loc.left + "//" + $btn_loc.top);
-	$.ajax({
-		data:'user_id='+ $user_id, 
-		dataType:'script', 
-		type:'post', 
-		url:'/admin/users/pop_user',
-		success: function(request){
-			$('#pop_user').css("display", "block");
-			$('#pop_user').css("position", "absolute");
-			$('#pop_user').css("top", $btn_loc.top);
-			$('#pop_user').css("left", $btn_loc.left + 150);
-		}
-	});
+	var $btn_loc = $('#loc_ref').offset() ;
 	
-	
+	if ($('#pop_user').css("display") == "block" && $('#pop_user').attr("user_id") == $user_id ){
+		$('#pop_user').fadeOut("fast", function(){
+			$('#pop_user').css("display", "none");
+		})
+		
+	}else{
+		$('#pop_user').fadeOut("slow", function(){
+			$(this).css("top", $btn_loc.top + 30);
+			$(this).css("left", $btn_loc.left);
+			
+			$(this).fadeIn("slow", function(){
+				$(this).css("display", "block");	
+				$(this).attr("user_id",$user_id);
+				$(this).css("position", "absolute");
+			});
+			
+			$.ajax({
+				data:'user_id='+ $user_id, 
+				dataType:'script', 
+				type:'post', 
+				url:'/admin/users/pop_user',
+				success: function(request){
+
+				}
+			});
+		});
+		
+		
+	}
+})
+
+$('.to_user_mbook').live("click", function(){
+	var $user_id = $(this).attr("id").replace("to_user_mbook_","");
+	window.location.href = "/admin/mbooks?user="+$user_id;
 })
 </script>

@@ -46,7 +46,7 @@
 			<tr class="bookdate">
 				<td class="input_name">발행일</td>
 				<td class="input_data">
-					<input type="text" id="issue_date" name="issue_date"><img id="btn_issue_date" src="/images/bt/bt_date.png" alt="발행일 선택" style="cursor:pointer;">
+					<input type="text" id="issue_date" name="issue_date" value="<%= Date.today.to_s %>"><img id="btn_issue_date" src="/images/bt/bt_date.png" alt="발행일 선택" style="cursor:pointer;">
 				</td>
 				<td class="error"><!-- <img src="/images/icon_error.png" alt="error"> 발행일을 선택하세요. --></td>
 			</tr>
@@ -92,7 +92,6 @@ $('#select_category').live("change", function(){
 })
 
 
-
 $('#submit_btn').click(function(){
 	if( $('#issue_date').val() == ""){
 		alert("발행일을 선택해주세요~");
@@ -108,6 +107,8 @@ $('#submit_btn').click(function(){
 		alert("업로드할 파일을 선택해주세요!");
 		return false;
 	}
+	
+	loadingView();
 })
 
 $('#btn_issue_date').live("click", function(){

@@ -1,4 +1,12 @@
-<body id="sub" class="sub_mbook_in_store_admin">
+<% 
+if @section == "show" 
+	class_name = "sub_detail_admin"
+else
+	class_name = "sub_mbook_in_store_admin"
+end
+%>
+
+<body id="sub" class="<%= class_name %>">
 	
 	<div id="header">
 	<%= render :partial => "/admin/shared/menu", :object =>@menu_on %>	

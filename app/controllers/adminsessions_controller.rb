@@ -44,7 +44,7 @@ class AdminsessionsController < ApplicationController
           
           admin_sign_in admin
               
-          redirect_to admin_temps_url
+          redirect_to admin_mbooks_url
           
         end
         
