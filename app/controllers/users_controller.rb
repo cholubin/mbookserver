@@ -43,9 +43,6 @@ class UsersController < ApplicationController
     @user.email = params[:user][:email]
     @user.tel = params[:user][:tel]
     @user.mobile = params[:user][:mobile]
-    @user.group1 = params[:user][:group1]
-    @user.group2 = params[:user][:group2]
-    @user.post_spot = params[:user][:post_spot]
     @user.zip_code = params[:user][:zip_code]
     @user.addr1 = params[:user][:addr1]
     @user.addr2 = params[:user][:addr2]
@@ -248,5 +245,7 @@ class UsersController < ApplicationController
      end   
 
   end
+
+    
     
 end

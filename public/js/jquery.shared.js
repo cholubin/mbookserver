@@ -4,7 +4,7 @@ var popupStatus = null;
 function loadingView() {
 	if($("#modal-bg").length == 0) {
 		$("<div id=\"modal-bg\"><img id=\"loading-icon\" src=\"/images/loading.gif\" width=\"91\" height=\"120\" alt=\"로딩이미지\"/></div>")
-		.css({"display":"none","background-color": "black", "position": "absolute", "top": "0", "left": "0","z-index":"10"})
+		.css({"display":"none","background-color": "black", "position": "absolute", "top": "0", "left": "0","z-index":"10000"})
 		.appendTo('body')
 	}
 	if(!loadingStatus) {

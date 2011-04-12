@@ -1,4 +1,5 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :userbooks
   map.resources :myadmins
   map.resources :adminsessions  
 
@@ -24,6 +25,20 @@ ActionController::Routing::Routes.draw do |map|
   map.namespace :admin do |admin|
       admin.resources :users, :temps, :categories,:myadmins, :mbooks
   end 
+  
+  
+  # API
+  map.register '/register.htm', :controller => 'apis', :action => 'register'
+  map.reader_login '/login.htm', :controller => 'apis', :action => 'reader_login'
+  map.memberout '/memberout.htm', :controller => 'apis', :action => 'memberout'
+  map.modifymember '/modifymember.htm', :controller => 'apis', :action => 'modifymember'
+  map.notification '/notification.htm', :controller => 'apis', :action => 'notification'
+  map.userbooklist '/userbooklist.htm', :controller => 'apis', :action => 'userbooklist'
+  map.mbookdownchk '/mbookdownchk.htm', :controller => 'apis', :action => 'mbookdownchk'
+  map.mbookdown '/mbookdown.htm', :controller => 'apis', :action => 'mbookdown'
+  map.mbookdownconfirm '/mbookdownconfirm.htm', :controller => 'apis', :action => 'mbookdownconfirm'
+  map.mbookinfo '/mbookinfo.htm', :controller => 'apis', :action => 'mbookinfo'
+  map.store '/store.htm', :controller => 'apis', :action => 'store'
   
   map.connect ':controller/:action/:id'
   map.connect ':controller/:action/:id.:format'

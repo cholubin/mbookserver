@@ -122,7 +122,8 @@ class MbooksController < ApplicationController
       
       @menu_on = "mb_reg"
       
-      @mbook = Mbook.new
+      @mbook = Mbook.new()
+      
       @categories = Category.all(:gubun => "template", :order => :priority)    
       category_id = Category.first(:gubun => "template", :order => [:priority]).id.to_i
       @subcategories = Subcategory.all(:category_id => category_id, :order => [:priority])    
@@ -144,12 +145,9 @@ class MbooksController < ApplicationController
     @mbook = Mbook.new()
     @mbook.category_id = params[:category_id]
     @mbook.subcategory1_id = params[:subcategory1_id]
+    @mbook.subcategory2_id = (params[:subcategory2_id] != nil and params[:subcategory2_id] != "") ? params[:subcategory2_id] : nil
     @mbook.issue_date = params[:issue_date]
-    if params[:subcategory2_id] != nil and params[:subcategory2_id] != ""
-      @mbook.subcategory2_id = params[:subcategory2_id]
-    else
-      @mbook.subcategory2_id = nil
-    end
+    
     @mbook.price = params[:price]
     @mbook.user_id = current_user.id
     
@@ -158,7 +156,8 @@ class MbooksController < ApplicationController
     
     if @mbook.save
       unzip_uploaded_file(@mbook)
-      rezip_uploaded_file(@mbook)
+      get_xml_data_update(@mbook)
+      # rezip_uploaded_file(@mbook)
       redirect_to '/mbooks?me=y&store=n'
     else
       puts_message "실패!"
@@ -167,27 +166,22 @@ class MbooksController < ApplicationController
   end
 
   def unzip_uploaded_file(mbook) 
-   if mbook != nil   
-     destination = MBOOK_PATH + "#{mbook.id.to_s}"
-     
-     begin
-       FileUtils.mkdir_p destination if not File.exist?(destination)
-       FileUtils.chmod 0777, destination
-      rescue
-        puts_message "mbook folder creation was failed!"
-      end
-     
-     # puts_message destination 
-     
-     loop do 
-        break if File.exists?(mbook.zipfile)
-     end
-     
-       unzip(mbook, destination)    
-       get_xml_data_update(mbook)
-                 
-     end
-   end
+    destination = mbook.zip_path
+
+    begin
+     FileUtils.mkdir_p destination if not File.exist?(destination)
+     FileUtils.chmod 0777, destination
+    rescue
+      puts_message "mbook folder creation was failed!"
+    end
+
+    loop do 
+      break if File.exists?(mbook.zipfile)
+    end
+
+     unzip(mbook, destination)    
+     # get_xml_data_update(mbook)
+  end
    
    def rezip_uploaded_file(mbook)
      path = mbook.zip_path
@@ -221,6 +215,61 @@ class MbooksController < ApplicationController
    end
 
    def unzip(mbook, destination)  
+        file = mbook.zipfile
+        file_names = ["BookInfo.xml", "medium.jpg", "cover_image.png"]
+        
+        Zip::ZipFile.open(file) { |zip_file|
+          i = 0
+          zip_file.each{ |f| 
+            f_path = File.join(destination, f.name)
+            
+            @folder_name = f.name if i == 0
+            
+            # puts_message f.name
+            file_names.each do |file|
+              puts_message f.name
+              if f.name.match(file)
+                make_path( f_path.sub(file,"") )
+                zip_file.extract(f, f_path) unless File.exist?(f_path)
+              elsif f.name.match(@folder_name + "thumb.jpg")
+                zip_file.extract(f, f_path) unless File.exist?(f_path)
+              end
+              i += 1
+            end
+          }
+        }
+        
+        FileUtils.rm_rf (destination + "/__MACOSX")
+        
+        
+        @dir_names = Dir.entries(mbook.zip_path)
+        puts_message "디렉토리 갯수: " + @dir_names.length.to_s
+        
+        if @dir_names.length == 3 # 폴더를 압축한 경우 
+          @folder_name = @folder_name.sub("/","")
+          
+          puts_message "폴더이름:::: ==> " + mbook.zip_path.force_encoding("UTF-8") + "/" + @folder_name.force_encoding("UTF-8")
+          
+          mv_source = mbook.zip_path + '/' + "\"" + @folder_name + "\""
+          mv_dest = (mbook.zip_path + '/' + @folder_name).gsub(@folder_name, "")
+          
+          system("cd #{mv_source}; mv *.* #{mv_dest}")
+          FileUtils.rm_rf (mbook.zip_path + "/" + @folder_name)
+        end 
+        
+        # tree = REXML::Document.new mbook.zip_path + "/BookInfo.xml"
+        # 
+        # tree.elements.each("Sections/Section") do |person|
+        #   puts person.get_elements("SectionTitle").first
+        # end
+   end
+
+  def make_path(destination)
+    FileUtils.mkdir_p destination if not File.exist?(destination)
+    FileUtils.chmod 0777, destination
+  end
+   
+   def unzip_old(mbook, destination)  
         file = mbook.zipfile
         original_filename = (mbook.original_filename).force_encoding("ASCII-8BIT")
         
@@ -365,5 +414,9 @@ class MbooksController < ApplicationController
     
     render :text => "success"
   end
+  
+  
+  
+  
   
 end

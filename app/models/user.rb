@@ -17,11 +17,16 @@ class User
   property :id,                 Serial
   property :userid,             String, :required => true
   property :name,               String, :required => true 
+  property :type,               String, :default => "publisher"
   property :publisher,          String #필명/출판사명
   property :email,              String
   property :tel,                String
   property :mobile,             String
 
+  # 메일인증을 위해서 추가 
+  property :auth_code,          String #인증코드 (메일인증)
+  property :auth_flag,          Boolean, :default => false
+  
   property :encrypted_password, String, :length => 150
   property :salt,               String, :length => 150
   property :remember_token,     Text,   :length => 150
@@ -32,7 +37,6 @@ class User
   
   before :save, :encrypt_password
   before :update, :encrypt_password
-  before :create, :pdf_path
   # after  :save, :demo_up
 
   def update_password(submitted_password)
