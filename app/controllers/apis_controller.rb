@@ -480,23 +480,35 @@ EOF
       if params[:folder_id] != nil and params[:folder_id] != ""
         #category_id 와 동일 
         category_id = params[:folder_id].to_i
-
-        mbooks = Mbook.all(:category_id => category_id)
+        
+        subcategories = Subcategory.all(:category_id => category_id)
 
         items = ""
-        mbooks.each do |mb|
+        subcategories.each do |sub|
           items = items + "<item>
           <type>folder</type>
-          <id>#{category_id.to_s}</id>
-          <name>#{Category.get(category_id).name}</name>
-          <subitems>#{mbooks.count.to_s}</subitems>
+          <id>#{sub.id.to_s}</id>
+          <name>#{Subcategory.get(sub.id).name}</name>
+          <subitems>#{Mbook.all(:subcategory1_id => sub.id).count.to_s}</subitems>
           <thumbnail>/images/icon_category.png</thumbnail>
           </item>"
         end
         result = "0"
       else
-        result = "~"
+        categories = Category.all
+        items = ""
+        categories.each do |cat|
+          items = items + "<item>
+          <type>folder</type>
+          <id>#{cat.id.to_s}</id>
+          <name>#{cat.name}</name>
+          <subitems>#{Mbook.all(:category_id => cat.id).count.to_s}</subitems>
+          <thumbnail>/images/icon_category.png</thumbnail>
+          </item>"
+        end
+        
       end
+      
     rescue
       result = "~"
       items = ""
