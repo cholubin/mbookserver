@@ -44,11 +44,12 @@ class MbooksController < ApplicationController
       
       if params[:cat] != nil and params[:cat] != ""
         @mbooks = @mbooks.all(:category_id => params[:cat].to_i)
-        puts_message @mbooks.count.to_s
       end
     
-      if params[:subcat] != nil and params[:subcat] != ""
-        @mbooks = (@mbooks.all(:subcategory1_id => params[:sub].to_i) + @mbooks.all(:subcategory2_id => params[:sub].to_i))
+      if params[:sub] != nil and params[:sub] != ""
+        @mbooks = (@mbooks.all(:subcategory1_id => params[:sub].to_i) || @mbooks.all(:subcategory2_id => params[:sub].to_i))
+        puts_message "2:: " + @mbooks.count.to_s
+        
       end
       
       @total_count = @mbooks.search(params[:keyword], params[:search],"").count
@@ -67,8 +68,8 @@ class MbooksController < ApplicationController
         @mbooks = @mbooks.all(:category_id => params[:cat].to_i)
       end
     
-      if params[:subcat] != nil and params[:subcat] != ""
-        @mbooks = (@mbooks.all(:subcategory1_id => params[:sub].to_i) + @mbooks.all(:subcategory2_id => params[:sub].to_i))
+      if params[:sub] != nil and params[:sub] != ""
+        @mbooks = (@mbooks.all(:subcategory1_id => params[:sub].to_i) || @mbooks.all(:subcategory2_id => params[:sub].to_i))
       end
       
       

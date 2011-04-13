@@ -195,7 +195,7 @@
 <script language="Javascript">
 $('#select_category').live("change", function(){
 	var $value = $(this,'option:selected').val();
-	location.href = "/mbooks?cat="+$value;
+	location.href = "/mbooks?me=<%= params[:me] %>&store=<%= params[:store] %>&cat="+$value;
 	
 	$.ajax({
 		data:'category_id='+ $value, 
@@ -211,7 +211,7 @@ $('#select_category').live("change", function(){
 $('#select_subcategory1').live("change", function(){
 	var $cat = $('#select_category :selected').val();
 	var $sub = $(this,'option:selected').val();
-	location.href = "/mbooks?cat="+$cat+"&sub="+$sub;
+	location.href = "/mbooks?me=<%= params[:me] %>&store=<%= params[:store] %>&cat="+$cat+"&sub="+$sub;
 	
 })
 
