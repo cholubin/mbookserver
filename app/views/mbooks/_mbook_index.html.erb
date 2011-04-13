@@ -195,6 +195,7 @@
 <script language="Javascript">
 $('#select_category').live("change", function(){
 	var $value = $(this,'option:selected').val();
+	location.href = "/mbooks?cat="+$value;
 	
 	$.ajax({
 		data:'category_id='+ $value, 
@@ -203,7 +204,7 @@ $('#select_category').live("change", function(){
 		url:'/mbooks/update_subcategories'
 	});
 	
-	location.href = "/mbooks?cat="+$value;
+	
 	
 })
 

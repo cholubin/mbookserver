@@ -41,8 +41,10 @@ class MbooksController < ApplicationController
         @mbooks = @mbooks.all(:status   => strStatus)
       end
     
+      
       if params[:cat] != nil and params[:cat] != ""
         @mbooks = @mbooks.all(:category_id => params[:cat].to_i)
+        puts_message @mbooks.count.to_s
       end
     
       if params[:subcat] != nil and params[:subcat] != ""
@@ -60,6 +62,16 @@ class MbooksController < ApplicationController
       if params[:in_store] == "y"
         @mbooks = @mbooks.all(:status => "승인완료")
       end
+      
+      if params[:cat] != nil and params[:cat] != ""
+        @mbooks = @mbooks.all(:category_id => params[:cat].to_i)
+      end
+    
+      if params[:subcat] != nil and params[:subcat] != ""
+        @mbooks = (@mbooks.all(:subcategory1_id => params[:sub].to_i) + @mbooks.all(:subcategory2_id => params[:sub].to_i))
+      end
+      
+      
       @total_count = @mbooks.search(params[:keyword], params[:search],"").count
       @mbooks = @mbooks.search(params[:keyword], params[:search], params[:page])
       
