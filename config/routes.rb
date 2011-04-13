@@ -39,6 +39,7 @@ ActionController::Routing::Routes.draw do |map|
   map.mbookdownconfirm '/mbookdownconfirm.htm', :controller => 'apis', :action => 'mbookdownconfirm'
   map.mbookinfo '/mbookinfo.htm', :controller => 'apis', :action => 'mbookinfo'
   map.store '/store.htm', :controller => 'apis', :action => 'store'
+  map.auth '/auth.htm', :controller => 'apis', :action => 'authentication'
   
   map.connect ':controller/:action/:id'
   map.connect ':controller/:action/:id.:format'

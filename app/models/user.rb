@@ -24,7 +24,7 @@ class User
   property :mobile,             String
 
   # 메일인증을 위해서 추가 
-  property :auth_code,          String #인증코드 (메일인증)
+  property :auth_code,          String, :length => 150  #인증코드 (메일인증)
   property :auth_flag,          Boolean, :default => false
   
   property :encrypted_password, String, :length => 150
@@ -73,6 +73,10 @@ class User
       end
   end
 
+  def make_authcode
+    return make_auth
+  end
+  
    private
 
        def encrypt_password
@@ -88,6 +92,10 @@ class User
 
        def make_salt
          secure_hash("#{Time.now.utc}#{password}")
+       end
+       
+       def make_auth
+         secure_hash("#{Time.now.utc}#{self.userid}")
        end
 
        def secure_hash(string)

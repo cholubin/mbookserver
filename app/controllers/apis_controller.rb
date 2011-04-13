@@ -4,9 +4,11 @@ include REXML
 
 class ApisController < ApplicationController
   # result 값 공통 ==========================
+  # 0 : OK
   # 3 : User in approval process
   # 4 : Invalid userid
   # 5 : Invalid userpw
+  # ~ : Error
   # ======================================
 
   
@@ -16,11 +18,17 @@ class ApisController < ApplicationController
 
       if @user != nil 
         user = User.authenticate(userid,userpw)
-        if user.nil? 
-          result = 5
+        
+        if user != nil
+          if user.auth_flag == false
+            result = 3
+          else
+            result = 0
+          end
         else
-          result = 0
+          result = 5
         end
+        
       else
         result = 4
       end
@@ -29,7 +37,6 @@ class ApisController < ApplicationController
     end
     # result 값
     # 0 : user exist
-    # ~ : Error
     return result
   end
 
@@ -46,9 +53,10 @@ EOF
   
   
   def mbookdownchk
-    userid = params[:userid]
-    userpw = params[:userpw]
-    mbookid = params[:mbookid].to_i
+    userid  = (params[:userid]  != nil and params[:userid]  != "") ? params[:userid]       : ""
+    userpw  = (params[:userpw]  != nil and params[:userpw]  != "") ? params[:userpw]       : ""
+    mbookid = (params[:mbookid] != nil and params[:mbookid] != "") ? params[:mbookid].to_i : ""
+    
     begin
       result = user_authentication(userid, userpw)
       
@@ -57,11 +65,7 @@ EOF
         if mbook.nil?
           result = 6
         else
-          if File.exists?(mbook.zipfile)
-            result = 0  
-          else
-            result = 6
-          end
+          result = File.exists?(mbook.zipfile) ? 0 : 7
         end
       end
       
@@ -72,16 +76,15 @@ EOF
     result_xml = make_result_xml(result)
 
     # result 값
-    # 0 : OK
     # 6 : mBook not exist
-    # ~ : Error
+    # 7 : mBook zipfile not exist
     render :xml => result_xml
   end
   
   def mbookdown
-    userid = params[:userid]
-    userpw = params[:userpw]
-    mbookid = params[:mbookid].to_i
+    userid  = (params[:userid]  != nil and params[:userid]  != "") ? params[:userid]       : ""
+    userpw  = (params[:userpw]  != nil and params[:userpw]  != "") ? params[:userpw]       : ""
+    mbookid = (params[:mbookid] != nil and params[:mbookid] != "") ? params[:mbookid].to_i : ""
     
     begin
       result = user_authentication(userid, userpw)
@@ -96,11 +99,7 @@ EOF
               userbook = Userbook.new()
               userbook.userid = userid
               userbook.mbookid = mbookid
-              if userbook.save
-                result = 0
-              else
-                result = 7
-              end
+              result = userbook.save ? 0 : 7
             end
           else
             result = 6
@@ -116,8 +115,7 @@ EOF
     # result 값
     # 0 : OK  // 파일을 보내는 경우에는 xml을 보낼 수 없다. 렌더링을 동시에 두종류 할 수 없다. 
     # 6 : mBook not exist    
-    # 7 : 사용자 구매리스트 업데이트 (구매하고 다운로드 한적이 없는 경우만 인서트)
-    # ~ : Error
+    # 7 : 사용자 구매리스트 업데이트 오류(구매하고 다운로드 한적이 없는 경우만 인서트)
 
     if result == 0
       send_file mbook.zipfile, :filename => mbook.id.to_s + ".mbook.zip",  :type => "application/zip", :stream => "false", :disposition => 'attachment'
@@ -128,9 +126,9 @@ EOF
   end
   
   def mbookdownconfirm
-    userid = params[:userid]
-    userpw = params[:userpw]
-    mbookid = params[:mbookid].to_i
+    userid  = (params[:userid]  != nil and params[:userid]  != "") ? params[:userid]       : ""
+    userpw  = (params[:userpw]  != nil and params[:userpw]  != "") ? params[:userpw]       : ""
+    mbookid = (params[:mbookid] != nil and params[:mbookid] != "") ? params[:mbookid].to_i : ""
     
     begin
       result = user_authentication(userid, userpw)
@@ -149,11 +147,7 @@ EOF
               userbook = Userbook.new()
               userbook.userid = userid
               userbook.mbookid = mbookid
-              if userbook.save
-                result = 0
-              else
-                result = 7
-              end
+              result = userbook.save ? 0 : 7
             end
             result = 0
           else
@@ -177,7 +171,7 @@ EOF
   
   def mbookinfo
     begin
-      mbookid = params[:mbookid].to_i
+      mbookid = (params[:mbookid] != nil and params[:mbookid] != "") ? params[:mbookid].to_i : ""
       mb = Mbook.get(mbookid)
       
       if !mb.nil?
@@ -224,29 +218,40 @@ EOF
   end
   
   def register
-    userid = params[:userid]
-    userpw = params[:userpw]
-    email = params[:email]
+    userid  = (params[:userid]  != nil and params[:userid]  != "") ? params[:userid] : ""
+    userpw  = (params[:userpw]  != nil and params[:userpw]  != "") ? params[:userpw] : ""
+    email   = (params[:email]   != nil and params[:email]   != "") ? params[:email]  : ""
     
-    if User.all(:userid => userid).count > 0
-      result = 1
-    elsif User.all(:email => email).count > 0
-      result = 2
-    else
-      @user = User.new
-      @user.userid = userid
-      @user.name = userid
-      @user.password = userpw
-      @user.email = email
-      @user.type = "reader"
-
-      if @user.save
-        result = 0
+    if userid != "" and userpw != "" and email != ""
+      if User.first(:userid => userid) != nil
+        result = 1
+      elsif User.first(:email => email) != nil
+        result = 2
       else
-        result = "~"
+        @user = User.new
+        @user.userid = userid
+        @user.name = userid
+        @user.password = userpw
+        @user.email = email
+        @user.type = "reader"
+        
+        auth_code = @user.make_authcode
+        puts_message "승인 코드==>" + auth_code
+        @user.auth_code = auth_code
+        
+        Emailer.deliver_email(
+          :recipients => email,
+          :subject => "엠북스토어 인증메일 입니다.",
+          :from => "mbookserver@gmail.com",
+          :body => "<html><head><body><a href='#{HOSTING_URL}auth.htm?userid=#{userid}&code=#{auth_code}'>여기를 클릭하시면 인증이 완료됩니다!~</a></body></head></html>"
+        )
+      
+        result = @user.save ? 0 : "~"
+        
       end
+    else
+      result = "~"
     end
-    
     
     result_xml = make_result_xml(result)
     
@@ -261,56 +266,48 @@ EOF
   
     
   def reader_login
-    userid = params[:userid]
-    userpw = params[:userpw]
+    userid  = (params[:userid]  != nil and params[:userid]  != "") ? params[:userid] : ""
+    userpw  = (params[:userpw]  != nil and params[:userpw]  != "") ? params[:userpw] : ""
+    
     begin
       result = user_authentication(userid, userpw)
       if result == 0
-        sign_in user
+        sign_in User.first(:userid => userid)
       end
       
     rescue
       result = "~"
     end
-    # result 값
-    # 0 : OK
-    # ~ : Error
     result_xml = make_result_xml(result)
     render :xml => result_xml
   end
+
   
   def memberout
-    userid = params[:userid]
-    userpw = params[:userpw]
+    userid  = (params[:userid]  != nil and params[:userid]  != "") ? params[:userid] : ""
+    userpw  = (params[:userpw]  != nil and params[:userpw]  != "") ? params[:userpw] : ""
 
     begin
       result = user_authentication(userid, userpw)
       if result == 0
-        if @user.destroy
-          result = 0
-        else
-          result = "~"
-        end
+        result = @user.destroy ? 0 : "~"
       end
-      
     rescue
       result = "~"
     end
-    # result 값
-    # 0 : OK
-    # ~ : Error
     result_xml = make_result_xml(result)
     render :xml => result_xml
   end
   
+
   def modifymember
     begin
-      userid = params[:userid]
-      userpw = params[:userpw]
-      newpw  = params[:newpw]
+      userid = (params[:userid] != nil and params[:userid] != "") ? params[:userid] : ""
+      userpw = (params[:userpw] != nil and params[:userpw] != "") ? params[:userpw] : ""
+      newpw  = (params[:newpw]  != nil and params[:newpw]  != "") ? params[:newpw]  : ""
 
       result = user_authentication(userid, userpw)
-      if result == 0
+      if  result == 0
         if @user.update_password(newpw)
           result = 0
         else
@@ -322,53 +319,21 @@ EOF
       result = "~"
     end
   
-      # result 값
-      #      0 : OK
-      #      ~ : Error
     result_xml = make_result_xml(result)
-
     render :xml => result_xml
-        
   end
   
-  # 개별공지 
   def notification
-    if params[:userid] != nil and params[:userid] != ""
-      userid = params[:userid]
-    else
-      userid = ""
-    end
-    
-    if params[:userpw] != nil and params[:userpw] != ""
-      userpw = params[:userpw]
-    else
-      userpw = ""
-    end
-    
-    if userid == "" and userpw == ""
-      notice = "전체공지입니다!"
-    else
-      notice = "개별공지입니다!"
-    end
-    
+    userid = (params[:userid] != nil and params[:userid] != "") ? params[:userid] : ""
+    userpw = (params[:userpw] != nil and params[:userpw] != "") ? params[:userpw] : ""
+    notice = (userid == "" and userpw == "")? "전체공지" : "개별공지"
     
     begin
       if userid == "" and userpw == ""
-        if notice == "" or notice.nil?
-          result = 1
-        else
-          result = 0
-        end
+        result = (notice == "" or notice.nil?) ? 1 : 0
       else
         result = user_authentication(userid, userpw)
-
-        if result == 0
-          if notice == "" or notice.nil?
-            result = 1
-          else
-            result = 0
-          end
-        end
+        if result == 0; result = (notice == "" or notice.nil?) ? 1 : 0; end
       end
       
     rescue
@@ -380,9 +345,7 @@ EOF
     end
     
     # result 값
-    # 0 : OK
     # 1 : 공지 없슴
-    # ~ : Error
     
     result_xml = <<-EOF
 <?xml version="1.0" encoding="UTF-8"?>
@@ -397,8 +360,8 @@ EOF
   end
   
   def userbooklist
-    userid = params[:userid]
-    userpw = params[:userpw]
+    userid = (params[:userid] != nil and params[:userid] != "") ? params[:userid] : ""
+    userpw = (params[:userpw] != nil and params[:userpw] != "") ? params[:userpw] : ""
     
     begin
       result = user_authentication(userid, userpw)
@@ -410,6 +373,8 @@ EOF
         booklist.each do |book|
           userbooklist = userbooklist + book.id.to_s + ","
         end
+        if userbooklist[-1] == ","; userbooklist[-1] = ""; end
+        
       end
       
     rescue
@@ -429,41 +394,39 @@ EOF
   end
   
   def store
+    items = "\n"
     
     begin
-  
       if params[:folder_id] != nil and params[:folder_id] != ""
         #category_id 와 동일 
         category_id = params[:folder_id].to_i
         
         subcategories = Subcategory.all(:category_id => category_id)
 
-        items = ""
         subcategories.each do |sub|
-          items = items + "<item>
-          <type>folder</type>
-          <id>#{sub.id.to_s}</id>
-          <name>#{Subcategory.get(sub.id).name}</name>
-          <subitems>#{Mbook.all(:subcategory1_id => sub.id).count.to_s}</subitems>
-          <thumbnail>/images/icon_category.png</thumbnail>
-          </item>"
+          items = items + 
+"<item>
+<type>folder</type>
+<id>#{sub.id.to_s}</id>
+<name>#{Subcategory.get(sub.id).name}</name>
+<subitems>#{Mbook.all(:subcategory1_id => sub.id).count.to_s}</subitems>
+<thumbnail>/images/icon_category.png</thumbnail>
+</item>\n"
         end
         result = "0"
       else
         categories = Category.all
-        items = ""
         categories.each do |cat|
-          items = items + "<item>
-          <type>folder</type>
-          <id>#{cat.id.to_s}</id>
-          <name>#{cat.name}</name>
-          <subitems>#{Mbook.all(:category_id => cat.id).count.to_s}</subitems>
-          <thumbnail>/images/icon_category.png</thumbnail>
-          </item>"
+          items = items + 
+"<item>
+<type>folder</type>
+<id>#{cat.id.to_s}</id>
+<name>#{cat.name}</name>
+<subitems>#{Mbook.all(:category_id => cat.id).count.to_s}</subitems>
+<thumbnail>/images/icon_category.png</thumbnail>
+</item>\n"
         end
-        
       end
-      
     rescue
       result = "~"
       items = ""
@@ -483,5 +446,39 @@ EOF
     render :xml => result_xml
   end
   
-  
+  def authentication
+    auth_code = (params[:code] != nil and params[:code] != "") ? params[:code] : ""
+    userid = (params[:userid] != nil and params[:userid] != "") ? params[:userid] : ""
+    
+    begin
+      if auth_code != nil and userid != ""
+        @user = User.first(:userid => userid)
+        if @user.auth_code == auth_code
+          @user.auth_flag = true
+          if @user.save
+            result = 0
+          else
+            result = 2
+          end
+        else
+          result = 1
+        end
+      else
+        result = "~"
+      end
+    rescue
+      result = "~"
+    end
+    
+      # result값 
+      # 0 : 인증완료 
+      # 1 : 인증실패 
+      # 2 : 인증정보 업데이트 에러 
+      # ~ : Error
+
+      if result == 0 
+        render :text => "인증성공"
+      else
+        render :text => "인증실패"
+      end  end
 end
