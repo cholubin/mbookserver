@@ -331,7 +331,7 @@ class MbooksController < ApplicationController
         FileUtils.rm_rf(@mbook.zip_path)
         unzip_uploaded_file(@mbook)
       end
-      redirect_to '/mbooks'
+      redirect_to "/mbooks?me=#{params[:me]}&store=#{params[:store]}"
     else
       puts_message "실패!"
       redirect_to '/mybooks'

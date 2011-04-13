@@ -3,6 +3,12 @@ require 'rexml/document'
 include REXML
 
 class ApisController < ApplicationController
+  # result 값 공통 ==========================
+  # 3 : User in approval process
+  # 4 : Invalid userid
+  # 5 : Invalid userpw
+  # ======================================
+
   
   def user_authentication(userid, userpw)
     begin
@@ -23,12 +29,21 @@ class ApisController < ApplicationController
     end
     # result 값
     # 0 : user exist
-    # 3 : User in approval process
-    # 4 : Invalid userid
-    # 5 : Invalid userpw
     # ~ : Error
     return result
   end
+
+  def make_result_xml(result)
+    result_xml = <<-EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<xml>
+<result>#{result}</result>
+</xml>
+EOF
+    return result_xml
+  end
+  
+  
   
   def mbookdownchk
     userid = params[:userid]
@@ -53,19 +68,13 @@ class ApisController < ApplicationController
     rescue
       result = "~"
     end
+    
+    result_xml = make_result_xml(result)
+
     # result 값
     # 0 : OK
-    # 3 : User in approval process
-    # 4 : Invalid userid
-    # 5 : Invalid userpw
     # 6 : mBook not exist
     # ~ : Error
-    result_xml = <<-EOF
-<?xml version="1.0" encoding="UTF-8"?>
-<xml>
-<result>#{result}</result>
-</xml>
-EOF
     render :xml => result_xml
   end
   
@@ -101,21 +110,15 @@ EOF
     rescue
       result = "~"
     end
+    
+    result_xml = make_result_xml(result)
+
     # result 값
     # 0 : OK  // 파일을 보내는 경우에는 xml을 보낼 수 없다. 렌더링을 동시에 두종류 할 수 없다. 
-    # 3 : User in approval process
-    # 4 : Invalid userid
-    # 5 : Invalid userpw
     # 6 : mBook not exist    
     # 7 : 사용자 구매리스트 업데이트 (구매하고 다운로드 한적이 없는 경우만 인서트)
     # ~ : Error
-    
-    result_xml = <<-EOF
-<?xml version="1.0" encoding="UTF-8"?>
-<xml>
-<result>#{result}</result>
-</xml>
-EOF
+
     if result == 0
       send_file mbook.zipfile, :filename => mbook.id.to_s + ".mbook.zip",  :type => "application/zip", :stream => "false", :disposition => 'attachment'
     else
@@ -162,21 +165,13 @@ EOF
       result = "~"
     end
     
+    result_xml = make_result_xml(result)
+
     # result 값
     # 0 : OK  // 파일을 보내는 경우에는 xml을 보낼 수 없다. 렌더링을 동시에 두종류 할 수 없다. 
-    # 3 : User in approval process
-    # 4 : Invalid userid
-    # 5 : Invalid userpw
     # 6 : mBook not exist    
     # 7 : 다운로드 카운트 업데이트 에러 
     # ~ : Error
-    
-    result_xml = <<-EOF
-<?xml version="1.0" encoding="UTF-8"?>
-<xml>
-<result>#{result}</result>
-</xml>
-EOF
     render :xml => result_xml
   end
   
@@ -217,20 +212,14 @@ EOF
       result = "~"
     end
     
+    if result != 0
+      result_xml = make_result_xml(result)
+    end
+    
     # result 값
     # 0 : OK
     # 6 : mBook is not exist
     # ~ : Error
-    if result != 0
-    result_xml = <<-EOF
-<?xml version="1.0" encoding="UTF-8"?>
-<xml>
-<result>#{result}</result>
-<mbookinfo></mbookinfo>
-</xml>
-EOF
-    end
-
     render :xml => result_xml
   end
   
@@ -238,7 +227,6 @@ EOF
     userid = params[:userid]
     userpw = params[:userpw]
     email = params[:email]
-    
     
     if User.all(:userid => userid).count > 0
       result = 1
@@ -258,19 +246,16 @@ EOF
         result = "~"
       end
     end
+    
+    
+    result_xml = make_result_xml(result)
+    
     # result 값
     #       0 : OK
     #       1 : user id exists already
     #       2 : email exists already
     #       3 : 인증 절차 중인 사용자
     #       ~ : Error
-    
-    result_xml = <<-EOF
-<?xml version="1.0" encoding="UTF-8"?>
-<xml>
-<result>#{result}</result>
-</xml>
-EOF
     render :xml => result_xml
   end
   
@@ -289,16 +274,8 @@ EOF
     end
     # result 값
     # 0 : OK
-    # 3 : 인증 절차 중인 사용자
-    # 4 : Invalid userid
-    # 5 : Invalid userpw
     # ~ : Error
-    result_xml = <<-EOF
-<?xml version="1.0" encoding="UTF-8"?>
-<xml>
-<result>#{result}</result>
-</xml>
-EOF
+    result_xml = make_result_xml(result)
     render :xml => result_xml
   end
   
@@ -321,16 +298,8 @@ EOF
     end
     # result 값
     # 0 : OK
-    # 3 : 인증 절차 중인 사용자
-    # 4 : Invalid userid
-    # 5 : Invalid userpw
     # ~ : Error
-    result_xml = <<-EOF
-<?xml version="1.0" encoding="UTF-8"?>
-<xml>
-<result>#{result}</result>
-</xml>
-EOF
+    result_xml = make_result_xml(result)
     render :xml => result_xml
   end
   
@@ -339,7 +308,7 @@ EOF
       userid = params[:userid]
       userpw = params[:userpw]
       newpw  = params[:newpw]
-    
+
       result = user_authentication(userid, userpw)
       if result == 0
         if @user.update_password(newpw)
@@ -348,25 +317,17 @@ EOF
           result = "~"
         end
       end
-    
+
     rescue
       result = "~"
     end
-      
+  
       # result 값
       #      0 : OK
-      #      3 : 인증 절차 중인 사용자
-      #      4 : Invalid userid
-      #      5 : Invalid userpw
       #      ~ : Error
-  result_xml = <<-EOF
-<?xml version="1.0" encoding="UTF-8"?>
-<xml>
-<result>#{result}</result>
-</xml>
-EOF
+    result_xml = make_result_xml(result)
 
-      render :xml => result_xml
+    render :xml => result_xml
         
   end
   
@@ -421,9 +382,6 @@ EOF
     # result 값
     # 0 : OK
     # 1 : 공지 없슴
-    # 3 : 인증 절차 중인 사용자
-    # 4 : Invalid userid
-    # 5 : Invalid userpw
     # ~ : Error
     
     result_xml = <<-EOF
@@ -459,9 +417,6 @@ EOF
     end
     # result 값
     # 0 : OK
-    # 3 : User in approval process
-    # 4 : Invalid userid
-    # 5 : Invalid userpw
     # ~ : Error
     result_xml = <<-EOF
 <?xml version="1.0" encoding="UTF-8"?>
