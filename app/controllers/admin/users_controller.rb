@@ -146,6 +146,21 @@ class Admin::UsersController < ApplicationController
     render :update do |page|
       page.replace_html 'pop_user', :partial => 'pop_user', :object => @user
     end
+  end
+  
+  def init_user_password
+    user_id = (params[:user_id] != nil and params[:user_id] != "") ? params[:user_id].to_i : nil
     
+    if user_id != nil
+      user = User.get(user_id)
+      user.update_password("1234")
+      if user.save
+        render :text => "success"
+      else
+        render :text => "fail"
+      end
+    else
+      render :text => "fail"
+    end
   end
 end

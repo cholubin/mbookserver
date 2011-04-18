@@ -20,7 +20,10 @@ class MbooksController < ApplicationController
       end
       # 내가 올린 mbook중 스토어에 등록된 책 
       if params[:me] == "y" and params[:store] == "y"
-        @mbooks = @mbooks.all(:user_id => current_user.id, :status => "승인완료")
+        @mbooks =   Mbook.all(:user_id => current_user.id, :status => "승인완료") + Mbook.all(:user_id => current_user.id, :status => "삭제대기")
+        
+        # @mbooks = repository(:default).adapter.select("SELECT * FROM mbooks where user_id = "+current_user.id.to_s+" and (status = '승인완료' or status = '삭제대기') ")
+        puts_message @mbooks.count.to_s
         @menu_on = "my_mb_store"
       # 내가 올린 모든 책 
       elsif params[:me] == "y" and params[:store] == "n"
@@ -31,14 +34,10 @@ class MbooksController < ApplicationController
         @mbooks = @mbooks.all(:status => "승인완료")
         @menu_on = "mb_store"
       end
-
+      
       if params[:st] != nil and params[:st] != ""
-        if params[:st] == "1"
-          strStatus = "승인완료"
-        elsif params[:st] == "2"
-          strStatus = "삭제대기"
-        end 
-        @mbooks = @mbooks.all(:status   => strStatus)
+        strStatus = params[:st]
+        @mbooks = @mbooks.all(:status => strStatus)
       end
     
       
@@ -48,12 +47,12 @@ class MbooksController < ApplicationController
     
       if params[:sub] != nil and params[:sub] != ""
         @mbooks = (@mbooks.all(:subcategory1_id => params[:sub].to_i) || @mbooks.all(:subcategory2_id => params[:sub].to_i))
-        puts_message "2:: " + @mbooks.count.to_s
-        
       end
       
-      @total_count = @mbooks.search(params[:keyword], params[:search],"").count
-      @mbooks = @mbooks.search(params[:keyword], params[:search], params[:page])
+      mbooks = @mbooks
+      
+      @total_count = @mbooks.search(mbooks, params[:keyword], params[:search],"").count
+      @mbooks = @mbooks.search(mbooks, params[:keyword], params[:search], params[:page])
       
     # 로그인 하지 않은 경우 (스토어에 등록된 책만 보여준다.)
     else
@@ -69,28 +68,23 @@ class MbooksController < ApplicationController
       end
     
       if params[:sub] != nil and params[:sub] != ""
-        @mbooks = (@mbooks.all(:subcategory1_id => params[:sub].to_i) || @mbooks.all(:subcategory2_id => params[:sub].to_i))
+        @mbooks = (@mbooks.all(:subcategory1_id => params[:sub].to_i) + @mbooks.all(:subcategory2_id => params[:sub].to_i))
       end
       
-      
-      @total_count = @mbooks.search(params[:keyword], params[:search],"").count
-      @mbooks = @mbooks.search(params[:keyword], params[:search], params[:page])
+      mbooks = @mbooks
+      @total_count = @mbooks.search(mbooks, params[:keyword], params[:search],"").count
+      @mbooks = @mbooks.search(mbooks, params[:keyword], params[:search], params[:page])
       
     end
 
     
     @categories = Category.all(:gubun => "template", :order => :priority)
       
-    render 'mbook'  
+    render 'mbook', :object => @total_count
   end
 
 
   def booklist
-    puts_message "good"
-    
-    # respond_to do |format|
-    #   format.xml { render :layout => false }
-    # end
     @board = "mbook"
     @section = "booklist"
     
@@ -163,6 +157,7 @@ class MbooksController < ApplicationController
     
     @mbook.price = params[:price]
     @mbook.user_id = current_user.id
+    @mbook.userid = current_user.userid
     
     @mbook.mbook_file = params[:mbook_file]
     @mbook.original_filename = params[:mbook_file].original_filename.gsub(".zip","")
@@ -229,7 +224,7 @@ class MbooksController < ApplicationController
 
    def unzip(mbook, destination)  
         file = mbook.zipfile
-        file_names = ["BookInfo.xml", "medium.jpg", "cover_image.png"]
+        file_names = ["BookInfo.xml", "medium.jpg", "cover_image.png", "cover.jpg"]
         
         Zip::ZipFile.open(file) { |zip_file|
           i = 0
@@ -330,6 +325,7 @@ class MbooksController < ApplicationController
       if params[:mbook_file] != nil and params[:mbook_file] != ""
         FileUtils.rm_rf(@mbook.zip_path)
         unzip_uploaded_file(@mbook)
+        get_xml_data_update(@mbook)
       end
       redirect_to "/mbooks?me=#{params[:me]}&store=#{params[:store]}"
     else

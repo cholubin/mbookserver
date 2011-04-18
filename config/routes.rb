@@ -10,6 +10,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.login '/admin/login', :controller => 'adminsessions', :action => 'new'
   map.login '/admin', :controller => 'adminsessions', :action => 'new'
+  map.join '/join', :controller => 'users', :action => 'new'
   map.logout '/admin/logout', :controller => 'adminsessions', :action => 'destroy'
   
   map.root :controller => 'pages', :action => 'home'

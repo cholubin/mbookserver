@@ -19,7 +19,7 @@
 				</tr>
 				<tr class="pw">
 					<td class="input_name">비밀번호</td>
-					<td class="input_data"><input type="button" value="비밀번호 초기화"></td>
+					<td class="input_data"><input type="button" value="비밀번호 초기화" id="btn_password_init" user_id="<%=  @user.id.to_s %>"></td>
 				</tr>
 				<tr class="email">
 					<td class="input_name">이메일</td>
@@ -44,3 +44,28 @@
 		</td>
 	</tr>
 </table>
+
+<script language="Javascript">
+$('#btn_password_init').live("click", function(){
+	var $user_id = $('#btn_password_init').attr("user_id");
+	
+	if(confirm("사용자의 비밀번호를 1234 로 초기화 하시겠습니까?")){
+		$.ajax({
+			data:'user_id='+ $user_id, 
+			dataType:'script', 
+			type:'post', 
+			url:'/admin/users/init_user_password',
+			success: function(request){
+				if ( request == "success"){
+					alert("초기화 되었습니다!");
+				}else{
+					alert("초기화 진행중 오류가 발생했습니다! 관리자에게 문의해 주세요.");
+				}
+				
+			}
+		});
+	}else{
+		return false;
+	}
+})
+</script>

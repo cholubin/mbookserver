@@ -17,6 +17,7 @@ class Mbook
   property :original_filename,  String
   property :id,                 Serial
   property :user_id,            Integer
+  property :userid,             String
   property :category_id,        Integer
   property :subcategory1_id,    Integer
   property :subcategory2_id,    Integer
@@ -43,19 +44,26 @@ class Mbook
     return dir 
   end
   
-  def self.search(keyword, search, page)
-    # puts_message self.count.to_s
+  def self.search(mbooks, keyword, search, page)
     case keyword
-      when "wrter"
-        self.all(:wrter.like => "%#{search}%").page :page => page, :per_page => 10
+      when "writer"
+        mbooks.all(:writer.like => "%#{search}%").page :page => page, :per_page => 10
       when "publisher"
-        self.all(:publisher.like => "%#{search}%").page :page => page, :per_page => 10
+        mbooks.all(:publisher.like => "%#{search}%").page :page => page, :per_page => 10
+      when "issue_date"
+        mbooks.all(:issue_date.like => "%#{search}%").page :page => page, :per_page => 10
       when "title"
-        self.all(:title.like => "%#{search}%").page :page => page, :per_page => 10
-      when "user_id"
-        self.all(:user_id.like => "%#{search}%").page :page => page, :per_page => 10
+        mbooks.all(:title.like => "%#{search}%").page :page => page, :per_page => 10
+      when "reg_date"
+        mbooks.all(:created_at.like => "%#{search}%").page :page => page, :per_page => 10
+      when "userid"
+        mbooks.all(:userid.like => "%#{search}%").page :page => page, :per_page => 10
+      when "price"
+        mbooks.all(:price.like => "%#{search}%").page :page => page, :per_page => 10
+      when "status"
+        mbooks.all(:status.like => "%#{search}%").page :page => page, :per_page => 10  
       else
-        self.all.page :page => page, :per_page => 10
+        mbooks.all.page :page => page, :per_page => 10
     end
       
   end

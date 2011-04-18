@@ -1,9 +1,18 @@
-
-<body id="sub">
+<%if @section == "new" %>
+<body id="index" class="index_login">
 	<div id="header">
-		<%= render :partial => "/shared/menu", :object => @board, :object => @section %>
+		<h1>mBook</h1>
+		<ul>
+			<li><img src="/images/main/info_login.png" alt="멤버쉽서비스"></li>
+		</ul>
+	</div>
+<%else %>
+<body id="sub" class="sub_user_information">
+	<div id="header">
+		<%= render :partial => "/shared/menu", :object =>@menu_on %>
 	</div>
 	
+<%end %>	
 	<%= render :partial => "#{@board}_#{@section}", :object => @total_count %>
 
 	<!-- footer -->

@@ -117,8 +117,8 @@ body#index a {
 	border-bottom: 2px dotted #26318f;	
 }
 #box_login {
-	height: 70px;
-	background: url("../images/main/bg_login.png") no-repeat top;
+	height: 90px;
+	background: url("../images/main/bg_login.png");
 	margin-bottom: 16px;
 	padding-bottom: 30px;
 }
@@ -169,7 +169,7 @@ body#index a {
 #index table tr td.error {
 	color: #ed539d;
 	font-size: 10px;
-	width: 150px;
+	width: 300px;
 }
 
 /* index footer */

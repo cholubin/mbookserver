@@ -21,6 +21,14 @@ class Admin::MbooksController < ApplicationController
     
     @mbooks = Mbook.all
 
+    if params[:cat] != nil and params[:cat] != "" and params[:cat] != "all"
+      @mbooks = @mbooks.all(:category_id => params[:cat].to_i)
+    end
+    
+    if params[:sub] != nil and params[:sub] != "" and params[:sub] != "all"
+      @mbooks = @mbooks.all(:subcategory1_id => params[:sub].to_i)
+    end
+    
     if params[:user] != nil and params[:user] != ""
       @mbooks = @mbooks.all(:user_id => params[:user].to_i)
     end
@@ -28,8 +36,11 @@ class Admin::MbooksController < ApplicationController
     if params[:st] != "all" and params[:st] != "" and params[:st] != nil
       @mbooks = @mbooks.all(:status => params[:st])
     end 
-    @mbooks = @mbooks.search(params[:keyword], params[:search], params[:page])
-    @total_count = @mbooks.search(params[:keyword], params[:search],"").count
+    
+    mbooks = @mbooks
+    
+    @mbooks = @mbooks.search(mbooks, params[:keyword], params[:search], params[:page])
+    @total_count = @mbooks.search(mbooks, params[:keyword], params[:search],"").count
     
     @categories = Category.all(:gubun => "template", :order => :priority)
      

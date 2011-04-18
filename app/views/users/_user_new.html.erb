@@ -1,130 +1,168 @@
-<div id="feature_wrapper">
-	<h2>회원가입</h2>
-		<p1>웹탑프린트샵 회원가입 페이지입니다.</p1><br>
-		<% if ! flash[:notice].nil? %>
-			<span class="error_message_small"><%= flash[:notice].to_s %></span>
-		<% end %>
+<div id="content">
+	<!-- Root Login -->
+	<div class="root_index">
+		<ul>
+			<li class="main"><a href="/"><img src="images/root/bt_root_main_blue.png" alt="main"></a></li>
+			<li>회원가입</li>
+		</ul>
 	</div>
-<!-- <copy> --><br>
-	<div id="line_bottom1"></div>
-	<% form_for(@user) do |f| %>
-	  <!-- <%= f.error_messages %> -->
-			<table>
-				<tr>
-					<td>
-						<table class="register_table">
-							<tr>
-								<td class="register_td" width="150"><img src="/images/register/check.jpg">희망 아이디</td>
-								<td class="register_td"  width="100">
-									<input class="field_1" maxlength="20" name="user[userid]" id="userid" type="text">
-								</td>
-								<td class="register_td" align="left" width="370">
-									<%= javascript_include_tag :defaults %>	
-									<%= javascript_include_tag "basic_tools" %>	
-									<%= image_tag '/images/register/overlap_check.jpg', :align => 'absmiddle', 
-									:onmouseover => "this.style.cursor='hand';",
-									:onclick => "if ($('#userid').val()=='') {
-													alert('아이디를 입력하세요!');
-													$('#userid').focus();
-													return false; 
-													}
-												else{
-													if (input_check($('#userid').val()) == false){
-														alert('아이디는 영문만 가능합니다!');
-														$('#userid').val('');
-														$('#userid').focus();
-														return false;
-													}
-														
-													}" + remote_function(:url => { :controller => 'users', :action => :id_check },
-									:with => "'user_id=' + $('#userid').val()")
-									%>
-									&nbsp;&nbsp;<span id="id_check" class="error_message_small">아이디 중복확인 해주세요!</span>
-									
 
-									
-								</td>
-							</tr>
-							<tr>
-							<td class="register_td" width="150"><img src="/images/register/check.jpg">이름</td>
-							<td class="register_td"  width="570" colspan="2">
-								<input class="field_1" maxlength="10" name="user[name]" type="text"></td>
-							</tr>							
-							<tr>
-							<td class="register_td" ><img src="/images/register/check.jpg">비밀번호</td>
-							<td class="register_td"  width="570"  colspan="2"><input class="field_1" type="password" value="" name="user[password]"/></td>
-							</tr>
-							<tr>
-							<td class="register_td" ><img src="/images/register/check.jpg">비밀번호 재확인</td>
-							<td class="register_td"  width="570"  colspan="2">
-								<input class="field_1" type="password" value="" name="user[re-password]"/></td>
-							</tr>
-							
-							<tr>
-							<td class="register_td" ><img src="/images/register/check.jpg">이메일 주소</td>
-							<td class="register_td" width="570"  colspan="2">
-								<input class="field_1" type="text" value="" name="user[email]"/></td>
-							</tr>
-							
-							<tr>
-							<td class="register_td" width="160"><img src="/images/mypage/check.jpg">전화</td>
-							<td class="register_td" width="570" colspan="2"><input class="field_1" type="text" name="user[tel]"/></td>
-							</tr>
-							<tr>
-							<td class="register_td" width="160"><img src="/images/mypage/check.jpg">모바일</td>
-							<td class="register_td" width="570" colspan="2"><input class="field_1" type="text" name="user[mobile]"/></td>
-							</tr>
-							
-							<tr>
-							<td class="register_td" width="160"><img src="/images/mypage/check.jpg">소속합회</td>
-							<td class="register_td" width="570" colspan="2">
-								<select name="user[group1]">
-									<option value="연합회(기관)">연합회(기관)</option>
-									<option value="동중한합회">동중한합회</option>
-									<option value="서중한합회">서중한합회</option>
-									<option value="충청합회">충청합회</option>
-									<option value="영남합회">영남합회</option>
-									<option value="호남합회">호남합회</option>
-									<option value="기타">기　　타</option>
-								</select></td>
-							</tr>
-							
-							<tr>
-							<td class="register_td" width="160"><img src="/images/mypage/check.jpg">소속교회</td>
-							<td class="register_td" width="570" colspan="2"><input class="field_1" type="text" name="user[group2]"/></td>
-							</tr>
-							
-							<tr>
-							<td class="register_td" width="160"><img src="/images/mypage/check.jpg">우편물 수신장소</td>
-							<td class="register_td" width="570" colspan="2">교회<input type="radio" value="교회" name="user[post_spot]"/> 자택<input type="radio" value="자택" name="user[post_spot]"/> 직접수령<input type="radio" value="직접수령" name="user[post_spot]" /></td>
-							</tr>
-							
-							<tr>
-							<td class="register_td" width="160"><img src="/images/mypage/check.jpg">우편번호</td>
-							<td class="register_td" width="570" colspan="2"><input class="field_1" type="text" name="user[zip_code]"/></td>
-							</tr>
-							
-							<tr>
-							<td class="register_td" width="160"><img src="/images/mypage/check.jpg">주소</td>
-							<td class="register_td" width="570" colspan="2">
-									<input style="width:400px;" type="text" name="user[addr1]"/><br>
-									<input style="width:400px;" type="text" name="user[addr2]"/>
-								</td>
-							</tr>
-						</table>
-						<!-- <템플릿 정보 반복 구간입니다.> -->
-					</td>
-				</tr>
-			</table>
-		<!-- <템플릿 정보창 한줄 반복 구간입니다. -->
-
+	<!-- Box Login -->
+	<% form_for(:user, :url => users_path) do |f| %>
+		<input type="hidden" id="id_check_fl" value="false">
+		<input type="hidden" id="password_check_fl" value="false">
+		<input type="hidden" id="email_check_fl" value="false">
 	
-	<div id="line_bottom1"></div>
-	<br>			
-
-	
-	<div id="button_wrapper">
-			<%= image_submit_tag("/images/board/submit.jpg") %>
-	</div>
-	<% end %>
+	<div id="box_join">
+		<table>
+			<tr>
+				<td class="name">이름</td>
+				<td width="180"><input name="name" id="name" type="text"></td>
+				<td class="error"><span id="name_check_string"></span></td>
+			</tr>
+			<tr>
+				<td class="id">아이디</td>
+				<td><input name="userid" id="userid" type="text"></td>
+				<td class="error"><span id="id_check_string"></span></td>
+			</tr>
+			<tr>
+				<td class="pw">비밀번호</td>
+				<td><input name="password" id="password" type="password"></td>
+				<td class="error"><span id="password1_check_string"></span></td>
+			</tr>		
+			<tr>
+				<td class="pw">비밀번호(확인)</td>
+				<td><input name="password_re" id="password_re" type="password"></td>
+				<td class="error"><span id="password2_check_string"></span></td>
+			</tr>		
 			
+			<tr>
+				<td class="email">이메일</td>
+				<td><input name="email" id="email" type="text"></td>
+				<td class="error"><span id="email_check_string"></span></td>
+			</tr>		
+			<!-- <tr>
+				<td class="publisher">필명/출판사명</td>
+				<td><input name="join_publisher" id="join_publisher" type="text"></td>
+				<td></td>					
+				<td class="error">※ 필명/출판사명을 입력하세요.</td>
+			</tr>		 -->
+			<tr>
+				<td colspan="3">
+					<input type="image" id="btn_join_submit" src="images/main/bt_join.png" alt="가입완료" style="vertical-align:middle;">
+					<a href=""><img src="images/main/bt_cancel.png" alt="취소" style="cursor:pointer;vertical-align:middle;" onClcik="history.back(-1);"></a>
+				</td>
+				<td></td>
+			</tr>
+		</table>
+	</div>
+	<%end %>
+</div>
+
+<script language="javascript">
+$(document).ready(function(){
+	$('#login_id').focus();
+})
+
+$('#userid').live("blur",function(){
+	var $id = $(this).val();
+	
+	if ($id != ""){
+		$.ajax({
+			data:'id='+ $id, 
+			dataType:'script', 
+			type:'post', 
+			url:'/sessions/check_login_id',
+			success: function(request){
+				if(request == "fail"){
+					$('#id_check_string').text("");
+					$('#userid').css("background-color","");
+					$('#id_check_fl').val("true");
+				}else if(request == "success"){
+					$('#userid').css("background-color","yellow");
+					$('#id_check_string').html("※ 이미 등록된 아이디입니다.");
+					$('#id_check_fl').val("false");
+				}
+			}
+		});
+	}else{
+		return false;	
+	}
+	
+})
+
+$('#password_re').live("blur", function(){
+	if ($('#password').val() != $('#password_re').val()) {
+		$('#password_re').css("background-color","yellow");
+		$('#password2_check_string').html("※ 비밀번호가 일치하지 않습니다.");
+		$('#password_check_fl').val("false")
+	}else{
+		$('#password_re').css("background-color","");
+		$('#password2_check_string').html("");
+		$('#password_check_fl').val("true")
+	}
+	
+	return false;
+})
+
+$('#email').live("blur", function(){
+	var regExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i; 
+
+
+	if ( !regExp.test( $('#email').val() ) ) {
+	    $('#email').css("background-color","yellow");
+		$('#email_check_string').html("※ 정확한 이메일을 입력하세요. <br>(해당 이메일주소로 승인코드가 발송됩니다.)");
+		$('#email_check_fl').val("false")
+	}else{
+		$('#email').css("background-color","");
+		$('#email_check_string').html("");
+		$('#email_check_fl').val("true")
+	}
+	
+	return false;
+})
+
+$('#name').live("change", function(){
+	if ( $(this).val() != "" ){
+		$(this).css("background-color","");
+		$('#name_check_string').html("");
+		
+		return false;
+	}
+})
+
+$('#btn_join_submit').live("click", function(){
+	if ($('#name').val() == ""){
+		$('#name').css("background-color","yellow").focus();
+		$('#name_check_string').html("이름을 입력해주세요.");
+		return false;
+	}
+	
+	if ($('#userid').val() == ""){
+		$('#userid').css("background-color","yellow").focus();
+		$('#id_check_string').html("아이디를 입력해주세요.");
+		return false;
+	}
+	
+	if ($('#password').val() == ""){
+		$('#password').css("background-color","yellow").focus();
+		$('#password1_check_string').html("비밀번호를 입력해주세요.");
+		return false;
+	}else{
+		$('#password1_check_string').html("");
+		$('#password').css("background-color","").focus();
+	}
+	
+	if ($('#password_re').val() == ""){
+		$('#password_re').css("background-color","yellow").focus();
+		$('#password2_check_string').html("확인용 비밀번호를 입력해주세요.");
+		return false;
+	}
+	
+	if ( $('#id_check_fl').val() == "false" || $('#password_check_fl').val() == "false" || $('#email_check_fl').val() == "false"){
+		return false;
+	}
+	
+})
+
+</script>

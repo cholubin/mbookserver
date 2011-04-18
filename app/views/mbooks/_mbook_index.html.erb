@@ -26,15 +26,21 @@
 			<li class="root_last"><img src="/images/root/root_last.png"></li>
 		</ul>
 	</div>
-	<!-- Sort list -->		
+	<!-- Sort list -->
+	<% if signed_in? %>		
 	<div class="sort_list">
 		<img src="/images/input_title/input_title_state.png" alt="상태별 보기">	
 		<select name="sort_list" id="select_status">
 			<option value="">전체</option>
-			<option value="1" <%= "selected" if params[:st] == "1" %>>승인완료</option>
-			<option value="2" <%= "selected" if params[:st] == "2" %>>삭제대기</option>
+			<%if @menu_on != "my_mb_store" %>
+			<option value="승인대기" <%= "selected" if params[:st] == "승인대기" %>>승인대기</option>
+			<option value="대기" <%= "selected" if params[:st] == "대기" %>>대기</option>
+			<%end %>
+			<option value="승인완료" <%= "selected" if params[:st] == "승인완료" %>>승인완료</option>
+			<option value="삭제대기" <%= "selected" if params[:st] == "삭제대기" %>>삭제대기</option>
 		</select>
 	</div>
+	<%end %>
 	<!-- List -->
 	<div class="list_title">
 		<ul>
@@ -73,7 +79,6 @@
 	
 	<div class="list_data">	
 		<input type="hidden" id="all_checked" value="false">
-		<%puts_message "total count:: " + @total_count.to_s %>
 		<% 	if params[:page].to_i == 0 or params[:page].to_i == 1
 				@temp_page = 0
 			else
@@ -175,21 +180,26 @@
 	
 	
 	<!-- Search -->
+	<% form_tag "/mbooks?me=#{params[:me]}&store=#{params[:store]}", :method => 'get' do %>								
+		<input type="hidden" id="me" name="me" value="<%= params[:me] %>">
+		<input type="hidden" id="store" name="store" value="<%= params[:store] %>">
 	<div class="search">
 		<img src="/images/input_title/input_title_search.png" alt="조건별 검색">
 		<select name="keyword" id="keyword">
-			<option value="1">mBook</option>
-			<option value="2">저자</option>
-			<option value="3">출판사</option>
-			<option value="4">발행일</option>
-			<option value="5">아이디</option>
-			<option value="6">등록일</option>
-			<option value="7">가격</option>
-			<option value="8">상태</option>
+			<option value="writer" <%= "selected" if params[:keyword] == "writer" %> >저자</option>
+			<option value="publisher" <%= "selected" if params[:keyword] == "publisher" %> >출판사</option>
+			<option value="issue_date" <%= "selected" if params[:keyword] == "issue_date" %> >발행일</option>
+			<option value="userid" <%= "selected" if params[:keyword] == "userid" %> >아이디</option>
+			<option value="reg_date" <%= "selected" if params[:keyword] == "reg_date" %> >등록일</option>
+			<option value="price" <%= "selected" if params[:keyword] == "price" %> >가격</option>
+			<% if signed_in? %>
+			<option value="status" <%= "selected" if params[:keyword] == "status" %> >상태</option>
+			<% end %>
 		</select>
-    	<input type="text" id="search" name="search" value="<%= params[:search] %>">
-    	<a href=""><img src="/images/bt/bt_search.png" alt="검색"></a>
+			<input type="text" id="search" name="search" value="<%= params[:search] %>" style="vertical-align:middle;">
+	    	<input type="image" src="/images/bt/bt_search.png" alt="검색" style="vertical-align:middle;">
 	</div>
+	<% end %>
 </div>
 
 <script language="Javascript">
@@ -203,9 +213,6 @@ $('#select_category').live("change", function(){
 		type:'post', 
 		url:'/mbooks/update_subcategories'
 	});
-	
-	
-	
 })
 
 $('#select_subcategory1').live("change", function(){

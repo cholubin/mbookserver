@@ -35,63 +35,37 @@ class UsersController < ApplicationController
 
     @menu = "home"
     @board = "user"
+    @section = "new"
         
-    @user = User.new
-    @user.userid = params[:user][:userid]
-    @user.name = params[:user][:name]
-    @user.password = params[:user][:password]
-    @user.email = params[:user][:email]
-    @user.tel = params[:user][:tel]
-    @user.mobile = params[:user][:mobile]
-    @user.zip_code = params[:user][:zip_code]
-    @user.addr1 = params[:user][:addr1]
-    @user.addr2 = params[:user][:addr2]
-    
-    flash[:notice] = "<ul>"
-    
-    if params[:user][:userid] == ""
-      flash[:notice] += "<li>사용자 아이디를 입력하세요.</li>"
-    end
+    userid = (params[:userid] == "" or params[:userid] == nil) ? nil : params[:userid]
+    name = (params[:name] == "" or params[:name] == nil) ? nil : params[:name]
+    password = (params[:password] == "" or params[:password] == nil) ? nil : params[:password]
+    email = (params[:email] == "" or params[:email] == nil) ? nil : params[:email]
 
-    if params[:user][:name] == ""
-      flash[:notice] += "<li>사용자 이름을 입력하세요.</li>"      
-    end
+    if userid != nil and name != nil and password != nil and email != nil
 
-    if params[:user][:password] == ""
-      flash[:notice] += "<li>비밀번호를 입력하세요.</li>"      
-    end
-
-    if params[:user][:email] == ""
-      flash[:notice] += "<li>이메일 주소를 입력하세요.</li>"      
-    end
-    
-    
-    
-    if @user.userid == nil or @user.name == nil or @user.password == nil or @user.email == nil
-      @section = "new"        
-      flash[:notice] += "</ul>"     
-      render 'user' 
-    else
-        if not User.first(:userid => params[:user][:userid]).nil? # 아이디 중복인 경우 ========================== 
-          flash[:notice] += "<li>이미 사용하고 있는 아이디 입니다.</li>"
-          flash[:notice] += "</ul>"       
-          @section = "new"        
-          render 'user'    
+      if not User.first(:userid => userid).nil? # 아이디 중복인 경우 ========================== 
+        render 'user'    
+      else
+        @user = User.new
+        @user.userid = params[:userid]
+        @user.name = params[:name]
+        @user.password = params[:password]
+        @user.email = params[:email];
+        
+        if @user.save
+          sign_in @user
+          redirect_to '/'
         else
-          if @user.save
-            @section = "index"
-            sign_in @user
-            render 'pages/congratulations'
-
-          else
-            @section = "new"        
-            render 'user'
-          end      
-        end
+          render 'user'
+        end      
+      end
+    
+      
+    else
+      render 'user'    
     end
         
-
-
   end
   # GET /users/1/edit
   def edit
@@ -109,69 +83,44 @@ class UsersController < ApplicationController
     
   end
 
-  # POST /users
-  # POST /users.xml
-
-
   # PUT /users/1
   # PUT /users/1.xml
   def update
-    @user = User.get(params[:user][:userid].to_i)
+    @user = User.get(params[:id].to_i)
     
     if signed_in? && @user.id == current_user.id
-      @menu = "home"
       @board = "user"
       @section = "edit"
           
 
-      if @user.has_password?(params[:user][:current_password])
+      if params[:password] != ""
+
+        @user.update_password(params[:password])
+        @user.email = params[:email]
+        @user.publisher = params[:publisher]
         
-        if params[:user][:new_password] != ""
+        if @user.save
+          @board = "mbook"
+          @section = "index"
 
-          @user.update_password(params[:user][:new_password])
-          @user.email = params[:user][:email]
-          @user.tel = params[:user][:tel]
-          @user.mobile = params[:user][:mobile]
-          @user.group1 = params[:user][:group1]
-          @user.group2 = params[:user][:group2]
-          @user.post_spot = params[:user][:post_spot]
-          @user.zip_code = params[:user][:zip_code]
-          @user.addr1 = params[:user][:addr1]
-          @user.addr2 = params[:user][:addr2]                    
-          
-          if @user.save
-            render 'users/modification_finished'
-          else
-            flash[:notice] = "오류가 발생했습니다. 다시 시도해주시기 바랍니다."
-            render 'user'
-          end
-
-
-        else  #메일만 수정하는 경우       
-          @user.email = params[:user][:email]
-          
-          @user.tel = params[:user][:tel]
-          @user.mobile = params[:user][:mobile]
-          @user.group1 = params[:user][:group1]
-          @user.group2 = params[:user][:group2]
-          @user.post_spot = params[:user][:post_spot]
-          @user.zip_code = params[:user][:zip_code]
-          @user.addr1 = params[:user][:addr1]
-          @user.addr2 = params[:user][:addr2]                    
-
-          if @user.save
-            render 'users/modification_finished'
-          else
-            flash[:notice] = "오류가 발생했습니다. 다시 시도해주시기 바랍니다."
-            render 'user'
-          end 
+          redirect_to '/mbooks'
+        else
+          render 'user'
         end
-      
-      else
-        flash[:notice] = "현재 비밀번호가 틀립니다!"
-        render 'user'
+      else  #메일만 수정하는 경우       
+        @user.email = params[:email]
+        @user.publisher = params[:publisher]
+
+        if @user.save
+          
+          @board = "mbook"
+          @section = "index"
+          
+          redirect_to '/mbook'
+        else
+          render 'user'
+        end 
       end
-      
       
       
     else
