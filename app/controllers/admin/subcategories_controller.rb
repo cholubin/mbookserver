@@ -17,7 +17,7 @@ class Admin::SubcategoriesController < ApplicationController
     @section = "index"
     @menu_on = "category"  
     
-    @categories = Category.all(:gubun => "template")
+    @categories = Category.all(:gubun => "template", :order => [:priority])
     @subcategories = Subcategory.all(:category_id => category_id, :order => [:priority])
 
      render 'subcategory'

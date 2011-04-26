@@ -64,7 +64,7 @@ end
 			<li><img src="/images/root/root_first.png"></li>
 			<li><a href="/admin/categories"><img src="/images/root/bt_root_total_pink.png" alt="전체분류"></a></li>
 			<li>
-				<select name="bookform" id="bookform">
+				<select id="bookform">
 					<%@categories.each do |cat| %>
 					<option value="<%= cat.id %>" <%= "selected" if cat.id.to_s == params[:cat] %>><%= cat.name %></option>
 					<%end %>
@@ -266,6 +266,7 @@ $('#cat_name').live("keydown", function(event){
 
 
 $('#bookform').live("change", function(){
+	alert("test");
 	var $value = $(this,'option:selected').val();
 	window.location.href = "/admin/subcategories?cat=" + $value;
 	
