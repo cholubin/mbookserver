@@ -265,14 +265,9 @@ $('#cat_name').live("keydown", function(event){
 })
 
 $('#bookform').change(function(){
-	alert("test");
+	var $value = $(this,'option:selected').val();
+	window.location.href = "/admin/subcategories?cat=" + $value;
 })
-// $('#bookform').live("change", function(){
-// 	alert("test");
-// 	var $value = $(this,'option:selected').val();
-// 	window.location.href = "/admin/subcategories?cat=" + $value;
-// 	
-// })
 
 $('#btn_del').live("click", function(){
 	var $checked_item = $(':checkbox:checked');
