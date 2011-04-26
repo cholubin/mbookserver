@@ -18,7 +18,8 @@
 				<li>분류 추가</li>
 				<li class="root_last"><img src="/images/root/root_last.png"></li>
 			</ul>
-		</div>
+		</div><br><br>
+		
 		<% form_for :categories, :url => { :action => "create" }, :html => {:multipart => true, :id => "imgFile"} do%>
 			<input type="hidden" name="mode" id="mode" value="new">
 			<input type="hidden" name="category_id" id="category_id" value="">

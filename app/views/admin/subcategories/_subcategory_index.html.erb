@@ -23,16 +23,18 @@ end
 	<!-- Upload -->
 	<div id="upload">
 		<!-- Root Category -->
-		<div class="root_list">
-			<ul>
-				<li><img src="/images/root/root_first.png"></li>
-				<li><a href="/admin/categories"><img src="/images/root/bt_root_total_pink.png" alt="전체분류"></a></li>
-				<li><%= category_name %></li>
-				<li><img src="/images/root/root_arrow_pink.png"></li>
-				<li>분류 추가</li>
-				<li class="root_last"><img src="/images/root/root_last.png"></li>
-			</ul>
-		</div>
+			<div class="root_list">
+				<ul>
+					<li><img src="/images/root/root_first.png"></li>
+					<li><a href="/admin/categories"><img src="/images/root/bt_root_total_pink.png" alt="전체분류"></a></li>
+					<li><%= category_name %></li>
+					<li><img src="/images/root/root_arrow_pink.png"></li>
+					<li>분류 추가</li>
+					<li class="root_last"><img src="/images/root/root_last.png"></li>
+				</ul>
+			</div>
+			
+			<br><br>
 		<% form_for :subcategories, :url => { :action => "create" }, :html => {:multipart => true, :id => "imgFile"} do%>
 			<input type="hidden" name="mode" id="mode" value="new">
 			<input type="hidden" name="category_id" id="category_id" value="<%= category_id %>">
@@ -55,8 +57,9 @@ end
 			</table>
 			<p class="error"><!-- <img src="/images/icon_error.png" alt="error"> 분류명을 입력하세요. --></p>		
 		</div>
+		<%end %>
 	</div>
-	<%end %>
+	
 	
 	<!-- Root Category -->
 	<div class="root_list" >
