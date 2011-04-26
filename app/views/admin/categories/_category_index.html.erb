@@ -14,7 +14,7 @@
 		<div class="root_list">
 			<ul>
 				<li><img src="/images/root/root_first.png"></li>
-				<li><a href=""><img src="/images/root/bt_root_total_pink.png" alt="전체분류"></a></li>
+				<li><a href="/admin/categories"><img src="/images/root/bt_root_total_pink.png" alt="전체분류"></a></li>
 				<li>분류 추가</li>
 				<li class="root_last"><img src="/images/root/root_last.png"></li>
 			</ul>
@@ -47,7 +47,7 @@
 	<div class="root_list" >
 		<ul>
 			<li><img src="/images/root/root_first.png"></li>
-			<li><a href=""><img src="/images/root/bt_root_total_pink.png" alt="전체분류"></a></li>
+			<li><a href="/admin/categories"><img src="/images/root/bt_root_total_pink.png" alt="전체분류"></a></li>
 			<li>
 				<select name="bookform" id="bookform">
 					<% @categories.each do |cat| %>
@@ -286,8 +286,8 @@ $('#btn_del').live("click", function(){
 })
 
 $('#bookform').live("change", function(){
-	alert("test");
-	window.location.href = "/admin/subcategories?cat=" + $(this).val();
+	var $value = $(this,'option:selected').val();
+	window.location.href = "/admin/subcategories?cat=" + $value;
 })
 </script>
 
