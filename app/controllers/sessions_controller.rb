@@ -31,39 +31,45 @@ class SessionsController < ApplicationController
       
       @user = User.first(:userid => params[:session][:userid])
 
-      if @user != nil 
-        user = User.authenticate(params[:session][:userid], 
-                             params[:session][:password])
-                             
-        if user.nil? 
-          flash.now[:error] = "아이디와 비밀번호가 일치하지 않습니다!"
-          @input_user_id = params[:session][:userid] 
-          render 'session', :object => @input_user_id
-          
-        else
-          
-          sign_in user
-          
-          if params[:session][:uri] != ""      
-            if params[:session][:uri] == "/users"
-              redirect_to '/'
-            else
-              if params[:session][:uri] == "/mbooks"
-                url = "/mbooks?me=y&store=n"
-              else
-                url = CGI::escape(params[:session][:uri]).gsub(/%2F/,'/').gsub(/%3F/,'?').gsub(/%3D/,'=')
-              end
-              redirect_to url
-            end
-          else
-            redirect_to '/'
-          end
-        end
-        
-      else
-        flash.now[:error] = "존재하지 않는 회원아이디 입니다!"
+      if @user.auth_fl == false
+        flash.now[:error] = "아직 이메일 인증을 하지 않은 아이디 입니다."
         @input_user_id = params[:session][:userid] 
         render 'session', :object => @input_user_id
+      else
+        if @user != nil 
+          user = User.authenticate(params[:session][:userid], 
+                               params[:session][:password])
+
+          if user.nil? 
+            flash.now[:error] = "아이디와 비밀번호가 일치하지 않습니다!"
+            @input_user_id = params[:session][:userid] 
+            render 'session', :object => @input_user_id
+
+          else
+
+            sign_in user
+
+            if params[:session][:uri] != ""      
+              if params[:session][:uri] == "/users"
+                redirect_to '/'
+              else
+                if params[:session][:uri] == "/mbooks"
+                  url = "/mbooks?me=y&store=n"
+                else
+                  url = CGI::escape(params[:session][:uri]).gsub(/%2F/,'/').gsub(/%3F/,'?').gsub(/%3D/,'=')
+                end
+                redirect_to url
+              end
+            else
+              redirect_to '/'
+            end
+          end
+
+        else
+          flash.now[:error] = "존재하지 않는 회원아이디 입니다!"
+          @input_user_id = params[:session][:userid] 
+          render 'session', :object => @input_user_id
+        end
       end
       
     end

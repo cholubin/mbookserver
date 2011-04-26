@@ -24,7 +24,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :mbooks
   
   map.namespace :admin do |admin|
-      admin.resources :users, :temps, :categories,:myadmins, :mbooks
+      admin.resources :users, :temps, :categories, :subcategories, :myadmins, :mbooks
   end 
   
   

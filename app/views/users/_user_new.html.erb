@@ -59,9 +59,23 @@
 	<%end %>
 </div>
 
+<div id="message" style="display:none;">
+	<div id="div_title">
+		<img src="/images/etc/message_check.png"> <span id="title">이메일 승인절차 진행.</span>
+	</div>
+	<div id="div_sub">
+		<span id="sub">이메일 주소로 승인번호가 발송되었습니다!<br>메일을 확인하시고 링크를 클릭하시면<br>가입절차가 완료됩니다!</span>
+	</div>
+</div>
+
 <script language="javascript">
 $(document).ready(function(){
 	$('#login_id').focus();
+	
+	var $left = (document.body.clientWidth)/2 - 250;
+ 	var $top = (document.body.clientHeight)/2 -135 ;
+	
+	$('#message').css("left", $left).css("top", $top);
 })
 
 $('#userid').live("blur",function(){
@@ -163,6 +177,31 @@ $('#btn_join_submit').live("click", function(){
 		return false;
 	}
 	
+	if (window.confirm("입력하신 정보로 회원가입을 신청하시겠습니까?")){
+		loadingView();
+		
+		$.ajax({
+			data:'userid='+ $('#userid').val()+'&name='+ $('#name').val()+'&password='+ $('#password').val()+'&email='+ $('#email').val(), 
+			dataType:'script', 
+			type:'post', 
+			url:'/users/create',
+			success: function(request){
+				if(request == "success"){
+					$('#message').css("display", "block");
+					loadingView();
+				}else{
+					alert("회원가입중 오류가 발생했습니다!");
+				}
+			}
+		});
+		
+		return false;
+	}else{
+		return false;
+	}
 })
 
+$('#message').live("click", function(){
+	window.location.href="/"
+})
 </script>

@@ -2,7 +2,7 @@
 require 'rexml/document'
 include REXML
 class MbooksController < ApplicationController
-  # before_filter :authenticate_user!
+  before_filter :authenticate_user!
 
   def index
     @menu = "mbook"

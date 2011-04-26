@@ -15,6 +15,7 @@ class Subcategory
   property :name,         String, :required => true
   property :priority,     Integer, :default => 9999
   property :gubun,        String, :default => "template"
+  property :icon_image,   String, :default => "icon_subcategory.png"
   property :category_id,  Integer    
   timestamps :at
 

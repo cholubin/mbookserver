@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 class Admin::CategoriesController < ApplicationController
+  layout 'admin_layout'
   before_filter :authenticate_admin!      
   # GET /admin_categories
   # GET /admin_categories.xml
@@ -8,10 +9,10 @@ class Admin::CategoriesController < ApplicationController
     @menu = "category"
     @board = "category"
     @section = "index"
-      
-    @categories = Category.all(:gubun => "template", :order => [ :priority.asc ])
+    @menu_on = "category"  
+    @categories = Category.all(:gubun => "template", :order => [ :priority ])
 
-     render 'admin/categories/category', :layout => false
+     render 'category'
   end
   
 
@@ -57,35 +58,90 @@ class Admin::CategoriesController < ApplicationController
   # POST /admin_categories
   # POST /admin_categories.xml
   def create
-    if params[:categories][:name] != "" and params[:categories][:sub_name] == ""
-      @category = Category.new
-      @category.name = params[:categories][:name]
-      @category.priority = params[:categories][:priority].to_i
+    if params[:mode] == "new"
+      if params[:category_name] != "" and params[:category_name] != ""
+        if Category.all(:name => params[:category_name], :gubun => "template").count < 1
+          @category = Category.new
+          @category.name = params[:category_name] 
+          @category.gubun = "template"
+          @category.priority = Category.all(:gubun => "template").count + 1
+        
+          if params[:file] != nil and params[:file] != ""
+              if Category.all(:icon_image => sanitize_filename(params[:file].original_filename), :gubun => "template").count > 0
+                render :text => "fail:동일한 파일명의 아이콘 이미지가 이미 업로드되어있습니다! \n파일명을 수정하거나 다른 이미지를 선택해주세요~"
+              else
+                @category.icon_image = sanitize_filename(params[:file].original_filename)
+                icon_upload(params[:file])
+                
+                if @category.save
+                  puts_message 'Main category was successfully created.'
+                  @categories = Category.all(:gubun => "template")
+
+                  render :partial => 'list_category', :object => @categories
+                else
+                  render :text => "fail:카테고리 생성중 오류가 발생했습니다!"
+                end
+              end
+          else
+              if @category.save
+                puts_message 'Main category was successfully created.'
+                @categories = Category.all(:gubun => "template")
+
+                render :partial => 'list_category', :object => @categories
+              else
+                render :text => "fail:카테고리 생성중 오류가 발생했습니다!"
+              end
+          end
+          
+          
+        else
+          render :text => "fail:이미 사용중인 카테고리 이름입니다!"
+        end
+      else
+        render :text => "fail:카테고리 이름을 입력하세요!"
+      end
       
-      if @category.save
-        flash[:notice] = 'Main category was successfully created.'
-        redirect_to :action => 'index'
+    elsif params[:mode] == "mod"
+      @category = Category.get(params[:category_id].to_i)
+      @category.name = params[:category_name] 
+      
+      if params[:file] != nil and params[:file] != ""
+        if Category.all(:icon_image => sanitize_filename(params[:file].original_filename), :gubun => "template").count > 0
+          render :text => "fail:동일한 파일명의 아이콘 이미지가 이미 업로드되어있습니다! \n파일명을 수정하거나 다른 이미지를 선택해주세요~"
+        else
+          if @category.icon_image != "icon_category.png"
+            FileUtils.rm_rf("#{RAILS_ROOT}" + "/public/images/category_icon/" + @category.icon_image)
+          end
+          @category.icon_image = sanitize_filename(params[:file].original_filename)
+          icon_upload(params[:file])
+          
+          if @category.save;
+            @categories = Category.all(:gubun => "template")
+            render :partial => 'list_category', :object => @categories
+          else
+            render :text => "fail:카테고리 수정중 오류가 발생했습니다!"
+          end
+        end
+        
       else
-       render :action => 'new'        
+        if @category.save;
+          @categories = Category.all(:gubun => "template")
+          render :partial => 'list_category', :object => @categories
+        else
+          render :text => "fail:카테고리 수정중 오류가 발생했습니다!"
+        end  
       end
-
-    elsif params[:categories][:name] == "" and params[:categories][:sub_name] != ""
-      @category = Category.get(params[:categories][:main_category].to_i)
-      @sub_category = @category.subcategories.new
-      @sub_category.name = params[:categories][:sub_name]
-      @sub_category.priority = params[:categories][:sub_priority].to_i
-
-      if @sub_category.save
-        flash[:notice] = 'Sub category was successfully created.'
-        redirect_to :action => 'index'
-      else
-       render :action => 'new'        
-      end
-
+      
+      
+      
+    else
+      render :text => "카테고리 작업중 알수없는 오류가 발생했습니다!"
     end
+  end
   
-    
-
+  def icon_upload(file)
+    uploader = Category_iconUploader.new
+    uploader.store!(file)
   end
 
   # PUT /admin_categories/1
@@ -194,11 +250,12 @@ class Admin::CategoriesController < ApplicationController
     category.priority = 1
     category.save
     
-    @category = category
+    @categories = Category.all(:gubun => "template")
     
-    render :update do |page|
-      page.replace_html 'created_category', :partial => 'created_category', :object => @category
-    end
+    # render :update do |page|
+      render :partial => 'list_category', :object => @categories
+      # page.replace_html 'list_category', :partial => 'list_category', :object => @categories
+    # end
   end
   
   def add_subcategory
@@ -214,8 +271,6 @@ class Admin::CategoriesController < ApplicationController
       max_order =  @category.subcategories.first(:order => [:priority.desc]).priority
     end
     
-    puts_message max_order.to_s
-    
     @subcategory.priority = max_order + 1
     @subcategory.name = subcategory_name
     
@@ -226,6 +281,7 @@ class Admin::CategoriesController < ApplicationController
     end
 
     @category_id = category_id
+    
     render :update do |page|
       page.replace_html 'created_subcategory', :partial => 'created_subcategory', :object => @subcategory, :object => @category_id
     end
@@ -234,7 +290,6 @@ class Admin::CategoriesController < ApplicationController
 
   def delete_category
     temp_category_name = params[:category_id].split('_')
-    puts_message params[:category_id]
     
     category_selector = temp_category_name[0]
     id = temp_category_name[1]
@@ -263,6 +318,7 @@ class Admin::CategoriesController < ApplicationController
     render :nothing => true
   end
   
+  
   def update_category
     temp_category_id = params[:category_id].split('_')
     category_name = params[:category_name]
@@ -284,5 +340,108 @@ class Admin::CategoriesController < ApplicationController
     end
     render :nothing => true
   end
+  
+  def update_category_name
+    category_id = params[:category_id].to_i
+    category_name = params[:category_name]
+    
+    @category = Category.get(category_id)
+    @category.name = category_name
+
+    if @category.save
+      render :text => "success"
+    else
+      render :text => "fail"
+    end
+  end
+  
+  
+  
+  def delete_selection
+    result = ""
+    
+    if params[:ids] != nil and params[:ids] != ""
+      ids = params[:ids].split(",")
+    
+      ids.each do |id|
+        cate = Category.get(id.to_i)
+        subcate = Subcategory.all(:category_id => id.to_i)
+        
+        if cate.destroy
+          if subcate.count > 0
+            if subcate.destroy
+              result = "success"
+            else
+              result = "서브카테고리 삭제중 오류 발생"  
+            end
+          else
+              result = "success"
+          end
+          
+          begin
+            if Mbook.all(:category_id => id.to_i).count > 0
+              mbooks = Mbook.all(:category_id => id.to_i)
+              mbooks.each do |mbook|
+                mbook.category_id = nil
+                mbook.subcategory1_id = nil
+                mbook.subcategory2_id = nil
+              
+                mbook.save
+              end
+              result = "success"
+            end
+          rescue
+            result = "mbook의 카테고리 정보를 초기화 하는중 오류가 발생했습니다!"
+          end
+        else
+          result = "카테고리 삭제중 오류 발생"
+        end
+      end #ids do loop end
+      
+    else
+      result = "삭제할 항목을 선택해 주세요!"
+    end
+    
+    html_str = ""
+    if result == "success"
+      i = 1
+				Category.all(:gubun => "template", :order => [:priority.asc]).each do |cat|
+				    html_str  = html_str	+ "<ul class='list_ul #{'list_first' if i % 6 == 1}' id='ul_#{cat.id}'>\n" +
+						"<li class='icon_cotegory'><img src='/images/category_icon/#{cat.icon_image}' alt='카테고리 아이콘'></li>\n" +
+						"<li class='category_name cat_name' category_id='#{cat.id}' cat_name='#{cat.name}'>#{cat.name}</li>\n" +
+						"<li><img src='/images/bt/bt_upload_re.png' alt='수정' style='cursor:pointer;' class='btn_mod' category_id='#{cat.id}' category_name='#{cat.name}'>\n" + 
+						"<input type='checkbox' class='chkbox' category_id='#{cat.id}'></li>\n" +
+						"</ul>\n";
+				i += 1
+				end
+				
+				result = "success@@" + html_str 
+    end
+    render :text => result
+    
+  end
+  
+  def update_category_order
+    ids = params[:ul_ids].gsub(/ul_/,"").split(",")
+    
+    
+    begin 
+      i = 1
+      ids.each do |id|
+        category = Category.get(id.to_i)
+        category.priority = i
+        category.save
+        
+        i += 1
+      end
+      
+      result = "success"
+    rescue
+      result = "카테고리의 우선순위 업데이트 중 오류가 발생했습니다!"
+    end
+    
+    render :text => result
+  end
+  
   
 end

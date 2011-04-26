@@ -1,0 +1,307 @@
+<script type="text/javascript" src="/js/jquery_1.4.2/ui/jquery.ui.core.js"></script>
+<script type="text/javascript" src="/js/jquery_1.4.2/ui/jquery.ui.widget.js"></script>
+<script type="text/javascript" src="/js/jquery_1.4.2/ui/jquery.ui.mouse.js"></script>
+<script type="text/javascript" src="/js/jquery_1.4.2/ui/jquery.ui.sortable.js"></script>
+
+<%  
+if params[:cat] != nil and params[:cat] != nil
+	category_id = params[:cat]
+else
+	if Category.first(:gubun => "template") != nil
+		category_id = Category.first(:gubun => "template").id
+	else
+		render '/'
+	end
+end
+%>
+<div id="content_header">
+	<h2 class="sub_title">분류 관리</h2>
+</div>
+<div id="content">
+	<!-- Upload -->
+	<div id="upload">
+		<!-- Root Category -->
+		<div class="root_list">
+			<ul>
+				<li><img src="/images/root/root_first.png"></li>
+				<li><a href="/admin/categories"><img src="/images/root/bt_root_total_pink.png" alt="전체분류"></a></li>
+				<li>형태명</li>
+				<li><img src="/images/root/root_arrow_pink.png"></li>
+				<li>분류 추가</li>
+				<li class="root_last"><img src="/images/root/root_last.png"></li>
+			</ul>
+		</div>
+		<% form_for :subcategories, :url => { :action => "create" }, :html => {:multipart => true, :id => "imgFile"} do%>
+			<input type="hidden" name="mode" id="mode" value="new">
+			<input type="hidden" name="category_id" id="category_id" value="<%= category_id %>">
+			<input type="hidden" name="subcategory_id" id="subcategory_id" value="">
+		<!-- Box Upload -->
+		<div id="box_upload">
+			<table>
+				<tr class="category_name">
+					<td class="input_name">분류</td>
+					<td class="input_data"><%=text_field_tag 'subcategory_name' %></td>
+					<td rowspan="2" class="upload_ok"><%=image_submit_tag("/images/bt/bt_upload_ok.png", :id => 'btn_submit', :alt => alt='등록완료', :style =>"cursor:pointer;") %></td>
+				</tr>
+				<tr class="category_icon">
+					<td class="input_name">아이콘 이미지 파일</td>
+					<td>
+						<img src="/images/bt/bt_image.png" alt="이미지 파일 등록"><input type="file" name="file" id="file">
+						<span class="input_info">※ 이미지 사이즈 : 가로 000px / 세로 000px</span>
+					</td>
+				</tr>
+			</table>
+			<p class="error"><!-- <img src="/images/icon_error.png" alt="error"> 분류명을 입력하세요. --></p>		
+		</div>
+	</div>
+	<%end %>
+	
+	<!-- Root Category -->
+	<div class="root_list" >
+		<ul>
+			<li><img src="/images/root/root_first.png"></li>
+			<li><a href="/admin/categories"><img src="/images/root/bt_root_total_pink.png" alt="전체분류"></a></li>
+			<li>
+				<select name="bookform" id="bookform">
+					<%@categories.each do |cat| %>
+					<option value="<%= cat.id %>" <%= "selected" if cat.id.to_s == params[:cat] %>><%= cat.name %></option>
+					<%end %>
+				</select>
+			</li>
+			<li class="root_last"><img src="/images/root/root_last.png"></li>
+		</ul>
+	</div>
+	<!-- List Category -->
+	<div id="list_category">
+		<%	i = 1
+			@subcategories.each do |subcat| %>
+		<ul class="list_ul <%= "list_first" if i % 6 == 1 %>" id="ul_<%= subcat.id %>">
+			<li class="icon_cotegory"><img src="/images/category_icon/<%= subcat.icon_image %>" alt="서브카테고리 아이콘"></li>
+			<li class="category_name cat_name" category_id="<%= subcat.id %>" cat_name="<%= subcat.name %>"><%= subcat.name %></li>
+			<li><img src="/images/bt/bt_upload_re.png" alt="수정" style="cursor:pointer;" class="btn_mod" subcategory_id="<%= subcat.id %>" subcategory_name="<%= subcat.name %>"> <input type="checkbox" class="chkbox" category_id="<%= subcat.id %>"></li>
+		</ul>
+		<%		i += 1
+			end %>
+	</div>
+	<!-- list Action -->		
+	<div class="select_list">
+		<img src="/images/input_title/input_title_select.png" alt="선택한 항목을">
+		<img src="/images/bt/bt_delete.png" alt="삭제" id="btn_del" style="cursor:pointer;">
+		<p class="error" style="display:none;" id="error_msg"><img src="/images/icon_error.png" alt="error"> 선택한 항목이 없습니다.</p>
+	</div>
+	
+	<!-- Search -->
+	<!-- <div class="search">
+		<img src="/images/input_title/input_title_search.png" alt="조건별 검색">
+		<select name="src_con1">
+			<option value="1">분류</option>
+		</select>
+    	<input type="text" name="src_con2" value="분류명">
+    	<a href=""><img src="/images/bt/bt_search.png" alt="검색"></a>
+	</div> -->
+</div>
+
+<script>
+$(function() {
+      //make specified element sortable
+	$("#list_category").sortable({
+		activate: function(event, ui){
+			$('.list_first').each(function(){
+				$(this).removeClass();
+			});
+		},
+		update: function(){
+			var $ul_ids = new Array();
+			$ul_ids = $('#list_category').sortable('toArray');
+			
+			$.ajax({
+				data:'ul_ids='+$ul_ids, 
+				dataType:'script', 
+				type:'post', 
+				url:'/admin/subcategories/update_category_order',
+				success: function(request){
+					if(request != "success"){
+						alert(request);
+					}
+				}
+			});
+		}
+	});
+
+});
+
+$('#btn_submit').live("click", function(){
+	if ($('#subcategory_name').val() == ""){
+		alert("서브카테고리 이름을 입력하세요!");
+		$('#subcategory_name').focus();
+		return false;
+	}else{
+		subcategory_create();
+	}
+})
+
+function subcategory_create() {
+	var frm ;
+	frm = $('#imgFile');
+	frm.ajaxForm({ 
+        dataType:  'script', 
+		url: '/admin/subcategories/create',
+        success:   Callback_imgUpload
+	  });
+	 // frm.submit();
+}
+
+function Callback_imgUpload(request,state){
+	var $temp = request.split(":");
+	var $stat = "";
+	var $msg = "";
+	
+	if($temp[0] == "fail") {
+		$stat = "fail";
+		$msg = $temp[1];
+	}else{
+		$stat = "success";
+		$msg = "";
+	}
+	
+	if (state == "success"){
+		$("#mode").val("new");
+		
+		if ($stat != "fail" ){
+			$('#subcategory_name').val("");
+			$("#list_category").html(request);
+			$('#file').val("");
+		}else{
+			alert($msg);
+			$('#subcategory_name').val("").focus();
+			$('#file').val("");
+			return false;
+		}
+	}else{
+		alert("서브카테고리 생성중 오류가 발생했습니다!\n관리자에게 문의해주세요.");
+		return false;
+	}
+}
+
+//수정버튼 클릭 
+$('.btn_mod').live("click", function(){
+	$('.list_ul').each(function(){
+		$(this).css("background-color","white");
+	})
+	var $target_ul = $(this).parent().parent();
+	
+	// $target_ul.css("background-color","yellow");
+	$target_ul.css("background-color","yellow");
+	
+	
+	var $subcategory_id = $(this).attr("subcategory_id");
+	$("#mode").val("mod");
+	
+	$('#subcategory_id').val($subcategory_id);
+	$('#subcategory_name').val($(this).attr("subcategory_name"));	
+	$('#subcategory_name').focus();
+})
+
+$('.cat_name').live("click", function(){
+	var $orgnCatName = $(this).attr("cat_name");
+	var $categoryId = $(this).attr("category_id");
+
+	$(this).html("<input type='text' value='"+$orgnCatName+"' subcategory_id='"+$categoryId+"' id='cat_name' name='cat_name' style='width:80px;'>");
+	$('#cat_name').focus();
+})
+
+$('#cat_name').live("blur", function(){
+	var $category_name = $(this).val();
+	var $category_id = $(this).attr("category_id");
+	
+	var $parentLi = $(this).parent();
+	if ($parentLi.attr("cat_name") != $(this).val()){
+		// 이름 업데이트 
+		$parentLi.html($(this).val());
+		
+		$.ajax({
+			data:'subcategory_name='+$subcategory_name+'&subcategory_id='+ $category_id, 
+			dataType:'script', 
+			type:'post', 
+			url:'/admin/subcategories/update_subcategory_name',
+			success: function(request){
+				if(request == "success"){
+					$parentLi.attr("cat_name", $category_name);
+				}
+			}
+		});
+	}else{
+		$parentLi.html($parentLi.attr("cat_name"));
+	}
+	
+})
+
+$('#cat_name').live("keydown", function(event){
+	if(event.keyCode == 13){
+		var $subcategory_name = $(this).val();
+		var $subcategory_id = $(this).attr("subcategory_id");
+		
+		var $parentLi = $(this).parent();
+		if ($parentLi.attr("cat_name") != $(this).val()){
+			$parentLi.html($(this).val());
+			
+			$.ajax({
+				data:'subcategory_name='+$subcategory_name+'&subcategory_id='+ $subcategory_id, 
+				dataType:'script', 
+				type:'post', 
+				url:'/admin/subcategories/update_subcategory_name',
+				success: function(request){
+					if(request == "success"){
+						$parentLi.attr("cat_name", $subcategory_name);
+					}
+				}
+			});
+		}else{
+			$parentLi.html($parentLi.attr("cat_name"));
+		}
+	}	
+})
+
+
+$('#bookform').live("change", function(){
+	location.href = "/admin/subcategories?cat=" + $(this).val();
+})
+
+$('#btn_del').live("click", function(){
+	var $checked_item = $(':checkbox:checked');
+	
+	if($checked_item.length > 0){
+		if( window.confirm("선택하신 " + $checked_item.length + "개의 분류를 삭제하시겠습니까?") ){
+			var $ids = "";
+			$checked_item.each(function(){
+				$ids = $ids + $(this).attr("category_id") + ",";
+			})
+			
+			$.ajax({
+				data:'ids='+$ids+'&category_id=<%= category_id %>', 
+				dataType:'script', 
+				type:'post', 
+				url:'/admin/subcategories/delete_selection',
+				success: function(request){
+					var result = request.split("@@");
+					if( result[0] == "success"){
+						$('#list_category').html(result[1]);
+					}else{
+						alert(request);
+					}
+				}
+			});
+			
+			return false;
+		}else{
+			return false;
+		}
+	}else{
+		$('#error_msg').css("display", "block");
+			setTimeout(function(){$('#error_msg').css("display", "none");}, 3000);
+			return false;
+	}
+})
+</script>
+
+

@@ -1,0 +1,9 @@
+<%	i = 1
+	@subcategories.each do |subcat| %>
+<ul class="list_ul <%= "list_first" if i % 6 == 1 %>" id="ul_<%= subcat.id %>">
+	<li class="icon_cotegory"><img src="/images/category_icon/<%= subcat.icon_image %>" alt="서브카테고리 아이콘"></li>
+	<li class="category_name cat_name" category_id="<%= subcat.id %>" cat_name="<%= subcat.name %>"><%= subcat.name %></li>
+	<li><img src="/images/bt/bt_upload_re.png" alt="수정" style="cursor:pointer;" class="btn_mod" subcategory_id="<%= subcat.id %>" subcategory_name="<%= subcat.name %>"> <input type="checkbox" class="chkbox" category_id="<%= subcat.id %>"></li>
+</ul>
+<%		i += 1
+	end %>

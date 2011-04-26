@@ -52,13 +52,23 @@ class UsersController < ApplicationController
         @user.name = params[:name]
         @user.password = params[:password]
         @user.email = params[:email];
+        @user.type = "writer"
         
-        if @user.save
-          sign_in @user
-          redirect_to '/'
+        auth_code = @user.make_authcode
+        @user.auth_code = auth_code
+        
+        
+        if emailing(userid, email, auth_code) and @user.save
+          # render :update do |page|
+          #    page.replace_html 'message', :partial => 'user_join_finished', :object => @message
+          # end
+          render :text => "success"
         else
-          render 'user'
-        end      
+          render :text => "fail"
+        end
+        
+        # @message = "이메일 주소로 승인번호가 발송되었습니다!<br>메일을 확인하시고 링크를 클릭하시면<br>가입절차가 완료됩니다!"        
+        
       end
     
       
@@ -66,6 +76,23 @@ class UsersController < ApplicationController
       render 'user'    
     end
         
+  end
+  
+  
+  def emailing(userid, email, auth_code)
+    begin
+      Emailer.deliver_email(
+        :recipients => email,
+        :subject => "[엠북스토어] 고객님, 인증메일 입니다.",
+        :from => "mbookserver@gmail.com",
+        :body => "<html><head><body><a href='#{HOSTING_URL}auth.htm?userid=#{userid}&code=#{auth_code}'>여기를 클릭하시면 인증이 완료됩니다!~</a></body></head></html>"
+      )
+      
+      return true
+    rescue
+      return false
+    end
+    
   end
   # GET /users/1/edit
   def edit

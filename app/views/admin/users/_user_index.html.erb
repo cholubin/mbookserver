@@ -31,7 +31,7 @@
 		<% @users.each do |user| %>
 		<ul class="list_data_white">
 			<li class="no"><%= @page_num %></li>
-			<li class="user_id"><%= user.userid %></li>
+			<li class="user_id"><%= user.userid %><%= "(미인증)" if user.auth_fl == false %></li>
 			<li class="user_type"><%= user.name %></li>				
 			<li class="user_detail"><img src="../images/bt/bt_user_detail.png" alt="사용자 정보 보기 / 수정" id="detail_<%= user.id %>" class="btn_user_detail" style="cursor:pointer;"></li>
 			<li class="user_mbook"><img src="../images/bt/bt_user_mbook.png" alt="사용자의 mBook 리스트 보기" class="to_user_mbook" id="to_user_mbook_<%= user.id %>" style="cursor:pointer;"></li>
@@ -83,6 +83,33 @@ $('#btn_del').live("click", function(){
 		$('#error_msg').css("display", "block");
 		setTimeout(function(){$('#error_msg').css("display", "none");}, 3000);
 		return false;
+	}else{
+		if (window.confirm("선택하신 사용자들을 정말 삭제하시겠습니까?")){
+			var $ids = "";
+			$(':checkbox:checked').each(function(){
+				$ids = $ids + $(this).attr("id").replace("chk_", "") + ",";
+			});
+
+			loadingView();
+
+			$.ajax({
+				data:'ids='+ $ids, 
+				dataType:'script', 
+				type:'post', 
+				url:'/admin/users/deleteSelection',
+				success: function(request){
+					if (request == "success"){
+						location.href="/admin/users";
+					}else{
+						alert("사용자 삭제중 오류가 발생했습니다!\관리자에게 문의해주세요!");
+					}
+					loadingView();
+				}
+			});	
+		}else{
+			return false;
+		}
+		
 	}
 })
 

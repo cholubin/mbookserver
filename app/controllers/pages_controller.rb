@@ -4,10 +4,6 @@ class PagesController < ApplicationController
 
   def home
     
-    user = User.first(:userid => "demo")
-    user.update_password("demo")
-    user.save
-    
     @title  = "home"
     @menu = "main"
     

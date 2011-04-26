@@ -37,7 +37,7 @@ input.img_disabled {
 
 /* index */
 body#index {
-	background: url("../images/main/bg_body.png") repeat-x top;
+	background: url("/images/main/bg_body.png") repeat-x top;
 	background-color: #070e42;
 	color: #fff;
 }
@@ -49,15 +49,57 @@ body#index a {
 	margin-left:auto; margin-right:auto;
 }
 
+#message {
+	position: absolute;
+	width: 500px;
+	height: 310px;
+	background: url("/images/etc/message_bg.jpg") repeat-x top;
+	background-color: #070e42;
+	cursor: pointer;
+	z-index: 100;
+/*	margin-left:auto; margin-right:auto;*/
+}
+	
+#message #div_title {
+	padding-left: 125px;
+	padding-top: 124px;
+	vertical-align: middle;
+}
+
+#message #div_sub {
+	padding-left: 170px;
+	padding-top: 15px;
+	vertical-align: middle;
+}
+
+
+#message #title {
+	font-weight: bold;
+	font-size: 23px;
+	color: #62D034;
+	vertical-align: middle;
+}
+
+#message #sub {
+/*	font-weight: bold;*/
+	font-size: 12px;
+	color: orange;
+	vertical-align: middle;
+}
+
+
+#message img {
+	vertical-align: middle;
+}	
 /* index header */
 #index #header {
 	height: 220px;
-	background: url("../images/main/bg_header.png") repeat-x top;
+	background: url("/images/main/bg_header.png") repeat-x top;
 }
 #index #header h1 {
 	height: 150px;
 	text-indent: -5000px;
-	background: url("../images/main/logo.png") no-repeat;
+	background: url("/images/main/logo.png") no-repeat;
 }
 #index #header ul {
 	text-align: right;
@@ -90,7 +132,7 @@ body#index a {
 	height: 450px;
 	border-top: 2px dotted #26318f;
 	border-bottom: 2px dotted #26318f;
-	background: url("../images/main/bg_category.png") no-repeat top;
+	background: url("/images/main/bg_category.png") no-repeat top;
 	padding-left: 74px;
 	padding-top: 20px;
 	padding-bottom: 10px;
@@ -118,13 +160,13 @@ body#index a {
 }
 #box_login {
 	height: 90px;
-	background: url("../images/main/bg_login.png");
+	background: url("/images/main/bg_login.png");
 	margin-bottom: 16px;
 	padding-bottom: 30px;
 }
 #box_join {
 	height: 260px;
-	background: url("../images/main/bg_join.png") no-repeat top;
+	background: url("/images/main/bg_join.png") no-repeat top;
 }
 #box_login table, #box_join table {
 	width: 580px;
@@ -149,7 +191,7 @@ body#index a {
 }
 #box_login table tr td.input_name, #box_join table tr td.input_name {
 	text-indent: -5000px;
-	background: url("../images/main/input_name_login.png") no-repeat;
+	background: url("/images/main/input_name_login.png") no-repeat;
 }
 #box_login table tr.id td, #box_join table tr.id td {
 	background-position: 0px -40px;
@@ -186,7 +228,7 @@ body#index a {
 
 /* sub */
 body#sub {
-	background: url("../images/header/bg_header.png") repeat-x top;	
+	background: url("/images/header/bg_header.png") repeat-x top;	
 }
 #sub #header, #sub #content_header, #sub #content, #sub #footer {
 	width: 980px;
@@ -234,13 +276,13 @@ body#sub {
 
 /* sub header nav_admin */
 #sub #header ul#nav_admin li a {
-	background: url("../images/header/menu_admin.png") no-repeat;
+	background: url("/images/header/menu_admin.png") no-repeat;
 }
 #sub #header ul#nav_admin li a:hover {
-	background: url("../images/header/menu_admin_over.png") no-repeat;
+	background: url("/images/header/menu_admin_over.png") no-repeat;
 }
 #sub #header ul#nav_admin li a.on {
-	background: url("../images/header/menu_admin_over.png") no-repeat;
+	background: url("/images/header/menu_admin_over.png") no-repeat;
 }
 #sub #header ul#nav_admin li.mbook_in_store a {
 	background-position: 10px 0;
@@ -273,13 +315,13 @@ body#sub {
 
 /* sub header nav_writer */
 #sub #header ul#nav_writer li a {
-	background: url("../images/header/menu_writer.png") no-repeat;
+	background: url("/images/header/menu_writer.png") no-repeat;
 }
 #sub #header ul#nav_writer li a:hover {
-	background: url("../images/header/menu_writer_over.png") no-repeat;
+	background: url("/images/header/menu_writer_over.png") no-repeat;
 }
 #sub #header ul#nav_writer li a.on {
-	background: url("../images/header/menu_writer_over.png") no-repeat;
+	background: url("/images/header/menu_writer_over.png") no-repeat;
 }
 #sub #header ul#nav_writer li.main a {
 	background-position: 14px 0;
@@ -321,37 +363,37 @@ body#sub {
 	text-indent: -5000px;
 }
 .sub_mbook_in_store_guest h2.sub_title, .sub_mbook_in_store_admin h2.sub_title, .sub_mbook_in_store_writer h2.sub_title {
-	background: url("../images/title/title_mbook_in_store.png") no-repeat center center;
+	background: url("/images/title/title_mbook_in_store.png") no-repeat center center;
 }
 .sub_detail_guest h2.sub_title, .sub_detail_admin h2.sub_title, .sub_detail_writer h2.sub_title {
-	background: url("../images/title/title_detail.png") no-repeat center center;
+	background: url("/images/title/title_detail.png") no-repeat center center;
 }
 .sub_waiting h2.sub_title {
-	background: url("../images/title/title_waiting.png") no-repeat center center;
+	background: url("/images/title/title_waiting.png") no-repeat center center;
 }
 .sub_request h2.sub_title {
-	background: url("../images/title/title_request.png") no-repeat center center;
+	background: url("/images/title/title_request.png") no-repeat center center;
 }
 .sub_user_mbook h2.sub_title {
-	background: url("../images/title/title_user_mbook.png") no-repeat center center;
+	background: url("/images/title/title_user_mbook.png") no-repeat center center;
 }
 .sub_my_mbook_in_store h2.sub_title {
-	background: url("../images/title/title_my_mbook_in_store.png") no-repeat center center;
+	background: url("/images/title/title_my_mbook_in_store.png") no-repeat center center;
 }
 .sub_my_mbook h2.sub_title {
-	background: url("../images/title/title_my_mbook.png") no-repeat center center;
+	background: url("/images/title/title_my_mbook.png") no-repeat center center;
 }
 .sub_upload h2.sub_title {
-	background: url("../images/title/title_upload.png") no-repeat center center;
+	background: url("/images/title/title_upload.png") no-repeat center center;
 }
 .sub_category h2.sub_title {
-	background: url("../images/title/title_category.png") no-repeat center center;
+	background: url("/images/title/title_category.png") no-repeat center center;
 }
 .sub_user_information h2.sub_title {
-	background: url("../images/title/title_user_information.png") no-repeat center center;
+	background: url("/images/title/title_user_information.png") no-repeat center center;
 }
 .sub_user h2.sub_title {
-	background: url("../images/title/title_user.png") no-repeat center center;
+	background: url("/images/title/title_user.png") no-repeat center center;
 }
 
 /* sub content 공통 */
@@ -390,7 +432,7 @@ body#sub {
 #sub .root_list ul li {
 	float: left;
 	height: 30px;
-	background: url("../images/root/bg_root.png") repeat-x;
+	background: url("/images/root/bg_root.png") repeat-x;
 	line-height: 30px;
 	padding-right: 4px;
 	vertical-align: middle;
@@ -483,10 +525,10 @@ body#sub {
 	line-height:66px;
 }
 .list_data ul li.no {
-	background: url("../images/icon_number.png") no-repeat center center;
+	background: url("/images/icon_number.png") no-repeat center center;
 }
 .list_data ul.list_data_white_deac li.no, .list_data ul.list_data_blue_deac li.no {
-	background: url("../images/icon_number_deac.png") no-repeat center center;
+	background: url("/images/icon_number_deac.png") no-repeat center center;
 }
 .list_data ul.list_data_blue li, .list_data ul.list_data_blue_deac li, .list_data ul.list_data_blue_deac li.no {
 	background-color: #ecedff;
@@ -539,20 +581,20 @@ body#sub {
 	text-align: center;
 }
 #pop_user table.box_pop_user tr td {
-	background: url("../images/pop/bg_pop.png") repeat-y center center;
+	background: url("/images/pop/bg_pop.png") repeat-y center center;
 }
 #pop_user table.box_pop_user tr.bt td {
 	padding-bottom: 10px;
 }
 #pop_user table.box_pop_user tr.close_pop td {
-	background: url("../images/pop/bg_pop_top.png") no-repeat top center;
+	background: url("/images/pop/bg_pop_top.png") no-repeat top center;
 	text-align: right;
 	padding: 0;
 	padding-top: 10px;
 	padding-right: 10px;
 }
 #pop_user table.box_pop_user tr.error td {
-	background: url("../images/pop/bg_pop_bottom.png") no-repeat bottom center;
+	background: url("/images/pop/bg_pop_bottom.png") no-repeat bottom center;
 	padding-bottom: 20px;
 }
 #pop_user table.box_pop_user .error {
@@ -579,7 +621,7 @@ body#sub {
 #pop_user table.box_pop_user_input tr td.input_name {
 	width: 100px;
 	text-indent: -5000px;
-	background: url("../images/input_name/input_name_user_information_pop.png") no-repeat bottom center;
+	background: url("/images/input_name/input_name_user_information_pop.png") no-repeat bottom center;
 	background-color: #ffd2e7;
 }
 #pop_user table.box_pop_user_input tr.name td.input_name {
@@ -646,16 +688,16 @@ body#sub {
 	width: 20px;
 }
 .pager li.first {
-	background: url("../images/arrow_first.png") no-repeat center center;
+	background: url("/images/arrow_first.png") no-repeat center center;
 }
 .pager li.previous {
-	background: url("../images/arrow_prev.png") no-repeat center center;
+	background: url("/images/arrow_prev.png") no-repeat center center;
 }
 .pager li.next {
-	background: url("../images/arrow_next.png") no-repeat center center;
+	background: url("/images/arrow_next.png") no-repeat center center;
 }
 .pager li.last {
-	background: url("../images/arrow_last.png") no-repeat center center;
+	background: url("/images/arrow_last.png") no-repeat center center;
 }
 .pager .more {
 	color: #bbb;
@@ -695,7 +737,7 @@ body#sub {
 #upload_form table tr td.input_name {
 	width: 140px;
 	text-indent: -5000px;
-	background: url("../images/input_name/input_name_upload.png") no-repeat;
+	background: url("/images/input_name/input_name_upload.png") no-repeat;
 	background-color: #ebedfe;
 }
 #upload_form table tr.bookform td.input_name {
@@ -771,15 +813,15 @@ body#sub {
 #detail_form table tr td.input_name {
 	width: 140px;
 	text-indent: -5000px;
-	background: url("../images/input_name/input_name_detail.png") no-repeat;
+	background: url("/images/input_name/input_name_detail.png") no-repeat;
 	background-color: #ebedfe;
 }
 #detail_form table tr.description td.input_name {
-	background: url("../images/input_name/input_name_description.png") no-repeat center left;
+	background: url("/images/input_name/input_name_description.png") no-repeat center left;
 	background-color: #ebedfe;
 }
 #detail_form table tr.state td.input_name {
-	background: url("../images/input_name/input_name_state.png") no-repeat center left;
+	background: url("/images/input_name/input_name_state.png") no-repeat center left;
 	background-color: #ebedfe;
 }
 #detail_form table tr.id td.input_name {
@@ -881,7 +923,7 @@ body#sub {
 #box_upload table tr td.input_name {
 	width: 140px;
 	text-indent: -5000px;
-	background: url("../images/input_name/input_name_category.png") no-repeat;
+	background: url("/images/input_name/input_name_category.png") no-repeat;
 	background-color: #ebedfe;
 }
 #box_upload table tr.category_name td.input_name {
@@ -925,7 +967,7 @@ body#sub {
 #box_user_information table tr td.input_name {
 	width: 140px;
 	text-indent: -5000px;
-	background: url("../images/input_name/input_name_user_information.png") no-repeat;
+	background: url("/images/input_name/input_name_user_information.png") no-repeat;
 	background-color: #ebedfe;
 }
 #box_user_information table tr.name td.input_name {

@@ -33,96 +33,44 @@ class Admin::UsersController < ApplicationController
     end
   end
 
-
-  # DELETE /users/1
-  # DELETE /users/1.xml
-  def destroy
-    
-    @user = User.get(params[:id])
-    
-
-      user_dir = "#{RAILS_ROOT}" + "/public/user_files/#{current_user.userid}/"
-      FileUtils.rm_rf user_dir
-      
-      @mycarts = Mycart.all(:user_id => @user.id)  
-      @mycarts.destroy
-
-      @freeboards = Freeboard.all(:user_id => @user.id)  
-      @freeboards.destroy
-
-      @myimages = Myimage.all(:user_id => @user.id)  
-      @myimages.destroy
-
-      if @user.destroy
-        redirect_to(admin_users_url)        
-      else
-        puts "에러 발생 =========================================="
-        puts @user.errors
-        redirect_to(admin_users_url)                
-      end
-          
-
-  end
-  
-  
   # multiple deletion
   def deleteSelection 
 
-    chk = params[:chk]
-
+    chk = params[:ids].split(",")
+    result = ""
     if !chk.nil? 
       chk.each do |chk|
-        @user = User.get(chk[0].to_i)
+        @user = User.get(chk.to_i)
         
         begin
-          user_dir = "#{RAILS_ROOT}" + "/public/user_files/#{@user.userid}/"
-          FileUtils.rm_rf user_dir
-
-          @mycarts = Mycart.all(:user_id => @user.id)  
-          @mycarts.destroy
-
-          @freeboards = Freeboard.all(:user_id => @user.id)  
-          @freeboards.destroy
-
-          @myimages = Myimage.all(:user_id => @user.id)  
-          @myimages.destroy
-        
-          @mytemplates = Mytemplate.all(:user_id => @user.id)  
-          @mytemplates.destroy
+          mbooks = Mbook.all(:user_id => @user.id)  
+          mbooks.each do |mbook|
+            if File.exists?(mbook.zipfile)
+              FileUtils.rm_rf(mbook.zipfile)
+            end
+            
+            if File.exists?(mbook.zip_path)
+              FileUtils.rm_rf(mbook.zip_path)
+            end
+          end
           
-          @folders = Folder.all(:user_id => @user.id)  
-          @folders.destroy
-
-          @mybookfolders = Mybookfolder.all(:user_id => @user.id)  
-          @mybookfolders.destroy
-
-          @mybookpdfs = Mybookpdf.all(:user_id => @user.id)  
-          @mybookpdfs.destroy
-
-          @mybooks = Mybook.all(:user_id => @user.id)  
-          @mybooks.destroy
-
-          @mypdfs = Mypdf.all(:user_id => @user.id)  
-          @mypdfs.destroy
-
-          @usertempopenlists = Usertempopenlist.all(:user_id => User.get(@user.id).userid)
-          @usertempopenlists.destroy
+          if mbooks.count > 0
+            mbooks.destroy
+          end
           
           if @user.destroy   
-            flash[:notice] = "정상적으로 사용자 삭제됨!"
+            result = "success"
           else
-            flash[:notice] = "사용자 삭제진행중 오류 발생!"            
+            result = "fail"
           end
           
         rescue
-          flash[:notice] = '사용자 관련 테이블 삭제 진행중 오류가 발생했습니다!'              
+          result = "fail"
         end 
       end
-    else
-        flash[:notice] = '삭제할 사용자를 선택하지 않으셨습니다!'    
     end
-      
-    redirect_to(admin_users_url)  
+    
+    render :text => result
   end
 
   def initialize_password
