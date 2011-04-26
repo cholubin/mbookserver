@@ -15,8 +15,6 @@
 			<ul>
 				<li><img src="/images/root/root_first.png"></li>
 				<li><a href=""><img src="/images/root/bt_root_total_pink.png" alt="전체분류"></a></li>
-				<li>형태명</li>
-				<li><img src="/images/root/root_arrow_pink.png"></li>
 				<li>분류 추가</li>
 				<li class="root_last"><img src="/images/root/root_last.png"></li>
 			</ul>
@@ -51,16 +49,10 @@
 			<li><img src="/images/root/root_first.png"></li>
 			<li><a href=""><img src="/images/root/bt_root_total_pink.png" alt="전체분류"></a></li>
 			<li>
-				<select name="bookform">
-					<option value="1">형태1</option>
-					<option value="2">형태2</option>
-				</select>
-			</li>
-			<li><img src="/images/root/root_arrow_pink.png"></li>
-			<li>
-				<select name="category">
-					<option value="1">분류1</option>
-					<option value="2">분류2</option>
+				<select name="bookform" id="bookform">
+					<% @categories.each do |cat| %>
+					<option value="<%= cat.id %>"><%= cat.name %></option>
+					<%end %>
 				</select>
 			</li>
 			<li class="root_last"><img src="/images/root/root_last.png"></li>
@@ -293,6 +285,9 @@ $('#btn_del').live("click", function(){
 	}
 })
 
+$('#bookform').live("change", function(){
+	location.href = "/admin/subcategories?cat=" + $(this).val();
+})
 </script>
 
 

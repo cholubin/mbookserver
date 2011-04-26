@@ -6,11 +6,14 @@ class Admin::MbooksController < ApplicationController
   def index
     @board = "mbook"
     @section = "index"
-
+    
+    
     if params[:st] != "all" and params[:st] != "" and params[:st] != nil
-      if params[:st] == "승인대기"
+      if params[:st] == "1"
+        status = "승인대기"
         @menu_on = "mb_req"
-      elsif params[:st] == "삭제대기"
+      elsif params[:st] == "2"
+        status = "삭제대기"
         @menu_on = "mb_del"
       else
         @menu_on = "mb_all"
@@ -34,7 +37,7 @@ class Admin::MbooksController < ApplicationController
     end
     
     if params[:st] != "all" and params[:st] != "" and params[:st] != nil
-      @mbooks = @mbooks.all(:status => params[:st])
+      @mbooks = @mbooks.all(:status => status)
     end 
     
     mbooks = @mbooks

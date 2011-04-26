@@ -35,10 +35,10 @@
 		<img src="../images/input_title/input_title_state.png" alt="상태별 보기">	
 		<select name="sort_list" id="select_status">
 			<option value="">전체</option>
-			<option value="승인대기" <%= "selected" if params[:st] == "승인대기" %>>승인대기</option>
-			<option value="대기" <%= "selected" if params[:st] == "대기" %>>대기</option>
-			<option value="승인완료" <%= "selected" if params[:st] == "승인완료" %>>승인완료</option>
-			<option value="삭제대기" <%= "selected" if params[:st] == "삭제대기" %>>삭제대기</option>
+			<option value="1" <%= "selected" if params[:st] == "1" %>>승인대기</option>
+			<option value="3" <%= "selected" if params[:st] == "3" %>>대기</option>
+			<option value="4" <%= "selected" if params[:st] == "4" %>>승인완료</option>
+			<option value="2" <%= "selected" if params[:st] == "2" %>>삭제대기</option>
 		</select>
 	</div>
 	<%end %>

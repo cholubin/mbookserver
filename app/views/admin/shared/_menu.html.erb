@@ -1,8 +1,8 @@
 <h1 class="logo"><a href=""><img src="../images/header/logo.png" alt="mBook"></a></h1>
 <ul id="nav_admin">
 	<li class="mbook_in_store"><a href="/admin/mbooks" class="<%= "on" if @menu_on == "mb_all" %>">mBook in Store</a></li>
-	<li class="waiting"><a href="/admin/mbooks?st=승인대기" class="<%= "on" if @menu_on == "mb_req" %>">승인대기 리스트</a></li>
-	<li class="request"><a href="/admin/mbooks?st=삭제대기" class="<%= "on" if @menu_on == "mb_del" %>">삭제대기 리스트</a></li>
+	<li class="waiting"><a href="/admin/mbooks?st=1" class="<%= "on" if @menu_on == "mb_req" %>">승인대기 리스트</a></li>
+	<li class="request"><a href="/admin/mbooks?st=2" class="<%= "on" if @menu_on == "mb_del" %>">삭제대기 리스트</a></li>
 	<li class="category"><a href="/admin/categories" class="<%= "on" if @menu_on == "category" %>">분류 관리</a></li>
 	<li class="history"><a href="">Review History</a></li>
 	<li class="user"><a href="/admin/users" class="<%= "on" if @menu_on == "user" %>">사용자 관리</a></li>

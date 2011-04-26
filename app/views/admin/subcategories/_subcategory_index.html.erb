@@ -6,9 +6,11 @@
 <%  
 if params[:cat] != nil and params[:cat] != nil
 	category_id = params[:cat]
+	category_name = Category.get(category_id.to_i).name
 else
 	if Category.first(:gubun => "template") != nil
 		category_id = Category.first(:gubun => "template").id
+		category_name = Category.get(category_id.to_i).name
 	else
 		render '/'
 	end
@@ -25,7 +27,7 @@ end
 			<ul>
 				<li><img src="/images/root/root_first.png"></li>
 				<li><a href="/admin/categories"><img src="/images/root/bt_root_total_pink.png" alt="전체분류"></a></li>
-				<li>형태명</li>
+				<li><%= category_name %></li>
 				<li><img src="/images/root/root_arrow_pink.png"></li>
 				<li>분류 추가</li>
 				<li class="root_last"><img src="/images/root/root_last.png"></li>
