@@ -266,7 +266,7 @@ $('#cat_name').live("keydown", function(event){
 
 
 $('#bookform').live("change", function(){
-	location.href = "/admin/subcategories?cat=" + $(this).val();
+	window.location.href = "/admin/subcategories?cat=" + $(this).val();
 })
 
 $('#btn_del').live("click", function(){
