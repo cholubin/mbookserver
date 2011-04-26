@@ -17,8 +17,10 @@ class Admin::MbooksController < ApplicationController
         @menu_on = "mb_del"
       elsif params[:st] == "3"
         status = "대기"
+        @menu_on = "mb_all"
       elsif params[:st] == "4"
         status = "승인완료"
+        @menu_on = "mb_all"
       else
         @menu_on = "mb_all"
       end
