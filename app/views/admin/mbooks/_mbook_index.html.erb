@@ -67,7 +67,7 @@
 			<ul class="list_data_white">
 				<li class="no"><%= @page_num %></li>
 				<li class="book"><img src="<%= mb.thumbnail_url %>" alt="책표지"></li>
-				<a href="/admin/mbooks/<%= mb.id %>">
+				<a href="/admin/mbooks/<%= mb.id %>?menu_on=<%= @menu_on %>">
 					<li class="mbook">
 					<b><%= mb.title %></b><br/>
 					▶ 저자 : <b><%= mb.writer %></b> | 출판사 : <b>출판사<%= mb.publisher %></b> | 발행일 : <b><%= mb.issue_date %></b>

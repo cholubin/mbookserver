@@ -62,15 +62,76 @@
 				<td class="input_name">상태</td>
 				<td class="input_data">
 					<%= @mbook.status %>
-					<br/>
-					<a href=""><img src="/images/bt/bt_store_upload.png" alt="Store로 등록 허용"></a>
-					<br/>
-					<a href=""><img src="/images/bt/bt_reject.png" alt="승인거부"></a>
-					<span class="error"><img src="/images/icon_error.png" alt="error"> 승인거부 사유를 입력하세요.</span>
-					<textarea name="reject"></textarea>
+					<%if @mbook.status == "승인대기" or @mbook.status == "승인완료" %>
+						<%if @mbook.status == "승인대기" %>
+						<br/>
+						<img src="/images/bt/bt_store_upload.png" alt="Store로 등록 허용" style="cursor:pointer;" id="btn_store">
+						
+					<%end %>
+						<br/>
+						<img src="/images/bt/bt_reject.png" alt="승인거부" style="cursor:pointer;" id="btn_store_cancel" status="<%= @mbook.status %>">
+						<span class="error"><img src="/images/icon_error.png" alt="error"> 승인거부 사유를 입력하세요.</span>
+						<textarea name="cancel_reason" id="cancel_reason"></textarea>
+					<%end %>
 				</td>
 			</tr>
 		</table>
-		<p><a href=""><img src="/images/bt/bt_cancel.png" alt="취소"></a></p>
+		<p><img src="/images/bt/bt_cancel.png" alt="취소" onClick="history.go(-1);" style="cursor:pointer;"></p>
 	</div>
 </div>
+
+<script>
+$('#btn_store').live("click", function(){
+	var $mode = "승인";
+
+	if (window.confirm("스토어로의 등록을 허용하시겠습니까?")){
+		$.ajax({
+			data:'id=<%= @mbook.id %>&str_status=승인완료&mode='+$mode, 
+			dataType:'script', 
+			type:'post', 
+			url:'/admin/mbooks/update_status',
+			success: function(request){
+				if(request == "success"){
+					if( window.confirm("스토어 등록이 완료되었습니다. \n목록으로 이동하시겠습니까?")){
+						window.location.href = "/admin/mbooks?menu_on=<%= @menu_on %>"
+					}
+				}
+			}
+		});
+	}else{return false;}
+})
+
+$('#btn_store_cancel').live("click", function(){
+	var $mode="";
+	
+	if ( $('#btn_store_cancel').attr("status") == "승인대기" ){
+		$mode = "거부";
+		$status = "승인거부"
+	}else if ($('#btn_store_cancel').attr("status") == "승인완료") {
+		$mode = "취소";
+		$status = "대기";
+	}
+	
+	if ($('#cancel_reason').val() == ""){
+		alert($mode + "사유를 입력해주세요!");
+		$('#cancel_reason').focus();
+		return false;
+	}else{
+		if (window.confirm("스토어로의 등록승인을 "+$mode+" 하시겠습니까??")){
+			$.ajax({
+				data:'id=<%= @mbook.id %>&str_status='+$status+'&cancel_reason='+$('#cancel_reason').val()+'&mode='+$mode, 
+				dataType:'script', 
+				type:'post', 
+				url:'/admin/mbooks/update_status',
+				success: function(request){
+					if(request == "success"){
+						if( window.confirm("스토어 등록이 완료되었습니다. \n목록으로 이동하시겠습니까?")){
+							window.location.href = "/admin/mbooks?menu_on=<%= @menu_on %>"
+						}
+					}
+				}
+			});
+		}else{return false;}	
+	}
+})
+</script>

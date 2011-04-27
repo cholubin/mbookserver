@@ -65,6 +65,8 @@ class Admin::MbooksController < ApplicationController
       @board = "mbook"
       @section = "show"
       
+      @menu_on = params[:menu_on]
+      
       render 'mbook'  
     else  
       redirect_to '/admin/mbooks'
@@ -106,20 +108,6 @@ class Admin::MbooksController < ApplicationController
 
   # PUT /admin_mbooks/1
   # PUT /admin_mbooks/1.xml
-  def update
-    @mbook = Admin::Mbook.find(params[:id])
-
-    respond_to do |format|
-      if @mbook.update_attributes(params[:mbook])
-        flash[:notice] = 'Admin::Mbook was successfully updated.'
-        format.html { redirect_to(@mbook) }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @mbook.errors, :status => :unprocessable_entity }
-      end
-    end
-  end
 
   def deleteSelection 
 
@@ -176,4 +164,30 @@ class Admin::MbooksController < ApplicationController
 
     render :text => "success"
   end
+  
+  #1개의 mBook파일에 대한 상태 변경 
+  def update_status
+    id = params[:id].to_i
+    mode = params[:mode]
+    
+    if Mbook.get(id) != nil
+      mbook = Mbook.get(id)
+      mbook_id = mbook.id
+      mbook.status = params[:str_status]
+      if params[:mode] != "승인"
+        mbook.cancel_reason = params[:cancel_reason]
+      end
+      
+      if mbook.save 
+        puts_message "mBook ("+mbook_id.to_s+") 상태변경 성공"
+      else
+        puts_message "mBook ("+mbook_id.to_s+") 상태변경 실패"
+      end
+    else
+      redirect_to '/admin/mbooks'
+    end
+
+    render :text => "success"
+  end
+  
 end

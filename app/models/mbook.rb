@@ -29,6 +29,7 @@ class Mbook
   property :description,        Text
   property :price,              String
   property :status,             String, :default => "대기"  # (status; "대기", "승인완료", "승인거부", "승인대기", "삭제대기")
+  property :cancel_reason,      Text
   property :coverimage_name,    String
   property :thumbnail_name,     String
 
