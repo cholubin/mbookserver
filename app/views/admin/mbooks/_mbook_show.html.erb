@@ -1,0 +1,76 @@
+<div id="content_header">
+	<h2 class="sub_title">mBook 자세히 보기</h2>
+</div>
+<div id="content">
+	<div id="detail_form">
+		<table>
+			<tr class="book">
+				<td rowspan="15" class="book"><img src="<%= @mbook.coverimage_url %>" alt="책표지"></td>
+				<td colspan="2" class="mbook"><img src="/images/icon_book.png" alt="책아이콘">mBook 제목</td>
+			</tr>
+			<tr class="id">
+				<td class="input_name">아이디</td>
+				<td class="input_data"><%= @mbook.userid %></td>
+			</tr>
+			<tr class="bookform">
+				<td class="input_name">형태</td>
+				<td class="input_data"><%= Category.get(@mbook.category_id).name %></td>
+			</tr>
+			<tr class="category1">
+				<td class="input_name">분류 (필수)</td>
+				<td class="input_data"><%= Subcategory.get(@mbook.subcategory1_id).name if Subcategory.get(@mbook.subcategory1_id) != nil %></td>
+			</tr>
+			<tr class="category2">
+				<td class="input_name">분류 (선택)</td>
+				<td class="input_data"><%= Subcategory.get(@mbook.subcategory2_id).name if Subcategory.get(@mbook.subcategory2_id) != nil %></td>
+			</tr>
+			<tr class="writer">
+				<td class="input_name">저자</td>
+				<td class="input_data"><%= @mbook.writer %></td>
+			</tr>
+			<tr class="publisher">
+				<td class="input_name">출판사</td>
+				<td class="input_data"><%= @mbook.publisher %></td>
+			</tr>			
+			<tr class="bookdate">
+				<td class="input_name">발행일</td>
+				<td class="input_data"><%= @mbook.issue_date %></td>
+			</tr>
+			<tr class="date">
+				<td class="input_name">등록일</td>
+				<td class="input_data"><%= @mbook.created_at.strftime('%Y-%m-%d') %></td>
+			</tr>
+			<tr class="description">
+				<td class="input_name">mBook 소개</td>
+				<td class="input_data"><%= @mbook.description %></td>
+			</tr>
+			<tr class="price">
+				<td class="input_name">가격</td>
+				<td class="input_data">
+					<img src="/images/icon_dollar.png" alt="달러"> <%= @mbook.price %>
+				</td>
+			</tr>
+			<!-- <tr class="book_image">
+				<td class="input_name">책표지 이미지 파일</td>
+				<td class="input_data">image.jpg</td>
+			</tr>			 -->
+			<!-- <tr class="mbookzip">
+				<td class="input_name">mBook Zip 파일</td>
+				<td class="input_data">mbook.zip</td>
+			</tr> -->
+			<tr class="state">
+				<td class="input_name">상태</td>
+				<td class="input_data">
+					<%= @mbook.status %>
+					<br/>
+					<a href=""><img src="/images/bt/bt_store_upload.png" alt="Store로 등록 허용"></a>
+					<br/>
+					<a href=""><img src="/images/bt/bt_reject.png" alt="승인거부"></a>
+					<span class="error"><img src="/images/icon_error.png" alt="error"> 승인거부 사유를 입력하세요.</span>
+					<textarea name="reject"></textarea>
+				</td>
+			</tr>
+		</table>
+		<p><a href=""><img src="/images/bt/bt_cancel.png" alt="취소"></a></p>
+	</div>
+</div>

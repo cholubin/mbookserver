@@ -59,11 +59,15 @@ class Admin::MbooksController < ApplicationController
   # GET /admin_mbooks/1
   # GET /admin_mbooks/1.xml
   def show
-    @mbook = Admin::Mbook.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @mbook }
+    @mbook = Mbook.get(params[:id])
+    
+    if @mbook != nil
+      @board = "mbook"
+      @section = "show"
+      
+      render 'mbook'  
+    else  
+      redirect_to '/admin/mbooks'
     end
   end
 

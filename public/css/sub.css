@@ -1,6 +1,6 @@
 /* sub */
 body {
-	background: url("../images/header/bg_header.png") repeat-x top;	
+	background: url("/images/header/bg_header.png") repeat-x top;	
 }
 #header, #content_header, #content, #footer {
 	width: 980px;
@@ -48,13 +48,13 @@ body {
 
 /* header nav_admin */
 #header ul#nav_admin li a {
-	background: url("../images/header/menu_admin.png") no-repeat;
+	background: url("/images/header/menu_admin.png") no-repeat;
 }
 #header ul#nav_admin li a:hover {
-	background: url("../images/header/menu_admin_over.png") no-repeat;
+	background: url("/images/header/menu_admin_over.png") no-repeat;
 }
 #header ul#nav_admin li a.on {
-	background: url("../images/header/menu_admin_over.png") no-repeat;
+	background: url("/images/header/menu_admin_over.png") no-repeat;
 }
 #header ul#nav_admin li.mbook_in_store a {
 	background-position: 10px 0;
@@ -87,13 +87,13 @@ body {
 
 /* header nav_writer */
 #header ul#nav_writer li a {
-	background: url("../images/header/menu_writer.png") no-repeat;
+	background: url("/images/header/menu_writer.png") no-repeat;
 }
 #header ul#nav_writer li a:hover {
-	background: url("../images/header/menu_writer_over.png") no-repeat;
+	background: url("/images/header/menu_writer_over.png") no-repeat;
 }
 #header ul#nav_writer li a.on {
-	background: url("../images/header/menu_writer_over.png") no-repeat;
+	background: url("/images/header/menu_writer_over.png") no-repeat;
 }
 #header ul#nav_writer li.main a {
 	background-position: 14px 0;
@@ -131,37 +131,37 @@ body {
 	text-indent: -5000px;
 }
 .sub_mbook_in_store_guest h2.sub_title, .sub_mbook_in_store_admin h2.sub_title, .sub_mbook_in_store_writer h2.sub_title {
-	background: url("../images/title/title_mbook_in_store.png") no-repeat center center;
+	background: url("/images/title/title_mbook_in_store.png") no-repeat center center;
 }
 .sub_detail_guest h2.sub_title, .sub_detail_admin h2.sub_title, .sub_detail_writer h2.sub_title {
-	background: url("../images/title/title_detail.png") no-repeat center center;
+	background: url("/images/title/title_detail.png") no-repeat center center;
 }
 .sub_waiting h2.sub_title {
-	background: url("../images/title/title_waiting.png") no-repeat center center;
+	background: url("/images/title/title_waiting.png") no-repeat center center;
 }
 .sub_request h2.sub_title {
-	background: url("../images/title/title_request.png") no-repeat center center;
+	background: url("/images/title/title_request.png") no-repeat center center;
 }
 .sub_user_mbook h2.sub_title {
-	background: url("../images/title/title_user_mbook.png") no-repeat center center;
+	background: url("/images/title/title_user_mbook.png") no-repeat center center;
 }
 .sub_my_mbook_in_store h2.sub_title {
-	background: url("../images/title/title_my_mbook_in_store.png") no-repeat center center;
+	background: url("/images/title/title_my_mbook_in_store.png") no-repeat center center;
 }
 .sub_my_mbook h2.sub_title {
-	background: url("../images/title/title_my_mbook.png") no-repeat center center;
+	background: url("/images/title/title_my_mbook.png") no-repeat center center;
 }
 .sub_upload h2.sub_title {
-	background: url("../images/title/title_upload.png") no-repeat center center;
+	background: url("/images/title/title_upload.png") no-repeat center center;
 }
 .sub_category h2.sub_title {
-	background: url("../images/title/title_category.png") no-repeat center center;
+	background: url("/images/title/title_category.png") no-repeat center center;
 }
 .sub_user_information h2.sub_title {
-	background: url("../images/title/title_user_information.png") no-repeat center center;
+	background: url("/images/title/title_user_information.png") no-repeat center center;
 }
 .sub_user h2.sub_title {
-	background: url("../images/title/title_user.png") no-repeat center center;
+	background: url("/images/title/title_user.png") no-repeat center center;
 }
 
 /* content 공통 */
@@ -200,7 +200,7 @@ ul.state .error {
 .root_list ul li {
 	float: left;
 	height: 30px;
-	background: url("../images/root/bg_root.png") repeat-x;
+	background: url("/images/root/bg_root.png") repeat-x;
 	line-height: 30px;
 	padding-right: 4px;
 	vertical-align: middle;
@@ -293,10 +293,10 @@ ul.state .error {
 	line-height:66px;
 }
 .list_data ul li.no {
-	background: url("../images/icon_number.png") no-repeat center center;
+	background: url("/images/icon_number.png") no-repeat center center;
 }
 .list_data ul.list_data_white_deac li.no, .list_data ul.list_data_blue_deac li.no {
-	background: url("../images/icon_number_deac.png") no-repeat center center;
+	background: url("/images/icon_number_deac.png") no-repeat center center;
 }
 .list_data ul.list_data_blue li, .list_data ul.list_data_blue_deac li, .list_data ul.list_data_blue_deac li.no {
 	background-color: #ecedff;
@@ -349,20 +349,20 @@ ul.state .error {
 	text-align: center;
 }
 #pop_user table.box_pop_user tr td {
-	background: url("../images/pop/bg_pop.png") repeat-y center center;
+	background: url("/images/pop/bg_pop.png") repeat-y center center;
 }
 #pop_user table.box_pop_user tr.bt td {
 	padding-bottom: 10px;
 }
 #pop_user table.box_pop_user tr.close_pop td {
-	background: url("../images/pop/bg_pop_top.png") no-repeat top center;
+	background: url("/images/pop/bg_pop_top.png") no-repeat top center;
 	text-align: right;
 	padding: 0;
 	padding-top: 10px;
 	padding-right: 10px;
 }
 #pop_user table.box_pop_user tr.error td {
-	background: url("../images/pop/bg_pop_bottom.png") no-repeat bottom center;
+	background: url("/images/pop/bg_pop_bottom.png") no-repeat bottom center;
 	padding-bottom: 20px;
 }
 #pop_user table.box_pop_user .error {
@@ -389,7 +389,7 @@ ul.state .error {
 #pop_user table.box_pop_user_input tr td.input_name {
 	width: 100px;
 	text-indent: -5000px;
-	background: url("../images/input_name/input_name_user_information_pop.png") no-repeat bottom center;
+	background: url("/images/input_name/input_name_user_information_pop.png") no-repeat bottom center;
 	background-color: #ffd2e7;
 }
 #pop_user table.box_pop_user_input tr.name td.input_name {
@@ -480,7 +480,7 @@ ul.state .error {
 #upload_form table tr td.input_name {
 	width: 140px;
 	text-indent: -5000px;
-	background: url("../images/input_name/input_name_upload.png") no-repeat;
+	background: url("/images/input_name/input_name_upload.png") no-repeat;
 	background-color: #ebedfe;
 }
 #upload_form table tr.bookform td.input_name {
@@ -556,15 +556,15 @@ ul.state .error {
 #detail_form table tr td.input_name {
 	width: 140px;
 	text-indent: -5000px;
-	background: url("../images/input_name/input_name_detail.png") no-repeat;
+	background: url("/images/input_name/input_name_detail.png") no-repeat;
 	background-color: #ebedfe;
 }
 #detail_form table tr.description td.input_name {
-	background: url("../images/input_name/input_name_description.png") no-repeat center left;
+	background: url("/images/input_name/input_name_description.png") no-repeat center left;
 	background-color: #ebedfe;
 }
 #detail_form table tr.state td.input_name {
-	background: url("../images/input_name/input_name_state.png") no-repeat center left;
+	background: url("/images/input_name/input_name_state.png") no-repeat center left;
 	background-color: #ebedfe;
 }
 #detail_form table tr.id td.input_name {
@@ -663,7 +663,7 @@ ul.state .error {
 #box_upload table tr td.input_name {
 	width: 140px;
 	text-indent: -5000px;
-	background: url("../images/input_name/input_name_category.png") no-repeat;
+	background: url("/images/input_name/input_name_category.png") no-repeat;
 	background-color: #ebedfe;
 }
 #box_upload table tr.category_name td.input_name {
@@ -707,7 +707,7 @@ ul.state .error {
 #box_user_information table tr td.input_name {
 	width: 140px;
 	text-indent: -5000px;
-	background: url("../images/input_name/input_name_user_information.png") no-repeat;
+	background: url("/images/input_name/input_name_user_information.png") no-repeat;
 	background-color: #ebedfe;
 }
 #box_user_information table tr.name td.input_name {

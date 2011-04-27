@@ -231,14 +231,19 @@ class MbooksController < ApplicationController
 
    def unzip(mbook, destination)  
         file = mbook.zipfile
-        file_names = ["BookInfo.xml", "medium.jpg", "cover_image.png", "cover.jpg"]
+        file_names = ["BookInfo.xml", "medium.jpg", "thumb.jpg", "cover.jpg"]
         
         Zip::ZipFile.open(file) { |zip_file|
           i = 0
           zip_file.each{ |f| 
             f_path = File.join(destination, f.name)
+            temp = f.name
+            if i == 0
+              temp = temp.split("\/") 
+              @folder_name = temp[0]
+            end
             
-            @folder_name = f.name if i == 0
+            puts_message "@folder_name::" + @folder_name
             
             # puts_message f.name
             file_names.each do |file|
@@ -260,7 +265,7 @@ class MbooksController < ApplicationController
         @dir_names = Dir.entries(mbook.zip_path)
         puts_message "디렉토리 갯수: " + @dir_names.length.to_s
         
-        if @dir_names.length == 3 # 폴더를 압축한 경우 
+        if @dir_names.length == 3
           @folder_name = @folder_name.sub("/","")
           
           puts_message "폴더이름:::: ==> " + mbook.zip_path.force_encoding("UTF-8") + "/" + @folder_name.force_encoding("UTF-8")

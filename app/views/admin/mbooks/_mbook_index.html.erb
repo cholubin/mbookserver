@@ -32,7 +32,7 @@
 	<%if @menu_on == "mb_all" %>
 	<!-- Sort list -->		
 	<div class="sort_list">
-		<img src="../images/input_title/input_title_state.png" alt="상태별 보기">	
+		<img src="/images/input_title/input_title_state.png" alt="상태별 보기">	
 		<select name="sort_list" id="select_status">
 			<option value="">전체</option>
 			<option value="1" <%= "selected" if params[:st] == "1" %>>승인대기</option>
@@ -67,7 +67,7 @@
 			<ul class="list_data_white">
 				<li class="no"><%= @page_num %></li>
 				<li class="book"><img src="<%= mb.thumbnail_url %>" alt="책표지"></li>
-				<a href="">
+				<a href="/admin/mbooks/<%= mb.id %>">
 					<li class="mbook">
 					<b><%= mb.title %></b><br/>
 					▶ 저자 : <b><%= mb.writer %></b> | 출판사 : <b>출판사<%= mb.publisher %></b> | 발행일 : <b><%= mb.issue_date %></b>
@@ -75,7 +75,7 @@
 				</a>
 				<li class="id"><%= User.get(mb.user_id).userid %>(<%= User.get(mb.user_id).name %>)</li>
 				<li class="date"><%= mb.created_at.strftime('%Y-%m-%d') %></li>
-				<li class="price"><img src="../images/icon_dollar.png" alt="달러"> <%= mb.price %></li>
+				<li class="price"><img src="/images/icon_dollar.png" alt="달러"> <%= mb.price %></li>
 				<li class="state"><%= mb.status %></li>
 				<li class="check"><input type="checkbox" class="chkbox" id="<%= mb.id %>"></li>
 			</ul>
@@ -92,7 +92,7 @@
 		<%elsif @menu_on == "mb_req" %>
 			<img src="/images/bt/bt_store_upload.png" alt="Store로 등록 허용" class="btn_status" to_state="req_ready" style="cursor:pointer;">
 		<%end %>
-		<p class="error" id="msg_error" style="display:none;"><img src="../images/icon_error.png" alt="error"> 선택한 항목이 없습니다.</p>
+		<p class="error" id="msg_error" style="display:none;"><img src="/images/icon_error.png" alt="error"> 선택한 항목이 없습니다.</p>
 	</div>
 	<!-- Paging -->
 	<div>
@@ -106,7 +106,7 @@
 	<!-- Search -->
 	<% form_tag "/admin/mbooks?cat=#{params[:cat]}&sub=#{params[:sub]}", :method => 'get' do %>								
 	<div class="search">
-		<img src="../images/input_title/input_title_search.png" alt="조건별 검색">
+		<img src="/images/input_title/input_title_search.png" alt="조건별 검색">
 		<select name="keyword" id="keyword">
 			<option value="writer" <%= "selected" if params[:keyword] == "writer" %> >저자</option>
 			<option value="publisher" <%= "selected" if params[:keyword] == "publisher" %> >출판사</option>
