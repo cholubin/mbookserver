@@ -31,7 +31,8 @@ class SessionsController < ApplicationController
       
       @user = User.first(:userid => params[:session][:userid])
 
-      if @user.auth_fl == false
+      if @user != nil and @user.auth_fl == false
+        puts_message "여기에 들어와야 하는데?"
         flash.now[:error] = "아직 이메일 인증을 하지 않은 아이디 입니다."
         @input_user_id = params[:session][:userid] 
         render 'session', :object => @input_user_id

@@ -2,7 +2,7 @@
 require 'rexml/document'
 include REXML
 class MbooksController < ApplicationController
-  before_filter :authenticate_user!
+  # before_filter :authenticate_user!
 
   def index
     @menu = "mbook"
@@ -97,26 +97,33 @@ class MbooksController < ApplicationController
   # GET /mbooks/1.xml
   def show
     @mbook = Mbook.get(params[:id].to_i)
-
-    @menu = "mbook"
-    @board = "mbook"
-    @section = "show"
     
-    if params[:me] == "y" and params[:store] == "y"
-      @menu_on = "my_mb_store"
-    # 내가 올린 모든 책 
-    elsif params[:me] == "y" and params[:store] == "n"
-      @menu_on = "my_mb"
-    # 스토어에 등록된 모든 책 
-    elsif params[:me] == "n" and params[:store] == "y"
-      @menu_on = "mb_store"
+    if @mbook != nil
+      @menu = "mbook"
+      @board = "mbook"
+      @section = "show"
+    
+      if params[:me] == "y" and params[:store] == "y"
+        @menu_on = "my_mb_store"
+      # 내가 올린 모든 책 
+      elsif params[:me] == "y" and params[:store] == "n"
+        @menu_on = "my_mb"
+      # 스토어에 등록된 모든 책 
+      elsif params[:me] == "n" and params[:store] == "y"
+        @menu_on = "mb_store"
+      end
+
+      category_id = @mbook.category_id
+      @categories = Category.all(:gubun => "template", :order => :priority)        
+      @subcategories = Subcategory.all(:category_id => category_id, :order => [:priority])
+      render 'mbook'
+    else
+      redirect_to '/mbooks' 
     end
     
-    @categories = Category.all(:gubun => "template", :order => :priority)    
-    category_id = @mbook.category_id
-    @subcategories = Subcategory.all(:category_id => category_id, :order => [:priority])
     
-    render 'mbook'
+    
+    
   end
 
   # GET /mbooks/new
