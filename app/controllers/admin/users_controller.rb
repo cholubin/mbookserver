@@ -6,7 +6,24 @@ class Admin::UsersController < ApplicationController
   # GET /users
   # GET /users.xml
   def index
-    @users = User.search_admin(params[:keyword], params[:search], params[:page])
+    @users = User.all()
+    
+    puts_message @users.count.to_s
+    
+    if params[:auth] != nil and params[:auth] != "" and params[:auth] != "all"
+        user_auth_fl = (params[:auth] == "true") ? true : false
+        @users = @users.all(:auth_fl => user_auth_fl)
+    end
+    
+    puts_message @users.count.to_s
+    
+    if params[:type] != nil and params[:type] != "" and params[:type] != "all"
+      @users = @users.all(:type => params[:type])
+    end
+    
+    puts_message @users.count.to_s
+    
+    @users = @users.search_admin(params[:keyword], params[:search], params[:page])
     @total_count = User.search_admin(params[:keyword], params[:search],"").count
         
     @menu_on = "user"

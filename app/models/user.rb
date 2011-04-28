@@ -17,7 +17,7 @@ class User
   property :id,                 Serial
   property :userid,             String, :required => true
   property :name,               String, :required => true 
-  property :type,               String, :default => "publisher"
+  property :type,               String, :default => "writer"
   property :publisher,          String #필명/출판사명
   property :email,              String
   property :tel,                String

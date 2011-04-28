@@ -3,13 +3,20 @@
 </div>
 <div id="content">
 	<!-- Sort list -->		
-	<div class="sort_list" style="display:none;">
+	<div class="sort_list" style="display:block;">
 		<img src="/images/input_title/input_title_user.png" alt="사용자 유형별 보기">	
-		<select name="sort_list">
-			<option value="1">admin</option>
-			<option value="2">writer</option>
+		<select name="sort_list" id="select_user_type">
+			<option value="all" <%= "selected" if params[:type]=="all" or params[:type]=="" %> >전체</option>
+			<option value="writer" <%= "selected" if params[:type]=="writer"%> >작가/출판사</option>
+			<option value="reader" <%= "selected" if params[:type]=="reader"%> >독자</option>
+		</select>
+		<select name="sort_list2" id="select_user_auth">
+			<option value="all" <%= "selected" if params[:auth]=="all" or params[:auth]=="" %>>전체</option>
+			<option value="true" <%= "selected" if params[:auth]=="true" %> >인증</option>
+			<option value="false" <%= "selected" if params[:auth]=="false" %>>미인증</option>
 		</select>
 	</div>
+	
 	<!-- List -->
 	<div class="list_title">
 		<ul>
@@ -152,4 +159,16 @@ $('.to_user_mbook').live("click", function(){
 	var $user_id = $(this).attr("id").replace("to_user_mbook_","");
 	window.location.href = "/admin/mbooks?user="+$user_id;
 })
+
+$('#select_user_auth').change(function(){
+	var $selected_value = $(this).val();
+	window.location.href = "/admin/users?type=<%= params[:type] %>&auth=" + $selected_value;
+})
+
+$('#select_user_type').change(function(){
+	var $selected_value = $(this).val();
+	window.location.href = "/admin/users?auth=<%= params[:auth] %>&type=" + $selected_value;
+})
+
+
 </script>
