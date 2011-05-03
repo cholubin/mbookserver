@@ -35,6 +35,31 @@ def sanitize_filename_restrict(filename)
   end
 end
 
+
+
 def puts_message(message)
   puts "=======================================================\n" + message + "\n======================================================="
+end
+
+def find_parent(id,current_level,self_level)
+  puts_message "id: " + id.to_s
+  puts_message "current_level: " + current_level.to_s
+  puts_message "self_level: " + self_level.to_s
+  
+  if current_level == self_level
+    return id
+  else
+    if Category.get(Category.get(id).parent_id) != nil
+      if Category.get(Category.get(id).parent_id).level == current_level
+        return Category.get(id).parent_id
+      else
+        find_parent(Category.get(id).parent_id, current_level,self_level)
+      end
+    else
+      return id
+    end
+  end
+  
+  
+  
 end

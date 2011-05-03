@@ -193,6 +193,7 @@ ul.state .error {
 .root_list {
 	float: left;
 }
+
 .sort_list {
 	float: right;
 	text-align: right;
@@ -206,6 +207,10 @@ ul.state .error {
 	vertical-align: middle;
 	color: #fff;
 }
+.root_list ul li a {
+	color: #fff;
+}
+
 .root_list ul li.root_last {
 	background: none;
 } 

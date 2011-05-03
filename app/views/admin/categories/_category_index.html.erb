@@ -3,6 +3,16 @@
 <script type="text/javascript" src="/js/jquery_1.4.2/ui/jquery.ui.mouse.js"></script>
 <script type="text/javascript" src="/js/jquery_1.4.2/ui/jquery.ui.sortable.js"></script>
 
+<%
+if params[:parent_id] != nil and params[:parent_id]
+	current_cat_id = params[:parent_id].to_i
+	category_str_top = make_category_str(current_cat_id)
+else
+	category_str_top = ""
+end
+
+
+%>
 
 <div id="content_header">
 	<h2 class="sub_title">분류 관리</h2>
@@ -15,20 +25,29 @@
 			<ul>
 				<li><img src="/images/root/root_first.png"></li>
 				<li><a href="/admin/categories"><img src="/images/root/bt_root_total_pink.png" alt="전체분류"></a></li>
+				<%= category_str_top %>
 				<li>분류 추가</li>
 				<li class="root_last"><img src="/images/root/root_last.png"></li>
 			</ul>
 		</div><br><br>
-		
+		<%
+			if params[:parent_id] != nil and params[:parent_id] != ""
+				parent_id = params[:parent_id]
+			else
+				parent_id = "0"
+			end
+		 %>
 		<% form_for :categories, :url => { :action => "create" }, :html => {:multipart => true, :id => "imgFile"} do%>
 			<input type="hidden" name="mode" id="mode" value="new">
+			<input type="hidden" name="level" id="level" value="<%= params[:level] %>">
+			<input type="hidden" name="parent_id" id="parent_id" value="<%= parent_id %>">
 			<input type="hidden" name="category_id" id="category_id" value="">
 		<!-- Box Upload -->
 		<div id="box_upload">
 			<table>
 				<tr class="category_name">
 					<td class="input_name">분류</td>
-					<td class="input_data"><%=text_field_tag 'category_name' %></td>
+					<td class="input_data"><%=text_field_tag 'category_name' %> <input type="checkbox" id="display_fl" name="display_fl">숨겨놓기</td>
 					<td rowspan="2" class="upload_ok"><%=image_submit_tag("/images/bt/bt_upload_ok.png", :id => 'btn_submit', :alt => alt='등록완료', :style =>"cursor:pointer;") %></td>
 				</tr>
 				<tr class="category_icon">
@@ -45,7 +64,7 @@
 	<%end %>
 	
 	<!-- Root Category -->
-	<div class="root_list" >
+	<!-- <div class="root_list" >
 		<ul>
 			<li><img src="/images/root/root_first.png"></li>
 			<li><a href="/admin/categories"><img src="/images/root/bt_root_total_pink.png" alt="전체분류"></a></li>
@@ -58,15 +77,15 @@
 			</li>
 			<li class="root_last"><img src="/images/root/root_last.png"></li>
 		</ul>
-	</div>
+	</div> -->
 	<!-- List Category -->
 	<div id="list_category">
 		<%	i = 1
 			@categories.each do |cat| %>
 		<ul class="list_ul <%= "list_first" if i % 6 == 1 %>" id="ul_<%= cat.id %>">
-			<li class="icon_cotegory"><a href="/admin/subcategories?cat=<%= cat.id %>"><img src="/images/category_icon/<%= cat.icon_image %>" alt="카테고리 아이콘"></a></li>
+			<li class="icon_cotegory"><a href="/admin/categories?level=<%= cat.level + 1 %>&parent_id=<%= cat.id %>"><img src="/images/category_icon/<%= cat.icon_image %>" alt="카테고리 아이콘" <%= "style=\"opacity:0.4;filter:alpha(opacity=40)\"" if cat.display_fl == false %> ></a></li>
 			<li class="category_name cat_name" category_id="<%= cat.id %>" cat_name="<%= cat.name %>"><%= cat.name %></li>
-			<li class="btn"><img src="/images/bt/bt_upload_re.png" alt="수정" style="cursor:pointer;" class="btn_mod" category_id="<%= cat.id %>" category_name="<%= cat.name %>"> <input type="checkbox" class="chkbox" category_id="<%= cat.id %>"></li>
+			<li class="btn"><img src="/images/bt/bt_upload_re.png" alt="수정" style="cursor:pointer;" class="btn_mod" display_fl="<%= cat.display_fl.to_s %>" category_id="<%= cat.id %>" category_name="<%= cat.name %>"> <input type="checkbox" class="chkbox" category_id="<%= cat.id %>"></li>
 		</ul>
 		<%		i += 1
 			end %>
@@ -159,10 +178,13 @@ function Callback_imgUpload(request,state){
 			$('#category_name').val("");
 			$("#list_category").html(request);
 			$('#file').val("");
+			$('#display_fl').attr("checked", false);
 		}else{
 			alert($msg);
 			$('#category_name').val("").focus();
 			$('#file').val("");
+			$('#display_fl').attr("checked", false);
+			
 			return false;
 		}
 	}else{
@@ -186,6 +208,13 @@ $('.btn_mod').live("click", function(){
 	$("#mode").val("mod");
 	$('#category_id').val($category_id);
 	$('#category_name').val($(this).attr("category_name"));	
+	
+	if ($(this).attr("display_fl") == "true"){
+		$('#display_fl').attr("checked", false);
+	}else{
+		$('#display_fl').attr("checked", true);
+	}
+		
 	$('#category_name').focus();
 })
 
@@ -252,6 +281,8 @@ $('#cat_name').live("keydown", function(event){
 
 $('#btn_del').live("click", function(){
 	var $checked_item = $(':checkbox:checked');
+	var $parent_id = '<%= params[:parent_id] %>';
+	var $level = '<%= params[:level] %>';
 	
 	if($checked_item.length > 0){
 		if( window.confirm("선택하신 " + $checked_item.length + "개의 분류를 삭제하시겠습니까?") ){
@@ -261,7 +292,7 @@ $('#btn_del').live("click", function(){
 			})
 			
 			$.ajax({
-				data:'ids='+$ids, 
+				data:'ids='+$ids+'&parent_id='+$parent_id+'&level='+$level, 
 				dataType:'script', 
 				type:'post', 
 				url:'/admin/categories/delete_selection',

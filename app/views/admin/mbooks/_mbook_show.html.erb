@@ -14,7 +14,7 @@
 			</tr>
 			<tr class="bookform">
 				<td class="input_name">형태</td>
-				<td class="input_data"><%= Category.get(@mbook.category_id).name %></td>
+				<td class="input_data"><%=  @mbook.category_id != nil ? Category.get(@mbook.category_id).name : "삭제된 카테고리"%></td>
 			</tr>
 			<tr class="category1">
 				<td class="input_name">분류 (필수)</td>

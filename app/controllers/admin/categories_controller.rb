@@ -6,11 +6,27 @@ class Admin::CategoriesController < ApplicationController
   # GET /admin_categories
   # GET /admin_categories.xml
   def index
-    @menu = "category"
     @board = "category"
     @section = "index"
     @menu_on = "category"  
+    
     @categories = Category.all(:gubun => "template", :order => [ :priority ])
+    
+    if params[:level] !=nil and  params[:level] != ""
+      level = params[:level].to_i
+      
+    else
+      level = 0
+    end
+    
+    @categories = @categories.all(:level => level)
+    
+    if params[:parent_id] != nil and params[:parent_id]
+      parent_id = params[:parent_id].to_i
+      
+      @categories = @categories.all(:parent_id => parent_id)
+    end
+    
 
      render 'category'
   end
@@ -58,13 +74,38 @@ class Admin::CategoriesController < ApplicationController
   # POST /admin_categories
   # POST /admin_categories.xml
   def create
+    if params[:level] !=nil and  params[:level] != ""
+      level = params[:level].to_i
+    else
+      level = 0
+    end
+
+    if params[:display_fl] != nil and params[:display_fl]
+      if params[:display_fl] == "on"
+        display_fl = false
+      else
+        display_fl = true
+      end
+    else
+      display_fl = true
+    end
+    
+    if params[:parent_id] != nil and params[:parent_id]
+      parent_id = params[:parent_id].to_i
+    else
+      parent_id = 0
+    end
+    
     if params[:mode] == "new"
       if params[:category_name] != "" and params[:category_name] != ""
-        if Category.all(:name => params[:category_name], :gubun => "template").count < 1
+        if Category.all(:name => params[:category_name], :gubun => "template", :level => level, :parent_id => parent_id).count < 1
           @category = Category.new
           @category.name = params[:category_name] 
           @category.gubun = "template"
-          @category.priority = Category.all(:gubun => "template").count + 1
+          @category.level = level
+          @category.display_fl = display_fl
+          @category.parent_id = parent_id
+          @category.priority = Category.all(:gubun => "template", :level => level).count + 1
         
           if params[:file] != nil and params[:file] != ""
               if Category.all(:icon_image => sanitize_filename(params[:file].original_filename), :gubun => "template").count > 0
@@ -85,7 +126,7 @@ class Admin::CategoriesController < ApplicationController
           else
               if @category.save
                 puts_message 'Main category was successfully created.'
-                @categories = Category.all(:gubun => "template")
+                @categories = Category.all(:gubun => "template", :level => level, :parent_id => parent_id)
 
                 render :partial => 'list_category', :object => @categories
               else
@@ -104,6 +145,7 @@ class Admin::CategoriesController < ApplicationController
     elsif params[:mode] == "mod"
       @category = Category.get(params[:category_id].to_i)
       @category.name = params[:category_name] 
+      @category.display_fl = display_fl
       
       if params[:file] != nil and params[:file] != ""
         if Category.all(:icon_image => sanitize_filename(params[:file].original_filename), :gubun => "template").count > 0
@@ -116,7 +158,7 @@ class Admin::CategoriesController < ApplicationController
           icon_upload(params[:file])
           
           if @category.save;
-            @categories = Category.all(:gubun => "template")
+            @categories = Category.all(:gubun => "template", :level => level, :parent_id => parent_id)
             render :partial => 'list_category', :object => @categories
           else
             render :text => "fail:카테고리 수정중 오류가 발생했습니다!"
@@ -125,7 +167,7 @@ class Admin::CategoriesController < ApplicationController
         
       else
         if @category.save;
-          @categories = Category.all(:gubun => "template")
+          @categories = Category.all(:gubun => "template", :level => level, :parent_id => parent_id)
           render :partial => 'list_category', :object => @categories
         else
           render :text => "fail:카테고리 수정중 오류가 발생했습니다!"
@@ -356,58 +398,62 @@ class Admin::CategoriesController < ApplicationController
   end
   
   
+  def delete_subcategory(id)
+    parent_id = id.to_i
+    begin
+      if Category.all(:parent_id => parent_id).count > 0
+        puts_message "자신의 서브카테고리 삭제 진행 ("+Category.all(:parent_id => parent_id).count.to_s+")"
+        Category.all(:parent_id => parent_id).each do |cat|
+          delete_subcategory(cat.id)
+        end
+      end
+      
+      self_category = Category.get(id.to_i)
+      self_name = self_category.name
+      if self_category.destroy
+        puts_message self_name + ": 삭제 완료"
+      end
+      
+      result = "success"
+    rescue
+      result = "fail"
+    end
+    
+    return result
+  end
   
   def delete_selection
     result = ""
+    if params[:parent_id] != nil and params[:parent_id] != ""
+      parent_id = params[:parent_id].to_i
+    else
+      parent_id = 0
+    end
+
+    if params[:level] != nil and params[:level] != ""
+      level = params[:level].to_i
+    else
+      level = 0
+    end
     
     if params[:ids] != nil and params[:ids] != ""
       ids = params[:ids].split(",")
     
       ids.each do |id|
-        cate = Category.get(id.to_i)
-        subcate = Subcategory.all(:category_id => id.to_i)
-        
-        if cate.destroy
-          if subcate.count > 0
-            if subcate.destroy
-              result = "success"
-            else
-              result = "서브카테고리 삭제중 오류 발생"  
-            end
-          else
-              result = "success"
-          end
-          
-          begin
-            if Mbook.all(:category_id => id.to_i).count > 0
-              mbooks = Mbook.all(:category_id => id.to_i)
-              mbooks.each do |mbook|
-                mbook.category_id = nil
-                mbook.subcategory1_id = nil
-                mbook.subcategory2_id = nil
-              
-                mbook.save
-              end
-              result = "success"
-            end
-          rescue
-            result = "mbook의 카테고리 정보를 초기화 하는중 오류가 발생했습니다!"
-          end
-        else
-          result = "카테고리 삭제중 오류 발생"
-        end
+          result = delete_subcategory(id)
       end #ids do loop end
       
     else
       result = "삭제할 항목을 선택해 주세요!"
     end
     
+    
     html_str = ""
     if result == "success"
       i = 1
-				Category.all(:gubun => "template", :order => [:priority.asc]).each do |cat|
+				Category.all(:gubun => "template",:level => level, :parent_id=> parent_id, :order => [:priority.asc]).each do |cat|
 				    html_str  = html_str	+ "<ul class='list_ul #{'list_first' if i % 6 == 1}' id='ul_#{cat.id}'>\n" +
-						"<li class='icon_cotegory'><img src='/images/category_icon/#{cat.icon_image}' alt='카테고리 아이콘'></li>\n" +
+						"<li class='icon_cotegory'><a href='/admin/categories?level=#{level+1}&parent_id=#{cat.id}'><img src='/images/category_icon/#{cat.icon_image}' alt='카테고리 아이콘'></a></li>\n" +
 						"<li class='category_name cat_name' category_id='#{cat.id}' cat_name='#{cat.name}'>#{cat.name}</li>\n" +
 						"<li><img src='/images/bt/bt_upload_re.png' alt='수정' style='cursor:pointer;' class='btn_mod' category_id='#{cat.id}' category_name='#{cat.name}'>\n" + 
 						"<input type='checkbox' class='chkbox' category_id='#{cat.id}'></li>\n" +
@@ -423,7 +469,6 @@ class Admin::CategoriesController < ApplicationController
   
   def update_category_order
     ids = params[:ul_ids].gsub(/ul_/,"").split(",")
-    
     
     begin 
       i = 1

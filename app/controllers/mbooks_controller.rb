@@ -59,9 +59,9 @@ class MbooksController < ApplicationController
       
       @menu_on = "mb_store"
       
-      if params[:in_store] == "y"
+      # if params[:in_store] == "y"
         @mbooks = @mbooks.all(:status => "승인완료")
-      end
+      # end
       
       if params[:cat] != nil and params[:cat] != ""
         @mbooks = @mbooks.all(:category_id => params[:cat].to_i)
@@ -78,7 +78,21 @@ class MbooksController < ApplicationController
     end
 
     
-    @categories = Category.all(:gubun => "template", :order => :priority)
+    @categories = Category.all(:gubun => "template", :order => :priority, :display_fl => true, :level => 0)
+    
+    if params[:level] !=nil and  params[:level] != ""
+      level = params[:level].to_i
+    else
+      level = 0
+    end
+    
+    @categories = @categories.all(:level => level, :display_fl => true, :level => 0)
+    
+    if params[:parent_id] != nil and params[:parent_id]
+      parent_id = params[:parent_id].to_i
+      
+      @categories = @categories.all(:parent_id => parent_id, :display_fl => true, :level => 0)
+    end
       
     render 'mbook', :object => @total_count
   end
@@ -114,8 +128,8 @@ class MbooksController < ApplicationController
       end
 
       category_id = @mbook.category_id
-      @categories = Category.all(:gubun => "template", :order => :priority)        
-      @subcategories = Subcategory.all(:category_id => category_id, :order => [:priority])
+      @categories = Category.all(:gubun => "template", :order => :priority, :display_fl => true, :level => 0)        
+      # @subcategories = Subcategory.all(:category_id => category_id, :order => [:priority])
       render 'mbook'
     else
       redirect_to '/mbooks' 
@@ -138,9 +152,9 @@ class MbooksController < ApplicationController
       
       @mbook = Mbook.new()
       
-      @categories = Category.all(:gubun => "template", :order => :priority)    
-      category_id = Category.first(:gubun => "template", :order => [:priority]).id.to_i
-      @subcategories = Subcategory.all(:category_id => category_id, :order => [:priority])    
+      @categories = Category.all(:gubun => "template", :order => :priority, :display_fl => true, :level => 0)    
+      category_id = Category.first(:gubun => "template", :order => [:priority]).id
+      @subcategories = Category.all(:parent_id => category_id, :order => [:priority], :display_fl => true)    
       
       render 'mbook'
     else
@@ -157,9 +171,9 @@ class MbooksController < ApplicationController
   # POST /mbooks.xml
   def create
     @mbook = Mbook.new()
-    @mbook.category_id = params[:category_id]
-    @mbook.subcategory1_id = params[:subcategory1_id]
-    @mbook.subcategory2_id = (params[:subcategory2_id] != nil and params[:subcategory2_id] != "") ? params[:subcategory2_id] : nil
+    # @mbook.category_id = params[:category_id]
+    @mbook.subcategory1_id = params[:sub1]
+    @mbook.subcategory2_id = params[:sub2]
     @mbook.issue_date = params[:issue_date]
     
     @mbook.price = params[:price]
@@ -314,15 +328,17 @@ class MbooksController < ApplicationController
    
   def update
     @mbook = Mbook.get(params[:id].to_i)
-    @mbook.category_id = params[:category_id]
-    @mbook.subcategory1_id = params[:subcategory1_id]
-    @mbook.issue_date = params[:issue_date]
-    
-    if params[:subcategory2_id] != nil and params[:subcategory2_id] != ""
-      @mbook.subcategory2_id = params[:subcategory2_id]
+    @mbook.subcategory1_id = params[:sub1]
+
+    if params[:sub2] != nil and params[:sub2] != ""
+      @mbook.subcategory2_id = params[:sub2]
     else
       @mbook.subcategory2_id = nil
     end
+    
+    
+    @mbook.issue_date = params[:issue_date]
+    
     @mbook.price = params[:price]
     
     if params[:mbook_file] != nil and params[:mbook_file] != ""
@@ -359,8 +375,8 @@ class MbooksController < ApplicationController
   end
   
   def update_subcategories
-      categories = Category.first(:id => params[:category_id].to_i)
-      @subcategories = Subcategory.all(:category_id => categories.id)
+      categories = Category.first(:id => params[:category_id].to_i, :display_fl => true)
+      @subcategories = Category.all(:parent_id => categories.id)
 
       render :update do |page|
         page.replace_html 'subcategories1', :partial => 'subcategories1', :object => @subcategories
@@ -437,7 +453,107 @@ class MbooksController < ApplicationController
   end
   
   
+  def fetch_subcategories  
+    if params[:category_id] != nil and params[:category_id] != ""
+      category_id = params[:category_id].to_i
+      level = params[:level].to_i
+      mode = params[:mode]
+      html_str = ""
+    
+      html_str = make_parent(level, category_id, mode)
+      html_str += make_children(level, category_id, mode)
+    
+      @result = html_str
+    
+      render :update do |page|
+        if mode == "opt" #선택분류를 선택할 때 
+          page.replace_html 'select_category2', :partial => 'subcategories1', :object => @result
+        else
+          page.replace_html 'select_category', :partial => 'subcategories1', :object => @result
+        end
+        
+      end  
+
+  end
+      
+    end
   
   
+  def make_parent(level, id, mode)
+    
+    
+    if Category.get(id) != nil and Category.get(id) != ""
+      
+      if level > -1 
+    	  parent_id = Category.get(id).parent_id
+      	parent_level = level -1
+
+        
+    		html_str = make_parent(level-1, parent_id, mode)
+        
+        if html_str == nil
+          html_str = ""
+        end
+        
+    		categories = Category.all(:parent_id => parent_id, :display_fl => true, :order => [:priority])
+    		
+    		if categories.count > 0
+    		  if mode == "opt"
+        		html_str += "<select class='select_category' name='select_category2_#{level}' id='select_category2_#{level}' level='#{level}' mode='#{mode}'>"
+        		html_str += "<option value="">케테고리 선택</option>"
+        	else
+        	  html_str += "<select class='select_category' name='select_category_#{level}' id='select_category_#{level}' level='#{level}' mode='#{mode}'>"
+        		html_str += "<option value="">케테고리 선택</option>"
+        		
+      	  end
+    		
+      		categories.each do |cat|
+      			html_str += "<option value='#{cat.id}' #{'selected' if cat.id == id}>#{cat.name}</option>"
+      		end
+
+      		html_str += "</select>"
+    	  end
+    	else
+    	  html_str = ""
+    	end
+
+    	return html_str
+    end
+    
+    end
+    
+  	
+
+  def make_children(level, id, mode)
+  	categories = Category.all(:parent_id => id, :display_fl => true, :order => [:priority])
+    
+    if categories.count > 0
+      if mode == "opt"
+      	html_str = "<select class='select_category' name='select_category2_#{level+1}' id='select_category2_#{level+1}' level='#{level+1}' mode='#{mode}'>"
+      	html_str += "<option value="">카테고리 선택</option>"
+      else
+        html_str = "<select class='select_category' name='select_category_#{level+1}' id='select_category_#{level+1}' level='#{level+1}' mode='#{mode}'>"
+      	html_str += "<option value="">카테고리 선택</option>"
+      end
+    	categories.each do |cat|
+    		html_str += "<option value='#{cat.id}'>#{cat.name}</option>"
+    	end
+
+    	html_str += "</select>"
+    else
+      html_str = ""
+    end
+    
+    return html_str
+    
+  end
   
 end
+
+
+
+
+
+
+
+

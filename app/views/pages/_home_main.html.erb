@@ -1,10 +1,18 @@
+<%
+if params[:parent_id] != nil and params[:parent_id]
+	current_cat_id = params[:parent_id].to_i
+	category_str_top = make_category_str_main(current_cat_id)
+else
+	category_str_top = ""
+end
+%>
+
 <div id="content">
 	<!-- Root Category-->
 	<div class="root_index">
 		<ul>
 			<li class="total"><a href=""><img src="images/root/bt_root_total_blue.png" alt="전체분류"></a></li>
-			<li><a href="/">형태</a></li>
-			
+			<%= category_str_top %>
 		</ul>
 	</div>
 	<!-- Box Category -->
@@ -12,11 +20,11 @@
 		<ul class="list">
 			<%@categories.each do |cat| %>
 				<li><%= cat.name %><br/>
-					<a href="sub?cat=<%= cat.id %>"><img src="images/icon_category.png" alt="분류명"></a><br/>
+					<a href="?level=<%= cat.level+1 %>&parent_id=<%= cat.id %>&cat=<%= cat.id %>"><img src="images/icon_category.png" alt="분류명"></a><br/>
 					<%if signed_in? %>
-						<a href="/mbooks?me=y&store=n&cat=<%=cat.id %>"><img src="images/main/bt_list.png" alt="리스트"></a>
+						<a href="/mbooks?level=<%= cat.level+1 %>&parent_id=<%= cat.id %>&me=y&store=n&cat=<%=cat.id %>"><img src="images/main/bt_list.png" alt="리스트"></a>
 					<%else %>
-						<a href="/mbooks?me=n&store=y&cat=<%=cat.id %>"><img src="images/main/bt_list.png" alt="리스트"></a>
+						<a href="/mbooks?level=<%= cat.level+1 %>&parent_id=<%= cat.id %>&me=n&store=y&cat=<%=cat.id %>"><img src="images/main/bt_list.png" alt="리스트"></a>
 					<%end %>
 				</li>
 			<%end %>

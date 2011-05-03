@@ -7,22 +7,47 @@
 		<ul>
 			<li><img src="/images/root/root_first.png"></li>
 			<li><a href=""><img src="/images/root/bt_root_total_pink.png" alt="전체분류"></a></li>
-			<li>
-				<select id="select_category" name="category_id">
-					<%@categories.each do |cat| %>
-					<option value="<%= cat.id %>" <%= "selected" if cat.id.to_s == params[:cat].to_s %>><%= cat.name %></option>
-					<%end %>
-				</select>
-			</li>
-			<li><img src="/images/root/root_arrow_pink.png"></li>
-			<li>
-				<span id="subcategories1">
-				<select id="select_subcategory1" name="subcategory1_id">
-					<% Subcategory.all(:category_id => params[:cat].to_i).each do |subcat| %>
-					<option value="<%= subcat.id %>" <%= "selected" if subcat.id.to_s == params[:sub].to_s %>><%= subcat.name %></option>
-					<%end %>
-				</select>
-			</li>
+			
+			<%
+				if params[:level] != nil and params[:level] != ""
+					level = params[:level].to_i - 1
+				else
+					level = 0
+				end
+				i = 0
+				
+				while i < level + 1
+					%>
+					<li>
+						<select class="select_category" level="<%= i + 1 %>">
+							<%Category.all(:gubun=>"template",:order=>[:priority],:level=>i, :display_fl => true).each do |cat| %>
+							<option value="<%= cat.id %>" <%= "selected" if cat.id.to_s == find_parent(params[:cat],i,level).to_s %>><%= cat.name %></option>
+							<%end %>
+						</select>
+					</li>
+					<li><img src="/images/root/root_arrow_pink.png"></li>
+					<%
+					i = i + 1
+				end
+				
+				if Category.all(:parent_id => params[:cat].to_i).count > 0
+					%>
+					<li>
+						<select class="select_category" level="<%= i + 1 %>">
+							<option value="">전체</option>
+							<%Category.all(:gubun=>"template",:order=>[:priority],:parent_id => params[:cat].to_i, :display_fl => true).each do |cat| %>
+							<option value="<%= cat.id %>" ><%= cat.name %></option>
+							<%end %>
+						</select>
+					</li>
+					<li><img src="/images/root/root_arrow_pink.png"></li>
+					<%
+				end
+				
+			%>
+			
+			
+			
 			<li class="root_last"><img src="/images/root/root_last.png"></li>
 		</ul>
 	</div>
@@ -109,7 +134,7 @@
 				<ul class="list_data_<%= @page_num % 2 == 0 ? "white":"blue" %>">
 					<li class="no"><%= @page_num %></li>
 					<li class="book"><img src="<%= mb.thumbnail_url %>" alt="책표지"></li>
-					<li class="category"><%= Category.get(mb.category_id.to_i).name %> <br> <%= Subcategory.get(mb.subcategory1_id.to_i).name %></li>
+					<li class="category"><%= Category.get(mb.subcategory1_id.to_i).name %> <br> <%= Category.get(mb.subcategory2_id.to_i).name if mb.subcategory2_id != nil %></li>
 					<a href="/mbooks/<%= mb.id %>?me=<%= params[:me] %>&store=<%= params[:store] %>">
 						<li class="mbook">
 						<b><%= mb.title %></b><br/>
@@ -296,5 +321,12 @@ $('#btn_del_from_store').live("click", function(){
 
 $('#select_status').live("change",function(){
 	window.location.href = "/mbooks?me=<%= params[:me] %>&store=<%= params[:store] %>&st="+ $('#select_status option:selected').val()
+})
+
+$('.select_category').change(function(){
+	var $level = parseInt($(this).attr("level"));
+	var $id = $(this).val();
+	
+	window.location.href = "/mbooks?level="+$level+"&parent_id="+$id+"&me=<%= params[:me] %>&store=<%= params[:store] %>&cat="+$id;
 })
 </script>

@@ -401,14 +401,14 @@ EOF
         #category_id 와 동일 
         category_id = params[:folder_id].to_i
         
-        subcategories = Subcategory.all(:category_id => category_id)
+        categories = Category.all(:parent_id => category_id)
 
-        subcategories.each do |sub|
+        categories.each do |sub|
           items = items + 
 "<item>
 <type>folder</type>
 <id>#{sub.id.to_s}</id>
-<name>#{Subcategory.get(sub.id).name}</name>
+<name>#{Category.get(sub.id).name}</name>
 <subitems>#{Mbook.all(:subcategory1_id => sub.id).count.to_s}</subitems>
 <thumbnail>/images/icon_category.png</thumbnail>
 </item>\n"

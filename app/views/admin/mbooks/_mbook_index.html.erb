@@ -161,6 +161,7 @@ $('.btn_status').live("click", function(){
 	var $url = "";
 	if( $status == "del" ){
 		$url = '/admin/mbooks/deleteSelection';
+		$str_status = "";
 		$str_confirm = "정말 삭제사히겠습니까?";
 	}else if ($status == "ready") {
 		$url = '/admin/mbooks/change_status';

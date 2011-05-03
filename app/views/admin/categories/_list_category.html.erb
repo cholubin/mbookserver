@@ -1,9 +1,9 @@
 <%	i = 1
 	@categories.each do |cat| %>
 <ul class="list_ul <%= "list_first" if i % 6 == 1 %>" id="ul_<%= cat.id %>">
-	<li class="icon_cotegory"><img src="/images/category_icon/<%= cat.icon_image %>" alt="카테고리 아이콘"></li>
+	<li class="icon_cotegory"><a href="/admin/categories?level=<%= cat.level + 1 %>&parent_id=<%= cat.id %>"><img src="/images/category_icon/<%= cat.icon_image %>" alt="카테고리 아이콘" <%= "style=\"opacity:0.4;filter:alpha(opacity=40)\"" if cat.display_fl == false %> ></a></li>
 	<li class="category_name cat_name" category_id="<%= cat.id %>" cat_name="<%= cat.name %>"><%= cat.name %></li>
-	<li><img src="/images/bt/bt_upload_re.png" alt="수정" style="cursor:pointer;" class="btn_mod" category_id="<%= cat.id %>" category_name="<%= cat.name %>"> <input type="checkbox" class="chkbox" category_id="<%= cat.id %>"></li>
+	<li class="btn"><img src="/images/bt/bt_upload_re.png" alt="수정" style="cursor:pointer;" class="btn_mod" display_fl="<%= cat.display_fl.to_s %>" category_id="<%= cat.id %>" category_name="<%= cat.name %>"> <input type="checkbox" class="chkbox" category_id="<%= cat.id %>"></li>
 </ul>
 <%		i += 1
 	end %>

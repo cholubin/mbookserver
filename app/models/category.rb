@@ -15,6 +15,10 @@ class Category
   property :priority,     Integer, :default => 9999
   property :gubun,        String, :default => "template"
   property :icon_image,   String, :default => "icon_category.png"
+  
+  property :level,        Integer
+  property :parent_id,    Integer
+  property :display_fl,   Boolean, :default => true
   timestamps :at
 
   has n, :subcategories

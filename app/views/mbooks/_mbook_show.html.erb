@@ -7,6 +7,9 @@
 		<input type="hidden" name="id" value="<%= @mbook.id %>">
 		<input type="hidden" name="me" value="<%= params[:me] %>">
 		<input type="hidden" name="store" value="<%= params[:store] %>">
+		<input type="hidden" name="sub1" id="sub1" value="">
+		<input type="hidden" name="sub2" id="sub2" value="">
+		
 		<table>
 			<tr class="book">
 				<td rowspan="15" class="book"><img src="<%= @mbook.coverimage_url %>" alt="책표지"></td>
@@ -16,41 +19,31 @@
 				<td class="input_name">아이디</td>
 				<td class="input_data" colspan="2"><%= User.first(:id => @mbook.user_id).userid %></td>
 			</tr>
-			<tr class="bookform">
-				<td class="input_name">형태</td>
-				<td class="input_data">
-					<select id="select_category" name="category_id">
-						<%@categories.each do |cat| %>
-						<option value="<%= cat.id %>" <%= "selected" if cat.id.to_s == @mbook.category_id.to_s %> ><%= cat.name %></option>
-						<%end %>
-					</select>
-				</td>
-				<td class="error"><!-- <img src="/images/icon_error.png" alt="error"> 형태를 선택하세요. --></td>
-			</tr>
 			<tr class="category1">
 				<td class="input_name">분류 (필수)</td>
 				<td class="input_data">
-					<span id="subcategories1">
-					<select id="select_subcategory1" name="subcategory1_id">
-						<% @subcategories.each do |subcat| %>
-						<option value="<%= subcat.id %>" <%= "selected" if subcat.id.to_s == @mbook.subcategory1_id.to_s %>><%= subcat.name %></option>
-						<%end %>
-					</select>
-					</span>		
+					<span id="select_category">
+						<select id="select_category_0" name="category_id" class="select_category" level="0" mode="main">
+							<option value="">카테고리 선택</option>
+							<%@categories.each do |cat| %>
+							<option value="<%= cat.id %>" ><%= cat.name %></option>
+							<%end %>
+						</select>
+					</span>
 				</td>
 				<td class="error"><!-- <img src="/images/icon_error.png" alt="error"> 분류를 선택하세요. --></td>
 			</tr>
 			<tr class="category2">
 				<td class="input_name">분류 (선택)</td>
 				<td class="input_data">
-					<span id="subcategories2">
-					<select id="select_subcategory2" name="subcategory2_id">
-						<option value="">선택안함</option>
-						<% @subcategories.each do |subcat| %>
-						<option value="<%= subcat.id %>" <%= "selected" if subcat.id.to_s == @mbook.subcategory2_id.to_s %> ><%= subcat.name %></option>
-						<%end %>
-					</select>
-					</span>					
+					<span id="select_category2">
+						<select id="select_category2_0" name="category_id2" class="select_category" level="0" mode="opt">
+							<option value="">선택안함</option>
+							<%@categories.each do |cat| %>
+							<option value="<%= cat.id %>" ><%= cat.name %></option>
+							<%end %>
+						</select>
+					</span>
 				</td>
 				<td class="error"></td>
 			</tr>
@@ -83,60 +76,103 @@
 				<%= @mbook.description %>
 				</td>
 			</tr>
-			<tr class="price">
-				<td class="input_name">가격</td>
-				<td class="input_data">
-					<img src="/images/icon_dollar.png" alt="달러">
-					<input id="price" name="price" type="text" value="<%= @mbook.price %>">
-				</td>
-				<td class="error"><span id="price_msg"></span></td>
-			</tr>
-			<!-- <tr class="book_image">
-				<td class="input_name">책표지 이미지 파일</td>
-				<td class="input_data" colspan="2">image.jpg</td>
-			</tr>			 -->
-			<tr class="mbookzip">
-				<td class="input_name">mBook Zip 파일</td>
-				<td class="input_data">
-					<img src="/images/bt/bt_mbook.png" alt="mBook Zip 파일 등록"><input type="file" name="mbook_file">	
-				</td>
-				<td class="error"><span class="input_info"><!-- ※ Zip 파일 최대 용량 : 000MB --></span></td>
-			</tr>
+			<% if signed_in? and current_user.id == @mbook.user_id %>
+				<tr class="price">
+					<td class="input_name">가격</td>
+					<td class="input_data">
+						<img src="/images/icon_dollar.png" alt="달러">
+						<input id="price" name="price" type="text" value="<%= @mbook.price %>">
+					</td>
+					<td class="error"><span id="price_msg"></span></td>
+				</tr>
+				<!-- <tr class="book_image">
+					<td class="input_name">책표지 이미지 파일</td>
+					<td class="input_data" colspan="2">image.jpg</td>
+				</tr>			 -->
+				<tr class="mbookzip">
+					<td class="input_name">mBook Zip 파일</td>
+					<td class="input_data">
+						<img src="/images/bt/bt_mbook.png" alt="mBook Zip 파일 등록"><input type="file" name="mbook_file">	
+					</td>
+					<td class="error"><span class="input_info"><!-- ※ Zip 파일 최대 용량 : 000MB --></span></td>
+				</tr>
+			<%end %>
+				
 			<tr class="state">
 				<td class="input_name">상태</td>
 				<td class="input_data" colspan="2"><span id="span_stuats" status="<%= @mbook.status %>"><%= @mbook.status %></span></td>
 			</tr>
 		</table>
 		
-		<table>
-			<tr>
-				<td width="170">&nbsp;</td>
-				<!-- <td width="300"><a href=""><img src="/images/bt/bt_store_request.png" id="store_req" alt="Store로 등록 신청" <%= "style=\"opacity:0.4;filter:alpha(opacity=40)\"" if @mbook.status == "승인대기" %>></a></td> -->
-				<td width="300"><a href=""><img src="/images/bt/bt_store_request.png" id="store_req" alt="Store로 등록 신청" <%= "class=\"img_disabled\"" if @mbook.status != "대기" %>></a></td>
-				<td align="left"><input id="submit_btn" type="image" src="/images/bt/bt_upload_re_ok.png" alt="수정완료" style="cursor:pointer;" <%= "disabled class=\"img_disabled\"" if @mbook.status != "대기" %> >
-				<!-- <a href="Javascript:history.back(-1);"><img src="/images/bt/bt_cancel.png" alt="취소"></a> --></td>
-			</tr>
-		</table>
+		<% if signed_in? and current_user.id == @mbook.user_id %>
+			<table>
+				<tr>
+					<td width="170">&nbsp;</td>
+					<!-- <td width="300"><a href=""><img src="/images/bt/bt_store_request.png" id="store_req" alt="Store로 등록 신청" <%= "style=\"opacity:0.4;filter:alpha(opacity=40)\"" if @mbook.status == "승인대기" %>></a></td> -->
+					<td width="300"><a href=""><img src="/images/bt/bt_store_request.png" id="store_req" alt="Store로 등록 신청" <%= "class=\"img_disabled\"" if @mbook.status != "대기" %>></a></td>
+					<td align="left"><input id="submit_btn" type="image" src="/images/bt/bt_upload_re_ok.png" alt="수정완료" style="cursor:pointer;" <%= "disabled class=\"img_disabled\"" if @mbook.status != "대기" %> >
+					<!-- <a href="Javascript:history.back(-1);"><img src="/images/bt/bt_cancel.png" alt="취소"></a> --></td>
+				</tr>
+			</table>
+		<%end %>
 		<%end %>
 		
 	</div>
 </div>
 
 <script language="Javascript">
-
-$('#select_category').live("change", function(){
-	var $value = $(this,'option:selected').val();
+$(document).ready(function(){
+	var $level = <%= Category.get(@mbook.subcategory1_id).level %>;
+	var $category_id = <%= @mbook.subcategory1_id.to_s %>;
+	var $mode = "main";
 	
 	$.ajax({
-		data:'category_id='+ $value, 
+		data:'category_id='+ $category_id + '&level=' + $level + '&mode=' + $mode, 
 		dataType:'script', 
 		type:'post', 
-		url:'/mbooks/update_subcategories'
+		url:'/mbooks/fetch_subcategories'
 	});
 	
+	<%if @mbook.subcategory2_id != nil and @mbook.subcategory1_id != "" %>
+		var $level = <%= Category.get(@mbook.subcategory2_id).level %>;
+		var $category_id = <%= @mbook.subcategory2_id.to_s %>;
+		var $mode = "opt";
+	
+		$.ajax({
+			data:'category_id='+ $category_id + '&level=' + $level + '&mode=' + $mode, 
+			dataType:'script', 
+			type:'post', 
+			url:'/mbooks/fetch_subcategories'
+		});
+	<%end %>
+})
+
+$('.select_category').live("change", function(){
+	var $level = $(this).attr("level");
+	var $category_id = $(this).val();
+	var $mode = $(this).attr("mode");
+	
+		$.ajax({
+			data:'category_id='+ $category_id + '&level=' + $level + '&mode=' + $mode, 
+			dataType:'script', 
+			type:'post', 
+			url:'/mbooks/fetch_subcategories'
+		});
 })
 
 $('#submit_btn').click(function(){
+	var $category1_level = $('#select_category select').length -1;
+	var $category2_level = $('#select_category2 select').length -1;
+	
+	if ( $('#select_category_'+ $category1_level ).val() == ""){
+		alert("필수 카테고리를 선택해 주세요!");
+		return false;
+	}else{
+		$('#sub1').val( $('#select_category_'+ $category1_level ).val() );
+	}
+	
+	$('#sub2').val( $('#select_category2_'+ $category2_level ).val() );
+	
 	if($('#price').val() == ""){
 		$('#price').focus();
 		$('#price').css("background-color", "yellow");
