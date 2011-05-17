@@ -409,7 +409,7 @@ EOF
 <type>folder</type>
 <id>#{sub.id.to_s}</id>
 <name>#{Category.get(sub.id).name}</name>
-<subitems>#{Mbook.all(:subcategory1_id => sub.id).count.to_s}</subitems>
+<subitems>#{Mbook.all(:subcategory1_id => category_id).count.to_s}</subitems>
 <thumbnail>/images/icon_category.png</thumbnail>
 </item>\n"
         end
