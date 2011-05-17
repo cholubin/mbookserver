@@ -31,6 +31,7 @@ class Mbook
   property :status,             String, :default => "대기"  # (status; "대기", "승인완료", "승인거부", "승인대기", "삭제대기")
   property :cancel_reason,      Text
   property :coverimage_name,    String
+  property :covermedium_name,   String
   property :thumbnail_name,     String
 
   timestamps :at
@@ -94,8 +95,15 @@ class Mbook
     return zip_path
   end
 
-  
+  def covermedium_url
+    if self.covermedium_name != nil and self.covermedium_name != ""
+      zip_path = MBOOK_URL + "#{self.id.to_s}/#{self.covermedium_name}"
+    else
+      zip_path = MBOOK_URL + "#{self.id.to_s}/#{self.thumbnail_name}"
+    end
+    return zip_path
+  end
 end
 
-# DataMapper.auto_upgrade!
+DataMapper.auto_upgrade!
 

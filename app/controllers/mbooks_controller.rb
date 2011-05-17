@@ -249,6 +249,11 @@ class MbooksController < ApplicationController
        # mbook.publisher = mb.elements["Publisher"].text
        mbook.coverimage_name = mb.elements["CoverImage"].text
        mbook.thumbnail_name = mb.elements["CoverThumbnail"].text
+       if mb.elements["CoverMedium"] != nil and mb.elements["CoverMedium"] != ""
+         mbook.covermedium_name = mb.elements["CoverMedium"].text
+       else
+         mbook.covermedium_name = mbook.thumbnail_name
+       end
        # mbook.description = mb.elements["Description"].text
        if mbook.save
          puts_message "mBook 메타데이타 업데이트 완료!"
