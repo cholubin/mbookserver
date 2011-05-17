@@ -401,7 +401,7 @@ EOF
         #category_id 와 동일 
         category_id = params[:folder_id].to_i
         
-        categories = Category.all(:parent_id => category_id)
+        categories = Category.all(:parent_id => category_id, :gubun => "template")
 
         categories.each do |sub|
           items = items + 
@@ -415,7 +415,7 @@ EOF
         end
         result = "0"
       else
-        categories = Category.all
+        categories = Category.all(:gubun => "template")
         categories.each do |cat|
           items = items + 
 "<item>
