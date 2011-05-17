@@ -400,7 +400,6 @@ EOF
       if params[:folder_id] != nil and params[:folder_id] != ""
         #category_id 와 동일 
         category_id = params[:folder_id].to_i
-        
         categories = Category.all(:parent_id => category_id, :gubun => "template")
         
         categories.each do |sub|
@@ -409,8 +408,29 @@ EOF
 <type>folder</type>
 <id>#{sub.id.to_s}</id>
 <name>#{Category.get(sub.id).name}</name>
-<subitems>#{Mbook.all(:subcategory1_id => category_id).count.to_s}</subitems>
+<subitems>#{Mbook.all(:subcategory1_id => sub.id).count.to_s}</subitems>
 <thumbnail>/images/icon_category.png</thumbnail>
+</item>\n"
+        end
+        
+        mbooks = Mbook.all(:subcategory1_id => category_id)
+        puts_message mbooks.count.to_s
+        mbooks.each do |mb|
+          items = items + 
+"<item>
+<type>book</type>
+<id>#{mb.id.to_s}</id>
+<thumbnail>mbook/#{mb.id}/#{mb.covermedium_name}</thumbnail>
+<preview>mbook/#{mb.id}/#{mb.coverimage_name}</preview>
+<download>mbook/#{mb.id}.mbook.zip</download>
+<title>#{mb.title}</title>
+<author>#{mb.writer}</author>
+<publisher>#{mb.publisher}</publisher>
+<pages>#{pages}</pages>
+<issue_date>#{issue_date}</issue_date>
+<price>#{mb.price}</price>
+<description>#{mb.description}</description>
+<product_identifier></product_identifier>
 </item>\n"
         end
         result = "0"
