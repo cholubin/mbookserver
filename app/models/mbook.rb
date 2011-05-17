@@ -97,5 +97,5 @@ class Mbook
   
 end
 
-DataMapper.auto_upgrade!
+# DataMapper.auto_upgrade!
 

@@ -170,10 +170,15 @@ class MbooksController < ApplicationController
   # POST /mbooks
   # POST /mbooks.xml
   def create
+    puts_message "Create Mbook process has start!"
     @mbook = Mbook.new()
     # @mbook.category_id = params[:category_id]
     @mbook.subcategory1_id = params[:sub1]
-    @mbook.subcategory2_id = params[:sub2]
+    if params[:sub2] != nil and params[:sub2] != ""
+      @mbook.subcategory2_id = params[:sub2]
+    else
+      @mbook.subcategory2_id = nil
+    end
     @mbook.issue_date = params[:issue_date]
     
     @mbook.price = params[:price]
@@ -183,18 +188,26 @@ class MbooksController < ApplicationController
     @mbook.mbook_file = params[:mbook_file]
     @mbook.original_filename = params[:mbook_file].original_filename.gsub(".zip","")
     
+    # @mbook.save
+    # redirect_to '/mbooks?me=y&store=n'
+    
     if @mbook.save
+      puts_message "unzip_uploaded_file start!"
       unzip_uploaded_file(@mbook)
+      
+      puts_message "get_xml_data_update start!"
       get_xml_data_update(@mbook)
       # rezip_uploaded_file(@mbook)
       redirect_to '/mbooks?me=y&store=n'
     else
-      puts_message "실패!"
-      redirect_to '/mybooks'
+      puts_message "실패! " + @mbook.errors.to_s
+      redirect_to '/mbooks'
     end
   end
 
   def unzip_uploaded_file(mbook) 
+    puts_message "unzip_uploaded_file start"
+    
     destination = mbook.zip_path
 
     begin
@@ -210,6 +223,8 @@ class MbooksController < ApplicationController
 
      unzip(mbook, destination)    
      # get_xml_data_update(mbook)
+     
+     puts_message "unzip_uploaded_file finished"
   end
    
    def rezip_uploaded_file(mbook)
