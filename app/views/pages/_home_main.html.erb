@@ -21,7 +21,7 @@ end
 			<%@categories.each do |cat| %>
 				<li><%= cat.name %><br/>
 					<%if Category.all(:parent_id => cat.id).count > 0 %>
-						<a href="?lv=<%= cat.level %>&sid=<%= cat.id %>"><img src="/images/icon_category.png" alt="분류명"></a><br/>
+						<a href="?lv=<%= cat.level+1 %>&sid=<%= cat.id %>"><img src="/images/icon_category.png" alt="분류명"></a><br/>
 					<%else%>
 						<%if signed_in? %>
 							<a href="/mbooks?lv=<%= cat.level %>&sid=<%= cat.id %>&me=y&store=n"><img src="/images/icon_category.png" alt="리스트"></a><br/>
