@@ -67,7 +67,7 @@ class MbooksController < ApplicationController
             @sid_temp << sid
           else
             @pid_temp << pid
-            pid = Category.get(pid).parent_id
+            pid = Category.get(pid).parent_id if Category.get(pid) != nil
             
             @sid_temp << sid
             sid = Category.get(sid).parent_id

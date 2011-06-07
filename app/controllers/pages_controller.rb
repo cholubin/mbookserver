@@ -9,8 +9,8 @@ class PagesController < ApplicationController
     
     @categories = Category.all(:gubun => "template", :display_fl => true, :order => [ :priority ])
     
-    if params[:level] !=nil and  params[:level] != ""
-      level = params[:level].to_i
+    if params[:lv] !=nil and  params[:lv] != ""
+      level = params[:lv].to_i
       
     else
       level = 0
@@ -18,8 +18,8 @@ class PagesController < ApplicationController
     
     @categories = @categories.all(:level => level)
     
-    if params[:parent_id] != nil and params[:parent_id]
-      parent_id = params[:parent_id].to_i
+    if params[:sid] != nil and params[:sid]
+      parent_id = params[:sid].to_i
       
       if Category.get(parent_id) != nil 
         if parent_id == 0 or Category.get(parent_id).display_fl == true
