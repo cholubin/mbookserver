@@ -11,6 +11,105 @@ class MbooksController < ApplicationController
     
     @mbooks = Mbook.all()
     
+    if params[:sid] != nil and params[:sid] != ""
+      @c_sid = params[:sid].to_i
+    else
+      @c_sid = 0
+    end
+    
+    if @c_sid != 0 
+      @c_pid = Category.get(@c_sid).parent_id
+    else
+      @c_pid = 0
+    end
+    
+    if params[:lv] != nil and params[:lv] != ""
+      @level = params[:lv].to_i
+    else
+      @level = 0
+    end
+
+    # puts_message "클릭한 Level: " + @level.to_s
+    # puts_message "selected ID: " + @c_sid.to_s 
+    # puts_message "parent ID: " + @c_pid.to_s 
+
+    @pid = []
+    @pid_temp = []
+    @sid = []
+    @sid_temp = []
+    
+    if @level == 0
+        @pid_temp << @c_pid
+        @pid_temp << @c_sid
+        
+        @sid_temp << @c_sid
+        @sid_temp << 0
+    else
+      pid = 0
+      sid = 0
+      @pid_temp << @c_sid
+      @sid_temp << 0
+      
+      (@level).downto(0) { |x|
+        if @level == x
+          @pid_temp << @c_pid
+          pid = Category.get(@c_pid).parent_id if Category.get(@c_pid) != nil
+
+          @sid_temp << @c_sid
+          sid = Category.get(@c_sid).parent_id if Category.get(@c_sid) != nil
+          
+          # puts_message "current pid: " + pid.to_s
+          # puts_message "current sid: " + sid.to_s
+        else
+          if x == 0
+            @pid_temp <<  0
+            
+            @sid_temp << sid
+          else
+            @pid_temp << pid
+            pid = Category.get(pid).parent_id
+            
+            @sid_temp << sid
+            sid = Category.get(sid).parent_id
+          end
+          
+        end
+      }
+    end
+    
+    if @level < 1
+      @pid = @pid_temp
+    else
+      i = @pid_temp.length() -1
+      puts_message "pid 갯수"+i.to_s
+      @pid_temp.each do |x|
+        @pid[i] = x
+        i = i -1
+      end
+    end
+    
+    if @level < 1
+      @sid = @sid_temp
+    else
+      i = @sid_temp.length() -1
+      puts_message "sid 갯수"+i.to_s
+      @sid_temp.each do |x|
+        @sid[i] = x
+        i = i -1
+      end
+      
+    end
+    
+    # @pid.each do |x|
+    #   puts_message "pid::" + x.to_s
+    # end
+    # 
+    # @sid.each do |x|
+    #   puts_message "sid::" + x.to_s
+    # end
+    
+    
+    
     # 로그인 한 경우 
     if signed_in?
       
@@ -41,14 +140,10 @@ class MbooksController < ApplicationController
       end
     
       
-      if params[:cat] != nil and params[:cat] != ""
-        @mbooks = @mbooks.all(:category_id => params[:cat].to_i)
+      if @c_sid != 0
+        @mbooks = @mbooks.all(:subcategory1_id => @c_sid)
       end
-    
-      if params[:sub] != nil and params[:sub] != ""
-        @mbooks = (@mbooks.all(:subcategory1_id => params[:sub].to_i) || @mbooks.all(:subcategory2_id => params[:sub].to_i))
-      end
-      
+            
       mbooks = @mbooks
       
       @total_count = @mbooks.search(mbooks, params[:keyword], params[:search],"").count
@@ -59,18 +154,12 @@ class MbooksController < ApplicationController
       
       @menu_on = "mb_store"
       
-      # if params[:in_store] == "y"
-        @mbooks = @mbooks.all(:status => "승인완료")
-      # end
+      @mbooks = @mbooks.all(:status => "승인완료")
       
-      if params[:cat] != nil and params[:cat] != ""
-        @mbooks = @mbooks.all(:category_id => params[:cat].to_i)
+      if @c_sid != 0
+        @mbooks = @mbooks.all(:subcategory1_id => @c_sid)
       end
-    
-      if params[:sub] != nil and params[:sub] != ""
-        @mbooks = (@mbooks.all(:subcategory1_id => params[:sub].to_i) + @mbooks.all(:subcategory2_id => params[:sub].to_i))
-      end
-      
+        
       mbooks = @mbooks
       @total_count = @mbooks.search(mbooks, params[:keyword], params[:search],"").count
       @mbooks = @mbooks.search(mbooks, params[:keyword], params[:search], params[:page])

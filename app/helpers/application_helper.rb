@@ -42,9 +42,9 @@ def puts_message(message)
 end
 
 def find_parent(id,current_level,self_level)
-  puts_message "id: " + id.to_s
-  puts_message "current_level: " + current_level.to_s
-  puts_message "self_level: " + self_level.to_s
+  # puts_message "id: " + id.to_s
+  # puts_message "current_level: " + current_level.to_s
+  # puts_message "self_level: " + self_level.to_s
   
   if current_level == self_level
     return id

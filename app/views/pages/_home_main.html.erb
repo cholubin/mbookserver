@@ -20,11 +20,20 @@ end
 		<ul class="list">
 			<%@categories.each do |cat| %>
 				<li><%= cat.name %><br/>
-					<a href="?level=<%= cat.level+1 %>&parent_id=<%= cat.id %>&cat=<%= cat.id %>"><img src="images/icon_category.png" alt="분류명"></a><br/>
+					<%if Category.all(:parent_id => cat.id).count > 0 %>
+						<a href="?level=<%= cat.level+1 %>&parent_id=<%= cat.id %>&cat=<%= cat.id %>"><img src="/images/icon_category.png" alt="분류명"></a><br/>
+					<%else%>
+						<%if signed_in? %>
+							<a href="/mbooks?level=<%= cat.level+1 %>&parent_id=<%= cat.id %>&me=y&store=n %>"><img src="/images/icon_category.png" alt="리스트"></a><br/>
+						<%else %>
+							<a href="/mbooks?level=<%= cat.level+1 %>&parent_id=<%= cat.id %>&me=n&store=y %>"><img src="/images/icon_category.png" alt="리스트"></a><br/>
+						<%end %>
+					<%end%>
+					
 					<%if signed_in? %>
-						<a href="/mbooks?level=<%= cat.level+1 %>&parent_id=<%= cat.id %>&me=y&store=n&cat=<%=cat.id %>"><img src="images/main/bt_list.png" alt="리스트"></a>
+						<a href="/mbooks?lv=<%= cat.level %>&pid=<%= cat.id %>&me=y&store=n"><img src="/images/main/bt_list.png" alt="리스트"></a>
 					<%else %>
-						<a href="/mbooks?level=<%= cat.level+1 %>&parent_id=<%= cat.id %>&me=n&store=y&cat=<%=cat.id %>"><img src="images/main/bt_list.png" alt="리스트"></a>
+						<a href="/mbooks?lv=<%= cat.level %>&pid=<%= cat.id %>&me=n&store=y"><img src="/images/main/bt_list.png" alt="리스트"></a>
 					<%end %>
 				</li>
 			<%end %>
