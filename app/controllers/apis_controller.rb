@@ -118,7 +118,7 @@ EOF
     # 7 : 사용자 구매리스트 업데이트 오류(구매하고 다운로드 한적이 없는 경우만 인서트)
 
     if result == 0
-      send_file mbook.zipfile, :filename => mbook.id.to_s + ".mbook.zip",  :type => "application/zip", :stream => "false", :disposition => 'attachment'
+      send_file mbook.zipfile, :filename => mbook.id.to_s + ".mbook.zip",  :type => "application/zip"# , :stream => "false", :disposition => 'attachment'
     else
       render :xml => result_xml
     end
