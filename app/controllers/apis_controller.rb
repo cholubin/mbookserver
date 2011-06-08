@@ -3,6 +3,7 @@ require 'rexml/document'
 include REXML
 
 class ApisController < ApplicationController
+  before_filter :set_cache_buster
   # result 값 공통 ==========================
   # 0 : OK
   # 3 : User in approval process
