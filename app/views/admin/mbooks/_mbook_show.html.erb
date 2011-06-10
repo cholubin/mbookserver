@@ -12,17 +12,32 @@
 				<td class="input_name">아이디</td>
 				<td class="input_data"><%= @mbook.userid %></td>
 			</tr>
-			<tr class="bookform">
-				<td class="input_name">형태</td>
-				<td class="input_data"><%=  @mbook.category_id != nil ? Category.get(@mbook.category_id).name : "삭제된 카테고리"%></td>
-			</tr>
 			<tr class="category1">
 				<td class="input_name">분류 (필수)</td>
-				<td class="input_data"><%= Subcategory.get(@mbook.subcategory1_id).name if Subcategory.get(@mbook.subcategory1_id) != nil %></td>
+				<td class="input_data">
+					<span id="select_category">
+						<select id="select_category_0" name="category_id" class="select_category" level="0" mode="main">
+							<option value="">카테고리 선택</option>
+							<%@categories.each do |cat| %>
+							<option value="<%= cat.id %>" ><%= cat.name %></option>
+							<%end %>
+						</select>
+					</span>
+				</td>
 			</tr>
 			<tr class="category2">
 				<td class="input_name">분류 (선택)</td>
-				<td class="input_data"><%= Subcategory.get(@mbook.subcategory2_id).name if Subcategory.get(@mbook.subcategory2_id) != nil %></td>
+				<td class="input_data">
+					<span id="select_category2">
+						<select id="select_category2_0" name="category_id2" class="select_category" level="0" mode="opt">
+							<option value="">선택안함</option>
+							<%@categories.each do |cat| %>
+							<option value="<%= cat.id %>" ><%= cat.name %></option>
+							<%end %>
+						</select>
+					</span>
+				</td>
+				<td class="error"></td>
 			</tr>
 			<tr class="writer">
 				<td class="input_name">저자</td>
@@ -81,6 +96,32 @@
 </div>
 
 <script>
+$(document).ready(function(){
+	var $level = <%= Category.get(@mbook.subcategory1_id).level %>;
+	var $category_id = <%= @mbook.subcategory1_id.to_s %>;
+	var $mode = "main";
+	
+	$.ajax({
+		data:'category_id='+ $category_id + '&level=' + $level + '&mode=' + $mode, 
+		dataType:'script', 
+		type:'post', 
+		url:'/mbooks/fetch_subcategories'
+	});
+	
+	<%if @mbook.subcategory2_id != nil and @mbook.subcategory1_id != "" %>
+		var $level = <%= Category.get(@mbook.subcategory2_id).level %>;
+		var $category_id = <%= @mbook.subcategory2_id.to_s %>;
+		var $mode = "opt";
+	
+		$.ajax({
+			data:'category_id='+ $category_id + '&level=' + $level + '&mode=' + $mode, 
+			dataType:'script', 
+			type:'post', 
+			url:'/mbooks/fetch_subcategories'
+		});
+	<%end %>
+})
+
 $('#btn_store').live("click", function(){
 	var $mode = "승인";
 

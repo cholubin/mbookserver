@@ -149,6 +149,8 @@ class Admin::MbooksController < ApplicationController
       
       @menu_on = params[:menu_on]
       
+      @categories = Category.all(:gubun => "template", :order => :priority, :display_fl => true, :level => 0)
+      
       render 'mbook'  
     else  
       redirect_to '/admin/mbooks'
