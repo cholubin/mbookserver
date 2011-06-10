@@ -8,24 +8,40 @@
 		<ul>
 			<li><img src="/images/root/root_first.png"></li>
 			<li><a href=""><img src="/images/root/bt_root_total_pink.png" alt="전체분류"></a></li>
-			<li>
-				<select id="select_category" name="category_id">
-					<option value="all">전체</option>
-					<%@categories.each do |cat| %>
-					<option value="<%= cat.id %>" <%= "selected" if cat.id.to_s == params[:cat].to_s %>><%= cat.name %></option>
-					<%end %>
-				</select>
-			</li>
-			<li><img src="/images/root/root_arrow_pink.png"></li>
-			<li>
-				<span id="subcategories1">
-				<select id="select_subcategory1" name="subcategory1_id">
-					<option value="all">전체</option>
-					<% Subcategory.all(:category_id => params[:cat].to_i).each do |subcat| %>
-					<option value="<%= subcat.id %>" <%= "selected" if subcat.id.to_s == params[:sub].to_s %>><%= subcat.name %></option>
-					<%end %>
-				</select>
-			</li>
+			<%
+				if params[:lv] != nil and params[:lv] != ""
+					level = params[:lv].to_i
+				else
+					level = 0
+				end
+				# puts_message "level::::" + level.to_s
+				i = 0
+				while i < level + 2
+					%>
+					<li>
+						<%
+						categories = Category.all(:gubun=>"template",:level=>i, :display_fl => true, :parent_id => @pid[i],:order=>[:priority])
+						%>
+						<select class="select_category" level="<%= i %>">
+							<%
+							if categories.count > 0
+							%>
+								<% if level == i - 1 %>
+									<option value="0">전체</option>
+								<%end %>
+								<%categories.each do |cat| %>
+									<option value="<%= cat.id %>" <%= "selected" if cat.id.to_s == @sid[i].to_s %>><%= cat.name %></option>
+								<%end %>
+							<%else %>
+								<option value="0">전체</option>
+							<%end %>
+						</select>
+					</li>
+					<li><img src="/images/root/root_arrow_pink.png"></li>
+					<%
+					i = i + 1
+				end
+			%>
 			<li class="root_last"><img src="/images/root/root_last.png"></li>
 		</ul>
 	</div>
@@ -142,9 +158,8 @@ $('#select_subcategory1').live("change", function(){
 	
 })
 
-$('#select_status').live("change", function(){
-	var $st = $('#select_status :selected').val();
-	location.href = "/admin/mbooks?cat=<%=params[:cat]%>&sub=<%=params[:sub]%>&st="+$st;
+$('#select_status').live("change",function(){
+	window.location.href = "/mbooks?me=<%= params[:me] %>&store=<%= params[:store] %>&st="+ $('#select_status option:selected').val()
 })
 
 
@@ -198,6 +213,13 @@ $('.btn_status').live("click", function(){
 			return false;
 		}
 	}
+})
+
+$('.select_category').change(function(){
+	var $level = parseInt($(this).attr("level"));
+	var $id = $(this).val();
+	
+	window.location.href = "/admin/mbooks?lv="+$level+"&sid="+$id+"&me=<%= params[:me] %>&store=<%= params[:store] %>";
 })
 
 </script>

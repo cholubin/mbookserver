@@ -7,6 +7,24 @@ class Admin::MbooksController < ApplicationController
     @board = "mbook"
     @section = "index"
     
+    if params[:sid] != nil and params[:sid] != ""
+      @c_sid = params[:sid].to_i
+    else
+      @c_sid = 0
+    end
+    
+    if @c_sid != 0 
+      @c_pid = Category.get(@c_sid).parent_id
+    else
+      @c_pid = 0
+    end
+    
+    if params[:lv] != nil and params[:lv] != ""
+      @level = params[:lv].to_i
+    else
+      @level = 0
+    end
+    
     
     if params[:st] != "all" and params[:st] != "" and params[:st] != nil
       if params[:st] == "1"
@@ -28,15 +46,75 @@ class Admin::MbooksController < ApplicationController
       @menu_on = "mb_all"
     end
     
-    @mbooks = Mbook.all
+    @pid = []
+    @pid_temp = []
+    @sid = []
+    @sid_temp = []
+    
+    if @level == 0
+        @pid_temp << @c_pid
+        @pid_temp << @c_sid
+        
+        @sid_temp << @c_sid
+        @sid_temp << 0
+    else
+      pid = 0
+      sid = 0
+      @pid_temp << @c_sid
+      @sid_temp << 0
+      
+      (@level).downto(0) { |x|
+        if @level == x
+          @pid_temp << @c_pid
+          pid = Category.get(@c_pid).parent_id if Category.get(@c_pid) != nil
 
-    if params[:cat] != nil and params[:cat] != "" and params[:cat] != "all"
-      @mbooks = @mbooks.all(:category_id => params[:cat].to_i)
+          @sid_temp << @c_sid
+          sid = Category.get(@c_sid).parent_id if Category.get(@c_sid) != nil
+          
+          # puts_message "current pid: " + pid.to_s
+          # puts_message "current sid: " + sid.to_s
+        else
+          if x == 0
+            @pid_temp <<  0
+            
+            @sid_temp << sid
+          else
+            @pid_temp << pid
+            pid = Category.get(pid).parent_id if Category.get(pid) != nil
+            
+            @sid_temp << sid
+            sid = Category.get(sid).parent_id
+          end
+          
+        end
+      }
     end
     
-    if params[:sub] != nil and params[:sub] != "" and params[:sub] != "all"
-      @mbooks = @mbooks.all(:subcategory1_id => params[:sub].to_i)
+    if @level < 1
+      @pid = @pid_temp
+    else
+      i = @pid_temp.length() -1
+      puts_message "pid 갯수"+i.to_s
+      @pid_temp.each do |x|
+        @pid[i] = x
+        i = i -1
+      end
     end
+    
+    if @level < 1
+      @sid = @sid_temp
+    else
+      i = @sid_temp.length() -1
+      puts_message "sid 갯수"+i.to_s
+      @sid_temp.each do |x|
+        @sid[i] = x
+        i = i -1
+      end
+      
+    end
+    
+    @mbooks = Mbook.all
+
     
     if params[:user] != nil and params[:user] != ""
       @mbooks = @mbooks.all(:user_id => params[:user].to_i)
@@ -46,6 +124,10 @@ class Admin::MbooksController < ApplicationController
       @mbooks = @mbooks.all(:status => status)
     end 
     
+    if @c_sid != 0
+      @mbooks = @mbooks.all(:subcategory1_id => @c_sid)
+    end
+
     mbooks = @mbooks
     
     @mbooks = @mbooks.search(mbooks, params[:keyword], params[:search], params[:page])
