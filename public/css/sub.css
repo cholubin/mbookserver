@@ -653,6 +653,10 @@ ul.state .error {
 #list_category ul.list_first {
 	clear: both;
 }
+#list_category ul li.icon_category img {
+	width: 80px;
+	height: 80px;
+}
 #box_upload table {
 	width: 980px;
 	border-top: 3px solid #8A94DE;

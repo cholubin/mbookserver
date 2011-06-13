@@ -152,6 +152,10 @@ body#index a {
 #box_category ul li img {
 	padding: 2px;
 }
+#box_category ul li img.icon {
+	width: 80px;
+	height: 80px;
+}
 #box_login, #box_join {
 	padding-left: 120px;
 	padding-top: 30px;
