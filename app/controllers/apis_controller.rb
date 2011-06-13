@@ -444,7 +444,7 @@ EOF
 <id>#{cat.id.to_s}</id>
 <name>#{cat.name}</name>
 <subitems>#{Mbook.all(:category_id => cat.id).count.to_s}</subitems>
-<thumbnail>/images/icon_category.png</thumbnail>
+<thumbnail>/images/category_icon/#{cat.icon_image}</thumbnail>
 </item>\n"
         end
       end
