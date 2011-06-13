@@ -24,9 +24,9 @@ end
 						<a href="?lv=<%= cat.level+1 %>&sid=<%= cat.id %>"><img src="/images/category_icon/<%= cat.icon_image %>" alt="분류명"></a><br/>
 					<%else%>
 						<%if signed_in? %>
-							<a href="/mbooks?lv=<%= cat.level %>&sid=<%= cat.id %>&me=y&store=n"><img src="/images/icon_category.png" alt="리스트"></a><br/>
+							<a href="/mbooks?lv=<%= cat.level %>&sid=<%= cat.id %>&me=y&store=n"><img src="/images/category_icon/<%= cat.icon_image %>" alt="리스트"></a><br/>
 						<%else %>
-							<a href="/mbooks?lv=<%= cat.level %>&sid=<%= cat.id %>&me=n&store=y"><img src="/images/icon_category.png" alt="리스트"></a><br/>
+							<a href="/mbooks?lv=<%= cat.level %>&sid=<%= cat.id %>&me=n&store=y"><img src="/images/category_icon/<%= cat.icon_image %>" alt="리스트"></a><br/>
 						<%end %>
 					<%end%>
 					
