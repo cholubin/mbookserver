@@ -34,7 +34,7 @@ class ApisController < ApplicationController
         result = 4
       end
     rescue
-      result = "-1"
+      result = -1
     end
     # result 값
     # 0 : user exist
@@ -71,7 +71,7 @@ EOF
       end
       
     rescue
-      result = "-1"
+      result = -1
     end
     
     result_xml = make_result_xml(result)
@@ -108,7 +108,7 @@ EOF
         end
       end
     rescue
-      result = "-1"
+      result = -1
     end
     
     result_xml = make_result_xml(result)
@@ -157,7 +157,7 @@ EOF
         end #if mbook.nil?
       end #if result == o
     rescue
-      result = "-1"
+      result = -1
     end
     
     result_xml = make_result_xml(result)
@@ -173,9 +173,16 @@ EOF
   def mbookinfo
     begin
       mbookid = (params[:mbookid] != nil and params[:mbookid] != "") ? params[:mbookid].to_i : ""
-      mb = Mbook.get(mbookid)
       
-      if !mb.nil?
+      
+      if mbookid != ""
+        mb = Mbook.get(mbookid) 
+      else
+        result = -1
+      end
+
+
+      if mbookid != "" and !mb.nil?
         result = 0
         
     result_xml = <<-EOF
@@ -201,12 +208,13 @@ EOF
       else
         result = 6
       end
-        result = 0
+        # result = 0
     rescue
-      puts mb.errors.to_s
-      result = "-1"
+      # puts_message mb.errors.to_s
+      result = -1
     end
     
+    puts_message result.to_s
     if result != 0
       result_xml = make_result_xml(result)
     end
@@ -247,11 +255,11 @@ EOF
           :body => "<html><head><body><a href='#{HOSTING_URL}auth.htm?userid=#{userid}&code=#{auth_code}'>여기를 클릭하시면 인증이 완료됩니다!~</a></body></head></html>"
         )
       
-        result = @user.save ? 0 : "-1"
+        result = @user.save ? 0 : -1
         
       end
     else
-      result = "-1"
+      result = -1
     end
     
     result_xml = make_result_xml(result)
@@ -277,7 +285,7 @@ EOF
       end
       
     rescue
-      result = "-1"
+      result = -1
     end
     result_xml = make_result_xml(result)
     render :xml => result_xml
@@ -291,10 +299,10 @@ EOF
     begin
       result = user_authentication(userid, userpw)
       if result == 0
-        result = @user.destroy ? 0 : "-1"
+        result = @user.destroy ? 0 : -1
       end
     rescue
-      result = "-1"
+      result = -1
     end
     result_xml = make_result_xml(result)
     render :xml => result_xml
@@ -312,12 +320,12 @@ EOF
         if @user.update_password(newpw)
           result = 0
         else
-          result = "-1"
+          result = -1
         end
       end
 
     rescue
-      result = "-1"
+      result = -1
     end
   
     result_xml = make_result_xml(result)
@@ -338,7 +346,7 @@ EOF
       end
       
     rescue
-      result = "-1"
+      result = -1
     end
     
     if result != 0
@@ -379,7 +387,7 @@ EOF
       end
       
     rescue
-      result = "-1"
+      result = -1
     end
     # result 값
     # 0 : OK
@@ -449,7 +457,7 @@ EOF
         end
       end
     rescue
-      result = "-1"
+      result = -1
       items = ""
     end
 
@@ -490,10 +498,10 @@ EOF
           result = 0
         end
       else
-        result = "-1"
+        result = -1
       end
     rescue
-      result = "-1"
+      result = -1
     end
     
       # result값 
