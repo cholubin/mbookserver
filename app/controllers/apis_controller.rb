@@ -160,7 +160,7 @@ EOF
       result = -1
     end
     
-    result_xml = make_result_xml(result)
+    result_xml = make_result_xml(result) 
 
     # result 값
     # 0 : OK  // 파일을 보내는 경우에는 xml을 보낼 수 없다. 렌더링을 동시에 두종류 할 수 없다. 
@@ -380,7 +380,7 @@ EOF
         
         userbooklist = ""
         booklist.each do |book|
-          userbooklist = userbooklist + book.id.to_s + ","
+          userbooklist +=  book.mbookid.to_s + ","
         end
         if userbooklist[-1] == ","; userbooklist[-1] = ""; end
         
