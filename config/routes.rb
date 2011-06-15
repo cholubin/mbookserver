@@ -35,6 +35,8 @@ ActionController::Routing::Routes.draw do |map|
   map.modifymember '/modifymember.htm', :controller => 'apis', :action => 'modifymember'
   map.notification '/notification.htm', :controller => 'apis', :action => 'notification'
   map.userbooklist '/userbooklist.htm', :controller => 'apis', :action => 'userbooklist'
+  map.userbookitems '/userbookitems.htm', :controller => 'apis', :action => 'userbookitems'
+  
   map.mbookdownchk '/mbookdownchk.htm', :controller => 'apis', :action => 'mbookdownchk'
   map.mbookdown '/mbookdown.htm', :controller => 'apis', :action => 'mbookdown'
   map.mbookdownconfirm '/mbookdownconfirm.htm', :controller => 'apis', :action => 'mbookdownconfirm'

@@ -401,7 +401,67 @@ EOF
 EOF
     render :xml => result_xml
   end
-  
+
+
+
+    def userbookitems
+      userid = (params[:userid] != nil and params[:userid] != "") ? params[:userid] : ""
+      userpw = (params[:userpw] != nil and params[:userpw] != "") ? params[:userpw] : ""
+
+      begin
+        result = user_authentication(userid, userpw)
+
+        if result == 0
+          booklist = Userbook.all(:userid => userid)
+
+          userbooklist = ""
+          
+          items = ""
+          userbooklist.each do |ub|
+            mb = Mbook.get(ub.mbookid)
+            items = items + 
+"<item>
+<type>book</type>
+<id>#{mb.id.to_s}</id>
+<thumbnail>mbook/#{mb.id.to_s}/#{mb.covermedium_name}</thumbnail>
+<preview>mbook/#{mb.id.to_s}/#{mb.coverimage_name}</preview>
+<download>mbook/#{mb.id.to_s}.mbook.zip</download>
+<title>#{mb.title}</title>
+<author>#{mb.writer}</author>
+<publisher>#{mb.publisher}</publisher>
+<pages>#{mb.pages}</pages>
+<issue_date>#{mb.issue_date}</issue_date>
+<price>#{mb.price}</price>
+<description>#{mb.description}</description>
+<product_identifier></product_identifier>
+</item>\n"
+          end
+          result = 0
+        end
+
+      rescue
+        result = -1
+      end
+      # result 값
+      #       0 : OK 
+      # 3 : User in approval process
+      # 4 : Invalid userid
+      # 5 : Invalid userpw  
+      # -1 : Error
+
+    result_xml = <<-EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<xml>
+<result>#{result}</result>
+<itemlist>#{items}</itemlist>
+</xml>
+EOF
+      render :xml => result_xml
+    end
+      
+      
+      
+      
   def store
     items = "\n"
     
