@@ -412,19 +412,17 @@ EOF
       userid = (params[:userid] != nil and params[:userid] != "") ? params[:userid] : ""
       userpw = (params[:userpw] != nil and params[:userpw] != "") ? params[:userpw] : ""
       
-      puts_message User.first(:userid => userid).id.to_s
-      
       begin
         result = user_authentication(userid, userpw)
         
         
         if result == 0
-          booklist = Userbook.all(:userid => User.first(:userid => userid).id)
+          booklist = Userbook.all(:userid => userid)
           
           if booklist.count > 0
           
             items = ""
-            userbooklist.each do |ub|
+            booklist.each do |ub|
               mb = Mbook.get(ub.mbookid)
               items = items + 
 "<item>
