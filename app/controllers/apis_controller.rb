@@ -471,25 +471,50 @@ EOF
   def store
     items = "\n"
     
+    #  :limit => 1, :offset => 2 (3번째부터 3개)
     begin
+      if params[:start] != nil and params[:start] != ""
+        offset = params[:start].to_i
+      else
+        offset = 0
+      end
+      
+      if params[:count] != nil and params[:count] != ""
+        limit = params[:count].to_i
+      else
+        limit = 0
+      end
+      
       if params[:folder_id] != nil and params[:folder_id] != ""
         #category_id 와 동일 
         category_id = params[:folder_id].to_i
+        
         categories = Category.all(:parent_id => category_id, :gubun => "template")
         
+        
         categories.each do |sub|
+          if limit > 0
+            mbook_count = Mbook.all(:subcategory1_id => sub.id, :limit => limit, :offset => offset).count.to_s
+          else
+            mbook_count = Mbook.all(:subcategory1_id => sub.id, :offset => offset).count.to_s
+          end
           items = items + 
 "<item>
 <type>folder</type>
 <id>#{sub.id.to_s}</id>
 <name>#{Category.get(sub.id).name}</name>
-<subitems>#{Mbook.all(:subcategory1_id => sub.id).count.to_s}</subitems>
+<subitems>#{mbook_count}</subitems>
 <thumbnail>/images/category_icon/#{sub.icon_image}</thumbnail>
 </item>\n"
         end
         
-        mbooks = Mbook.all(:subcategory1_id => category_id)
-        puts_message mbooks.count.to_s
+        if limit > 0
+          mbooks = Mbook.all(:subcategory1_id => category_id, :limit => limit, :offset => offset)
+        else
+          mbooks = Mbook.all(:subcategory1_id => category_id, :offset => offset)
+        end
+        
+        # puts_message mbooks.count.to_s
         mbooks.each do |mb|
           items = items + 
 "<item>
@@ -512,12 +537,14 @@ EOF
       else
         categories = Category.all(:gubun => "template", :level => 0)
         categories.each do |cat|
+          subcat_count = Category.all(:parent_id => cat.id).count.to_s
+          
           items = items + 
 "<item>
 <type>folder</type>
 <id>#{cat.id.to_s}</id>
 <name>#{cat.name}</name>
-<subitems>#{Mbook.all(:category_id => cat.id).count.to_s}</subitems>
+<subitems>#{subcat_count}</subitems>
 <thumbnail>/images/category_icon/#{cat.icon_image}</thumbnail>
 </item>\n"
         end
