@@ -16,12 +16,14 @@ class ApisController < ApplicationController
   def user_authentication(userid, userpw)
     begin
       @user = User.first(:userid => userid)
-
+      
+      
       if @user != nil 
-        user = User.authenticate(userid,userpw)
+      
+        @user = User.authenticate(userid,userpw)
         
-        if user != nil
-          if user.auth_fl == false
+        if @user != nil
+          if @user.auth_fl == false
             result = 3
           else
             result = 0
@@ -33,11 +35,13 @@ class ApisController < ApplicationController
       else
         result = 4
       end
+      
     rescue
       result = -1
     end
     # result 값
     # 0 : user exist
+    
     return result
   end
 
@@ -405,21 +409,26 @@ EOF
 
 
     def userbookitems
-      userid = (params[:userid] != nil and params[:userid] != "") ? params[:userid].to_i : ""
+      userid = (params[:userid] != nil and params[:userid] != "") ? params[:userid] : ""
       userpw = (params[:userpw] != nil and params[:userpw] != "") ? params[:userpw] : ""
-
+      
+      puts_message User.first(:userid => userid).id.to_s
+      
       begin
         result = user_authentication(userid, userpw)
-
+        
+        
         if result == 0
-          booklist = Userbook.all(:userid => userid)
-
-          userbooklist = ""
+          booklist = Userbook.all(:userid => User.first(:userid => userid).id)
           
-          items = ""
-          userbooklist.each do |ub|
-            mb = Mbook.get(ub.mbookid)
-            items = items + 
+          if booklist.count > 0
+          
+            userbooklist = ""
+          
+            items = ""
+            userbooklist.each do |ub|
+              mb = Mbook.get(ub.mbookid)
+              items = items + 
 "<item>
 <type>book</type>
 <id>#{mb.id.to_s}</id>
@@ -436,6 +445,7 @@ EOF
 <product_identifier></product_identifier>
 </item>\n"
           end
+        end
           result = 0
         end
 
