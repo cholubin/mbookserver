@@ -423,8 +423,6 @@ EOF
           
           if booklist.count > 0
           
-            userbooklist = ""
-          
             items = ""
             userbooklist.each do |ub|
               mb = Mbook.get(ub.mbookid)
