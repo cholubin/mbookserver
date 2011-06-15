@@ -405,7 +405,7 @@ EOF
 
 
     def userbookitems
-      userid = (params[:userid] != nil and params[:userid] != "") ? params[:userid] : ""
+      userid = (params[:userid] != nil and params[:userid] != "") ? params[:userid].to_i : ""
       userpw = (params[:userpw] != nil and params[:userpw] != "") ? params[:userpw] : ""
 
       begin
