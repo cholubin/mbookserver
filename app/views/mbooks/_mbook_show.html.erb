@@ -185,6 +185,9 @@ $('#store_req').live("click", function(){
 	if( $('#span_stuats').attr("status") == "승인대기" ){
 		alert("이미 승인대기 중 입니다!");
 		return false;
+	}else if( $('#span_stuats').attr("status") == "승인완료" ){
+		alert("이미 승인완료 되었습니다!");
+		return false;
 	}else{
 		if( confirm("스토어에 등록을 신청하시겠습니까?") ){
 			$.ajax({

@@ -41,7 +41,11 @@
 			<li class="user_id"><%= user.userid %><%= "(미인증)" if user.auth_fl == false %></li>
 			<li class="user_type"><%= user.name %></li>				
 			<li class="user_detail"><img src="/images/bt/bt_user_detail.png" alt="사용자 정보 보기 / 수정" id="detail_<%= user.id %>" class="btn_user_detail" style="cursor:pointer;"></li>
-			<li class="user_mbook"><img src="/images/bt/bt_user_mbook.png" alt="사용자의 mBook 리스트 보기" class="to_user_mbook" id="to_user_mbook_<%= user.id %>" style="cursor:pointer;"></li>
+			<li class="user_mbook">
+				<% if Mbook.all(:user_id => user.id).count > 0 %>
+					<img src="/images/bt/bt_user_mbook.png" alt="사용자의 mBook 리스트 보기" class="to_user_mbook" id="to_user_mbook_<%= user.id %>" style="cursor:pointer;">
+				<%end %>
+			</li>
 			<li class="check"><input type="checkbox" class="chkbox" id="chk_<%= user.id %>"></li>
 		</ul>
 		<% @page_num -= 1
