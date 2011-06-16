@@ -494,9 +494,9 @@ EOF
         
         categories.each do |sub|
           if limit > 0
-            mbook_count = Mbook.all(:subcategory1_id => sub.id, :limit => limit, :offset => offset).count.to_s
+            mbook_count = Mbook.all(:status => "승인완료", :subcategory1_id => sub.id, :limit => limit, :offset => offset).count.to_s
           else
-            mbook_count = Mbook.all(:subcategory1_id => sub.id, :offset => offset).count.to_s
+            mbook_count = Mbook.all(:status => "승인완료",:subcategory1_id => sub.id, :offset => offset).count.to_s
           end
           items = items + 
 "<item>
@@ -509,9 +509,9 @@ EOF
         end
         
         if limit > 0
-          mbooks = Mbook.all(:subcategory1_id => category_id, :limit => limit, :offset => offset)
+          mbooks = Mbook.all(:status => "승인완료",:subcategory1_id => category_id, :limit => limit, :offset => offset)
         else
-          mbooks = Mbook.all(:subcategory1_id => category_id, :offset => offset)
+          mbooks = Mbook.all(:status => "승인완료",:subcategory1_id => category_id, :offset => offset)
         end
         
         # puts_message mbooks.count.to_s
