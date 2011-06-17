@@ -65,7 +65,11 @@
 		<table width="900">
 			<tr height="20"></tr>
 			<tr align="center">
-				<td><%= @users.pager.to_html "/admin/users" %></td>
+				<td>
+					<div class="pager">
+						<%= @users.pager.to_html "/admin/users" %>
+					<div class="pager">
+				</td>
 			</tr>
 		</table>
 	</div>
