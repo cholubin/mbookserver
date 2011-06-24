@@ -538,13 +538,14 @@ EOF
         categories = Category.all(:gubun => "template", :level => 0)
         categories.each do |cat|
           subcat_count = Category.all(:parent_id => cat.id).count.to_s
-          
+          mbooks_count = Mbook.all(:status => "승인완료",:subcategory1_id => cat.id).count.to_s
           items = items + 
 "<item>
 <type>folder</type>
 <id>#{cat.id.to_s}</id>
 <name>#{cat.name}</name>
 <subitems>#{subcat_count}</subitems>
+<books>#{mbooks_count}</books>
 <thumbnail>/images/category_icon/#{cat.icon_image}</thumbnail>
 </item>\n"
         end
