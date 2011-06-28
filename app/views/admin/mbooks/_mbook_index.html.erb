@@ -26,6 +26,10 @@
 							<%
 							if categories.count > 0
 							%>
+								<% if (level == 0 and i == 0) %>
+									<option value="0">전체</option>
+								<%end %>
+								
 								<% if level == i - 1 %>
 									<option value="0">전체</option>
 								<%end %>
@@ -159,7 +163,7 @@ $('#select_subcategory1').live("change", function(){
 })
 
 $('#select_status').live("change",function(){
-	window.location.href = "/mbooks?me=<%= params[:me] %>&store=<%= params[:store] %>&st="+ $('#select_status option:selected').val()
+	window.location.href = "/admin/mbooks?menu=<%= params[:menu] %>&me=<%= params[:me] %>&store=<%= params[:store] %>&st="+ $('#select_status option:selected').val()
 })
 
 
@@ -219,7 +223,7 @@ $('.select_category').change(function(){
 	var $level = parseInt($(this).attr("level"));
 	var $id = $(this).val();
 	
-	window.location.href = "/admin/mbooks?lv="+$level+"&sid="+$id+"&me=<%= params[:me] %>&store=<%= params[:store] %>";
+	window.location.href = "/admin/mbooks?menu=<%= params[:menu] %>&lv="+$level+"&sid="+$id+"&me=<%= params[:me] %>&store=<%= params[:store] %>&st=<%= params[:st] %>";
 })
 
 </script>

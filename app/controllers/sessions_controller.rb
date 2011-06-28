@@ -32,7 +32,6 @@ class SessionsController < ApplicationController
       @user = User.first(:userid => params[:session][:userid])
 
       if @user != nil and @user.auth_fl == false
-        puts_message "여기에 들어와야 하는데?"
         flash.now[:error] = "아직 이메일 인증을 하지 않은 아이디 입니다."
         @input_user_id = params[:session][:userid] 
         render 'session', :object => @input_user_id
@@ -49,7 +48,7 @@ class SessionsController < ApplicationController
           else
 
             sign_in user
-
+            
             if params[:session][:uri] != ""      
               if params[:session][:uri] == "/users"
                 redirect_to '/'
@@ -62,7 +61,12 @@ class SessionsController < ApplicationController
                 redirect_to url
               end
             else
-              redirect_to '/'
+              if current_user.type == "writer"
+                redirect_to "/mbooks?me=y&store=n"
+              else
+                redirect_to '/'
+              end
+              
             end
           end
 

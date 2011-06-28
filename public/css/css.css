@@ -38,7 +38,7 @@ input.img_disabled {
 /* index */
 body#index {
 	background: url("/images/main/bg_body.png") repeat-x top;
-	background-color: #070e42;
+	background-color: #002825;
 	color: #fff;
 }
 body#index a {
@@ -54,7 +54,7 @@ body#index a {
 	width: 500px;
 	height: 310px;
 	background: url("/images/etc/message_bg.jpg") repeat-x top;
-	background-color: #070e42;
+	background-color: #002825;
 	cursor: pointer;
 	z-index: 100;
 /*	margin-left:auto; margin-right:auto;*/
@@ -130,8 +130,8 @@ body#index a {
 #box_category {
 	clear: both;
 	height: 450px;
-	border-top: 2px dotted #26318f;
-	border-bottom: 2px dotted #26318f;
+	border-top: 2px dotted #075c56;
+	border-bottom: 2px dotted #075c56;
 	background: url("/images/main/bg_category.png") no-repeat top;
 	padding-left: 74px;
 	padding-top: 20px;
@@ -159,8 +159,8 @@ body#index a {
 #box_login, #box_join {
 	padding-left: 120px;
 	padding-top: 30px;
-	border-top: 2px dotted #26318f;
-	border-bottom: 2px dotted #26318f;	
+	border-top: 2px dotted #075c56;
+	border-bottom: 2px dotted #075c56;
 }
 #box_login {
 	height: 90px;
@@ -213,7 +213,7 @@ body#index a {
 	background-position: 0px -162px;
 }
 #index table tr td.error {
-	color: #ed539d;
+	color: #ff8a00;
 	font-size: 10px;
 	width: 300px;
 }
@@ -351,6 +351,10 @@ body#sub {
 	background-position: -724px 0;
 	width: 64px;
 }
+#sub #header ul#nav_writer li.point a {
+	background-position: -1060px 0px;
+	width: 100px;
+}
 #sub #header ul#nav_writer li.user_information a {
 	background-position: -820px 0;
 	width: 86px;
@@ -416,7 +420,7 @@ body#sub {
 	text-align: left;
 }
 #sub .input_info {
-	color: #7e85be;
+	color: #0b6f67;
 	position: relative;
 	font-size: 10px;
 }
@@ -519,10 +523,10 @@ body#sub {
 .list_title ul li {
 	height: 18px;
 	color: #fff;
-	background-color: #8a94de;
+	background-color: #509a94;
 }
 .list_data ul {
-	border-bottom: 1px solid #8a94de;
+	border-bottom: 1px solid #6bb4ae;
 }
 .list_data ul li {
 	height: 68px;
@@ -535,8 +539,8 @@ body#sub {
 	background: url("/images/icon_number_deac.png") no-repeat center center;
 }
 .list_data ul.list_data_blue li, .list_data ul.list_data_blue_deac li, .list_data ul.list_data_blue_deac li.no {
-	background-color: #ecedff;
-	border-right: 2px solid #ecedff;
+	background-color: #e5f2f1;
+	border-right: 2px solid #e5f2f1;
 }
 .list_data ul li.book img {
 	width: 44px;
@@ -667,7 +671,7 @@ body#sub {
 }
 .pager li {
 	display: inline-block;
-	background-color:#b2b9ed;
+	background-color:#cfe8e6;
 	line-height: 26px;
 	height: 26px;
 	padding-left: 10px;
@@ -675,7 +679,7 @@ body#sub {
 	margin: 1px;
 }
 .pager li.active {
-	background-color:#212958;
+	background-color:#124b47;
 }
 .pager li.active a {
 	color: #fff;
@@ -718,7 +722,7 @@ body#sub {
 
 /* sub content 등록 */
 #upload_form {
-	border: 4px solid #EBEDFE;
+	border: 4px solid #cfe8e6;
 	padding: 6px;
 	padding-bottom: 20px;
 	width: 800px;
@@ -727,8 +731,8 @@ body#sub {
 }
 #upload_form table {
 	width: 800px;
-	border-top: 3px solid #8A94DE;
-	border-bottom: 3px solid #8A94DE;
+	border-top: 3px solid #509a94;
+	border-bottom: 3px solid #509a94;
 	vertical-align: middle;
 	margin-bottom: 20px;
 }
@@ -742,7 +746,7 @@ body#sub {
 	width: 140px;
 	text-indent: -5000px;
 	background: url("/images/input_name/input_name_upload.png") no-repeat;
-	background-color: #ebedfe;
+	background-color: #cfe8e6;
 }
 #upload_form table tr.bookform td.input_name {
 	background-position: 0 -12px;
@@ -763,7 +767,7 @@ body#sub {
 	background-position: 0 -212px;
 }
 #upload_form table tr td.input_data, #upload_form table tr td.error {
-	border-bottom: 1px solid #cbd1ff;
+	border-bottom: 1px solid #cfe8e6;
 }
 #upload_form table tr td.input_data {
 	width: 410px;
@@ -777,7 +781,7 @@ body#sub {
 
 /* sub content 상세보기 */
 #detail_form {
-	border: 4px solid #EBEDFE;
+	border: 4px solid #cfe8e6;
 	padding: 6px;
 	padding-bottom: 20px;
 	margin-left: auto;
@@ -789,7 +793,7 @@ body#sub {
 	margin-bottom: 20px;
 }
 #detail_form table tr.state {
-	border-bottom: 3px solid #8A94DE;
+	border-bottom: 3px solid #509a94;
 }
 #detail_form table tr td.book {
 	vertical-align: top;
@@ -805,7 +809,7 @@ body#sub {
 	height:40px;
 	color: #fff;
 	font-size: 18px;
-	background-color: #8a94de;
+	background-color: #509a94;
 	padding: 0;
 }
 #detail_form table tr td {
@@ -818,15 +822,15 @@ body#sub {
 	width: 140px;
 	text-indent: -5000px;
 	background: url("/images/input_name/input_name_detail.png") no-repeat;
-	background-color: #ebedfe;
+	background-color: #cfe8e6;
 }
 #detail_form table tr.description td.input_name {
 	background: url("/images/input_name/input_name_description.png") no-repeat center left;
-	background-color: #ebedfe;
+	background-color: #cfe8e6;
 }
 #detail_form table tr.state td.input_name {
 	background: url("/images/input_name/input_name_state.png") no-repeat center left;
-	background-color: #ebedfe;
+	background-color: #cfe8e6;
 }
 #detail_form table tr.id td.input_name {
 	background-position: 0 -8px;
@@ -865,7 +869,7 @@ body#sub {
 	background-position: 0 -488px;
 }
 #detail_form table tr td.input_data, #detail_form table tr td.error {
-	border-bottom: 1px solid #cbd1ff;
+	border-bottom: 1px solid #cfe8e6;
 }
 #detail_form table tr td.input_data {
 	width: 430px;
@@ -897,8 +901,8 @@ body#sub {
 #list_category {
 	float: left;
 	width: 980px;
-	border-top: 3px solid #8A94DE;
-	border-bottom: 3px solid #8A94DE;
+	border-top: 3px solid #509a94;
+	border-bottom: 3px solid #509a94;
 }
 #list_category ul {
 	float: left;
@@ -907,15 +911,15 @@ body#sub {
 	line-height: 28px;
 	padding-top: 30px;
 	padding-bottom: 30px;
-	border-bottom: 1px solid #cbd1ff;
+	border-bottom: 1px solid #cfe8e6;
 }
 #list_category ul.list_first {
 	clear: both;
 }
 #box_upload table {
 	width: 980px;
-	border-top: 3px solid #8A94DE;
-	border-bottom: 3px solid #8A94DE;
+	border-top: 3px solid #509a94;
+	border-bottom: 3px solid #509a94;
 	vertical-align: middle;
 	margin-bottom: 10px;
 }
@@ -928,7 +932,7 @@ body#sub {
 	width: 140px;
 	text-indent: -5000px;
 	background: url("/images/input_name/input_name_category.png") no-repeat;
-	background-color: #ebedfe;
+	background-color: #cfe8e6;
 }
 #box_upload table tr.category_name td.input_name {
 	background-position: 0 -14px;
@@ -937,18 +941,18 @@ body#sub {
 	background-position: 0 -56px;
 }
 #box_upload table tr td.input_data {
-	border-bottom: 1px solid #cbd1ff;
+	border-bottom: 1px solid #cfe8e6;
 }
 #box_upload table tr td.upload_ok {
 	text-align: center;
 	vertical-align: middle;
-	background-color: #ebedfe;
+	background-color: #cfe8e6;
 	width: 140px;
 }
 
 /* sub content 나의 정보 수정 */
 #box_user_information {
-	border: 4px solid #EBEDFE;
+	border: 4px solid #cfe8e6;
 	padding: 6px;
 	padding-bottom: 20px;
 	width: 700px;
@@ -957,8 +961,8 @@ body#sub {
 }
 #box_user_information table {
 	width: 700px;
-	border-top: 3px solid #8A94DE;
-	border-bottom: 3px solid #8A94DE;
+	border-top: 3px solid #509a94;
+	border-bottom: 3px solid #509a94;
 	vertical-align: middle;
 	margin-bottom: 20px;
 }
@@ -972,7 +976,7 @@ body#sub {
 	width: 140px;
 	text-indent: -5000px;
 	background: url("/images/input_name/input_name_user_information.png") no-repeat;
-	background-color: #ebedfe;
+	background-color: #cfe8e6;
 }
 #box_user_information table tr.name td.input_name {
 	background-position: 0 -12px;
@@ -989,6 +993,9 @@ body#sub {
 #box_user_information table tr.publisher td.input_name {
 	background-position: 0 -172px;
 }
+#box_user_information table tr.servicetype td.input_name {
+	background-position: 0px -220px;
+}
 #box_user_information table tr td.input_data {
 	width: 360px;
 }
@@ -996,7 +1003,7 @@ body#sub {
 	width: 200px;
 }
 #box_user_information table tr td.input_data, #box_user_information table tr td.error {
-	border-bottom: 1px solid #cbd1ff;
+	border-bottom: 1px solid #cfe8e6;
 }
 #box_user_information p {
 	text-align: center;

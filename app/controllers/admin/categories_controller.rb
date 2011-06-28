@@ -206,34 +206,7 @@ class Admin::CategoriesController < ApplicationController
 
   end
 
-  # # DELETE /admin_categories/1
-  # # DELETE /admin_categories/1.xml
-  # def destroy
-  #   puts "==============================="
-  #   @category = Category.get(params[:id])
-  #   @subcategoris = Subcategory.all(:category_id => @category.id)
-  #   
-  # 
-  #   if @subcategoris.destroy
-  #     @category.destroy
-  #     redirect_to admin_categories_url      
-  #   else
-  #     puts_message "Error occured during deleting subcategories"
-  #     redirect_to admin_categories_url      
-  #   end
-  # end
-  # 
-  # def destroy_sub
-  #   @categories = Category.all
-  #   @subcategory = @categories.subcategories.get(params[:id].to_i)
-  #   
-  #   if @subcategory.destroy
-  #     redirect_to admin_categories_url      
-  #   else
-  #     puts_message "Error occured during deleting subcategories"
-  #     redirect_to admin_categories_url      
-  #   end
-  # end  
+ 
 
   def category_order_update
     category_id = params[:category_id].split(',')

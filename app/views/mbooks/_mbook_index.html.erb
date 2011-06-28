@@ -26,6 +26,10 @@
 							<%
 							if categories.count > 0
 							%>
+								<% if (level == 0 and i == 0) %>
+									<option value="0">전체</option>
+								<%end %>
+							
 								<% if level == i - 1 %>
 									<option value="0">전체</option>
 								<%end %>

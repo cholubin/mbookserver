@@ -9,7 +9,7 @@ class MbooksController < ApplicationController
     @board = "mbook"
     @section = "index"
     
-    @mbooks = Mbook.all()
+    @mbooks = Mbook.all(:id => 00)
     
     if params[:sid] != nil and params[:sid] != ""
       @c_sid = params[:sid].to_i
@@ -29,9 +29,6 @@ class MbooksController < ApplicationController
       @level = 0
     end
 
-    # puts_message "클릭한 Level: " + @level.to_s
-    # puts_message "selected ID: " + @c_sid.to_s 
-    # puts_message "parent ID: " + @c_pid.to_s 
 
     @pid = []
     @pid_temp = []
@@ -58,8 +55,6 @@ class MbooksController < ApplicationController
           @sid_temp << @c_sid
           sid = Category.get(@c_sid).parent_id if Category.get(@c_sid) != nil
           
-          # puts_message "current pid: " + pid.to_s
-          # puts_message "current sid: " + sid.to_s
         else
           if x == 0
             @pid_temp <<  0
@@ -81,7 +76,7 @@ class MbooksController < ApplicationController
       @pid = @pid_temp
     else
       i = @pid_temp.length() -1
-      puts_message "pid 갯수"+i.to_s
+      # puts_message "pid 갯수"+i.to_s
       @pid_temp.each do |x|
         @pid[i] = x
         i = i -1
@@ -92,7 +87,7 @@ class MbooksController < ApplicationController
       @sid = @sid_temp
     else
       i = @sid_temp.length() -1
-      puts_message "sid 갯수"+i.to_s
+      # puts_message "sid 갯수"+i.to_s
       @sid_temp.each do |x|
         @sid[i] = x
         i = i -1
@@ -112,14 +107,15 @@ class MbooksController < ApplicationController
     
     # 로그인 한 경우 
     if signed_in?
-      
+       @mbooks = get_mbooks(@mbooks, @c_sid)
+       
       if (params[:me] == nil or params[:me] == "") and (params[:store] == nil or params[:store] == "")
         params[:me] = "n"
         params[:store] = "y"
       end
       # 내가 올린 mbook중 스토어에 등록된 책 
       if params[:me] == "y" and params[:store] == "y"
-        @mbooks =   Mbook.all(:user_id => current_user.id, :status => "승인완료") + Mbook.all(:user_id => current_user.id, :status => "삭제대기")
+        @mbooks = @mbooks.all(:user_id => current_user.id, :status => "승인완료") + Mbook.all(:user_id => current_user.id, :status => "삭제대기")
         
         # @mbooks = repository(:default).adapter.select("SELECT * FROM mbooks where user_id = "+current_user.id.to_s+" and (status = '승인완료' or status = '삭제대기') ")
         puts_message @mbooks.count.to_s
@@ -140,9 +136,7 @@ class MbooksController < ApplicationController
       end
     
       
-      if @c_sid != 0
-        @mbooks = @mbooks.all(:subcategory1_id => @c_sid)
-      end
+     
             
       mbooks = @mbooks
       
@@ -154,11 +148,7 @@ class MbooksController < ApplicationController
       
       @menu_on = "mb_store"
       
-      @mbooks = @mbooks.all(:status => "승인완료")
-      
-      if @c_sid != 0
-        @mbooks = @mbooks.all(:subcategory1_id => @c_sid)
-      end
+      @mbooks = get_mbooks(@mbooks, @c_sid)
         
       mbooks = @mbooks
       @total_count = @mbooks.search(mbooks, params[:keyword], params[:search],"").count
@@ -186,7 +176,23 @@ class MbooksController < ApplicationController
     render 'mbook', :object => @total_count
   end
 
-
+  def get_mbooks(mbooks, current_id)
+    @mbooks = mbooks
+    
+    # puts_message "id: "+ current_id.to_s + " // " + Mbook.all(:subcategory1_id => current_id).count.to_s
+    @mbooks = @mbooks + ( Mbook.all(:subcategory1_id => current_id) || Mbook.all(:subcategory2_id => current_id) )
+    puts_message @mbooks.count.to_s
+    if Category.all(:parent_id => current_id).count > 0
+      Category.all(:parent_id => current_id).each do |cat|
+        @mbooks = get_mbooks(@mbooks, cat.id)
+      end
+      
+      return @mbooks
+    else
+      return @mbooks
+    end
+  end
+  
   def booklist
     @board = "mbook"
     @section = "booklist"

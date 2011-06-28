@@ -41,12 +41,14 @@
 				<td><input name="email" id="email" type="text"></td>
 				<td class="error"><span id="email_check_string"></span></td>
 			</tr>		
-			<!-- <tr>
-				<td class="publisher">필명/출판사명</td>
-				<td><input name="join_publisher" id="join_publisher" type="text"></td>
-				<td></td>					
-				<td class="error">※ 필명/출판사명을 입력하세요.</td>
-			</tr>		 -->
+			<tr>
+				<td class="servicetype">서비스 형태</td>
+				<td colspan="2">
+					<input type="radio" name="servicetype" value="shared" checked>Shared App
+					<input type="radio" name="servicetype" value="single">Single Category
+					<input type="radio" name="servicetype" value="multiple">Multiple Category
+				</td>
+			</tr>
 			<tr>
 				<td colspan="3">
 					<input type="image" id="btn_join_submit" src="images/main/bt_join.png" alt="가입완료" style="vertical-align:middle;">
@@ -180,8 +182,10 @@ $('#btn_join_submit').live("click", function(){
 	if (window.confirm("입력하신 정보로 회원가입을 신청하시겠습니까?")){
 		loadingView();
 		
+		var selectedValue = $('input:radio[name=servicetype]:checked').val() ;
+		
 		$.ajax({
-			data:'userid='+ $('#userid').val()+'&name='+ $('#name').val()+'&password='+ $('#password').val()+'&email='+ $('#email').val(), 
+			data:'userid='+ $('#userid').val()+'&name='+ $('#name').val()+'&password='+ $('#password').val()+'&email='+ $('#email').val()+'&servicetype='+ selectedValue, 
 			dataType:'script', 
 			type:'post', 
 			url:'/users/create',

@@ -7,6 +7,8 @@ class Admin::MbooksController < ApplicationController
     @board = "mbook"
     @section = "index"
     
+    @mbooks = Mbook.all(:id => 00)
+    
     if params[:sid] != nil and params[:sid] != ""
       @c_sid = params[:sid].to_i
     else
@@ -29,19 +31,19 @@ class Admin::MbooksController < ApplicationController
     if params[:st] != "all" and params[:st] != "" and params[:st] != nil
       if params[:st] == "1"
         status = "승인대기"
-        @menu_on = "mb_req"
       elsif params[:st] == "2"
         status = "삭제대기"
-        @menu_on = "mb_del"
       elsif params[:st] == "3"
         status = "대기"
-        @menu_on = "mb_all"
       elsif params[:st] == "4"
         status = "승인완료"
-        @menu_on = "mb_all"
       else
         @menu_on = "mb_all"
       end
+    end
+    
+    if params[:menu] != nil and params[:menu] != ""
+      @menu_on = "mb_" + params[:menu]
     else
       @menu_on = "mb_all"
     end
@@ -113,9 +115,9 @@ class Admin::MbooksController < ApplicationController
       
     end
     
-    @mbooks = Mbook.all
-
     
+    @mbooks = get_mbooks(@mbooks, @c_sid)
+
     if params[:user] != nil and params[:user] != ""
       @mbooks = @mbooks.all(:user_id => params[:user].to_i)
     end
@@ -124,9 +126,9 @@ class Admin::MbooksController < ApplicationController
       @mbooks = @mbooks.all(:status => status)
     end 
     
-    if @c_sid != 0
-      @mbooks = @mbooks.all(:subcategory1_id => @c_sid)
-    end
+    # if @c_sid != 0
+    #   @mbooks = @mbooks.all(:subcategory1_id => @c_sid)
+    # end
 
     mbooks = @mbooks
     
@@ -138,6 +140,23 @@ class Admin::MbooksController < ApplicationController
     render 'mbook'
   end
 
+  def get_mbooks(mbooks, current_id)
+    @mbooks = mbooks
+    
+    # puts_message "id: "+ current_id.to_s + " // " + Mbook.all(:subcategory1_id => current_id).count.to_s
+    @mbooks = @mbooks + ( Mbook.all(:subcategory1_id => current_id) || Mbook.all(:subcategory2_id => current_id) )
+    puts_message @mbooks.count.to_s
+    if Category.all(:parent_id => current_id).count > 0
+      Category.all(:parent_id => current_id).each do |cat|
+        @mbooks = get_mbooks(@mbooks, cat.id)
+      end
+      
+      return @mbooks
+    else
+      return @mbooks
+    end
+  end
+  
   # GET /admin_mbooks/1
   # GET /admin_mbooks/1.xml
   def show

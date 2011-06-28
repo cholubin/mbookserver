@@ -31,6 +31,11 @@
 				<td class="input_data"><input name="publisher" type="text" value="<%= @user.publisher %>" style="width:250px;"></td>
 				<td class="error"><img src="/images//icon_error.png" alt="error"> 필명/출판사명을 입력하세요.</td>
 			</tr>
+			<tr class="servicetype">
+				<td class="input_name">서비스 형태</td>
+				<td class="input_data"><%= @user.servicetype %></td>
+				<td class="error"></td>
+			</tr>
 		</table>
 		<p><input type="image" src="/images//bt/bt_upload_re_ok.png" alt="수정완료" style="vertical-align:middle;">
 		<img src="/images//bt/bt_cancel.png" alt="취소" style="cursor:pointer;" onClick="history.back(-1);"></p>

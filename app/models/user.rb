@@ -17,7 +17,8 @@ class User
   property :id,                 Serial
   property :userid,             String, :required => true
   property :name,               String, :required => true 
-  property :type,               String, :default => "writer"
+  property :type,               String, :default => "writer" # reader / writer
+  property :servicetype,        String, :default => "shared" # shared / single / multiple
   property :publisher,          String #필명/출판사명
   property :email,              String
   property :tel,                String
@@ -102,3 +103,5 @@ class User
          Digest::SHA2.hexdigest(string)
        end
 end
+
+DataMapper.auto_upgrade!

@@ -41,18 +41,20 @@ class UsersController < ApplicationController
     name = (params[:name] == "" or params[:name] == nil) ? nil : params[:name]
     password = (params[:password] == "" or params[:password] == nil) ? nil : params[:password]
     email = (params[:email] == "" or params[:email] == nil) ? nil : params[:email]
-
+    servicetype = (params[:servicetype] == "" or params[:servicetype] == nil) ? "shared" : params[:servicetype]
+    
     if userid != nil and name != nil and password != nil and email != nil
 
       if not User.first(:userid => userid).nil? # 아이디 중복인 경우 ========================== 
         render 'user'    
       else
         @user = User.new
-        @user.userid = params[:userid]
-        @user.name = params[:name]
-        @user.password = params[:password]
-        @user.email = params[:email];
+        @user.userid = userid
+        @user.name = name
+        @user.password = password
+        @user.email = email
         @user.type = "writer"
+        @user.servicetype = servicetype
         
         auth_code = @user.make_authcode
         @user.auth_code = auth_code
