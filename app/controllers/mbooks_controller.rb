@@ -18,7 +18,11 @@ class MbooksController < ApplicationController
     end
     
     if @c_sid != 0 
-      @c_pid = Category.get(@c_sid).parent_id
+      if Category.get(@c_sid) != nil
+        @c_pid = Category.get(@c_sid).parent_id
+      else
+        @c_pid = 0
+      end
     else
       @c_pid = 0
     end
