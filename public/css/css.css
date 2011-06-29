@@ -217,6 +217,18 @@ body#index a {
 	font-size: 10px;
 	width: 300px;
 }
+#box_join_service {
+	height: 260px;
+	padding: 20px;
+	line-height: 20px;
+	font-size: 10px;
+	border-bottom: 2px dotted #075C56;	
+}
+#box_join_service b {
+	color: #dee08d;
+}
+
+
 
 /* index footer */
 #index #footer {
@@ -994,7 +1006,7 @@ body#sub {
 	background-position: 0 -172px;
 }
 #box_user_information table tr.servicetype td.input_name {
-	background-position: 0px -220px;
+	background-position: 0px -210px;
 }
 #box_user_information table tr td.input_data {
 	width: 360px;
