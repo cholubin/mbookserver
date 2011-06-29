@@ -153,7 +153,7 @@ class MbooksController < ApplicationController
       @menu_on = "mb_store"
       
       @mbooks = get_mbooks(@mbooks, @c_sid)
-        
+      @mbooks = @mbooks.all(:status => "승인완료")  
       mbooks = @mbooks
       @total_count = @mbooks.search(mbooks, params[:keyword], params[:search],"").count
       @mbooks = @mbooks.search(mbooks, params[:keyword], params[:search], params[:page])
