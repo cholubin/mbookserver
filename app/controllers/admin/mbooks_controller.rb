@@ -39,13 +39,24 @@ class Admin::MbooksController < ApplicationController
         status = "승인완료"
       else
         @menu_on = "mb_all"
+        @menu_class = "sub_mbook"
       end
     end
     
     if params[:menu] != nil and params[:menu] != ""
       @menu_on = "mb_" + params[:menu]
+      if params[:menu] == "req"
+        @menu_class = "sub_waiting"
+      elsif params[:menu] == "del"
+        @menu_class = "sub_request"
+      else
+        @menu_on = "mb_all"
+        @menu_class = "sub_mbook"
+      end
+      
     else
       @menu_on = "mb_all"
+      @menu_class = "sub_mbook"
     end
     
     @pid = []
