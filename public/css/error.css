@@ -1,0 +1,27 @@
+
+/* error */
+body#error {
+	background-color: #002825;
+	color: #fff;
+	text-align: center;
+	vertical-align: middle;
+}
+#error_message {
+	margin: auto;
+	margin-top: 30px;
+	width: 500px;
+	height: 310px;
+	background: url("/images/message_bg.jpg") no-repeat center center;
+	text-align: center;
+}
+#error_message .message_title_text {
+	font-size: 22px;
+	color: #6cd139;
+	vertical-align: bottom;
+	height: 160px;
+}
+#error_message .message_sub_text {
+	font-size: 18px;
+	padding-top: 10px;
+}
+

@@ -121,17 +121,20 @@ class MbooksController < ApplicationController
       if params[:me] == "y" and params[:store] == "y"
         @mbooks = @mbooks.all(:user_id => current_user.id, :status => "승인완료") + Mbook.all(:user_id => current_user.id, :status => "삭제대기")
         
-        # @mbooks = repository(:default).adapter.select("SELECT * FROM mbooks where user_id = "+current_user.id.to_s+" and (status = '승인완료' or status = '삭제대기') ")
         puts_message @mbooks.count.to_s
         @menu_on = "my_mb_store"
+        @menu_class = "sub_my_mbook_in_store"
+        
       # 내가 올린 모든 책 
       elsif params[:me] == "y" and params[:store] == "n"
         @mbooks = @mbooks.all(:user_id => current_user.id)
         @menu_on = "my_mb"
+        @menu_class = "sub_my_mbook"
       # 스토어에 등록된 모든 책 
       elsif params[:me] == "n" and params[:store] == "y"
         @mbooks = @mbooks.all(:status => "승인완료")
         @menu_on = "mb_store"
+        @menu_class = "sub_mbook_in_store_writer"
       end
       
       if params[:st] != nil and params[:st] != ""

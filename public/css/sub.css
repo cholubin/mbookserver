@@ -140,6 +140,9 @@ body {
 .sub_detail_guest h2.sub_title, .sub_detail_admin h2.sub_title, .sub_detail_writer h2.sub_title {
 	background: url("/images/title/title_detail.png") no-repeat center center;
 }
+.sub_mbook h2.sub_title {
+	background: url("/images/title/title_mbook.png") no-repeat center center;
+}
 .sub_waiting h2.sub_title {
 	background: url("/images/title/title_waiting.png") no-repeat center center;
 }
