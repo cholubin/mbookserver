@@ -16,6 +16,7 @@ class Userbook
   property :id,                 Serial
   property :userid,             String, :required => true
   property :mbookid,            Integer
+  property :mbook_price,        String
   
   timestamps :at
 

@@ -76,6 +76,12 @@
 				<%= @mbook.description %>
 				</td>
 			</tr>
+			<tr class="size">
+				<td class="input_name">mBook 용량</td>
+				<td class="input_data" colspan="2">
+				<%= @mbook.file_size %> MB
+				</td>
+			</tr>
 			<% if signed_in? and current_user.id == @mbook.user_id %>
 				<tr class="price">
 					<td class="input_name">가격</td>

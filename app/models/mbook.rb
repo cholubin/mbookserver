@@ -33,6 +33,7 @@ class Mbook
   property :coverimage_name,    String
   property :covermedium_name,   String
   property :thumbnail_name,     String
+  property :file_size,          Float #단위:MB
 
   timestamps :at
   

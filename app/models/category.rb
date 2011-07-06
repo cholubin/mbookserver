@@ -23,13 +23,4 @@ class Category
 
   has n, :subcategories
 
-  # def self.up
-  #   if Category.first(:name => '명함') == nil
-  #     Category.new(:name=>'명함', :priority=>1).save
-  #     Category.new(:name=>'현수막', :priority=>2).save
-  #     Category.new(:name=>'봉투', :priority=>3).save  
-  #   else 
-  #     puts Category.first(:priority => 1).id
-  #   end
-  # end
 end

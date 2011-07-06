@@ -9,7 +9,7 @@ class ApisController < ApplicationController
   # 3 : User in approval process
   # 4 : Invalid userid
   # 5 : Invalid userpw
-  # ~ : Error
+  # -1 : Error
   # ======================================
 
   
@@ -130,10 +130,12 @@ EOF
     
   end
   
+  # 무료컨텐츠 다운의 경우는 회원정보는 필요없고, 디바이스정보만 저장한다.
   def mbookdownconfirm
     userid  = (params[:userid]  != nil and params[:userid]  != "") ? params[:userid]       : ""
     userpw  = (params[:userpw]  != nil and params[:userpw]  != "") ? params[:userpw]       : ""
     mbookid = (params[:mbookid] != nil and params[:mbookid] != "") ? params[:mbookid].to_i : ""
+    devicetype  = (params[:devicetype]  != nil and params[:devicetype]  != "") ? params[:devicetype]       : ""
     
     begin
       result = user_authentication(userid, userpw)
@@ -145,13 +147,20 @@ EOF
           result = 6
         else
           dncount = Mbookdncount.new()
-          dncount.userid = userid
+          dncount.userid = mbook.user_id
           dncount.mbookid = mbookid
+          dncount.mbook_title = mbook.title
+          dncount.mbook_price = mbook.price
+          dncount.dn_user_id = userid
+          dncount.devicetype = devicetype
+          
           if dncount.save
             if Userbook.all(:userid => userid, :mbookid => mbookid).count < 1
               userbook = Userbook.new()
               userbook.userid = userid
               userbook.mbookid = mbookid
+              userbook.price = mbook.price
+              
               result = userbook.save ? 0 : 7
             end
             result = 0

@@ -60,6 +60,9 @@ def find_parent(id,current_level,self_level)
     end
   end
   
- 
-  
+end
+
+def round_to(num, decimals)
+  factor = 10.0**decimals
+  return (num*factor).round / factor
 end

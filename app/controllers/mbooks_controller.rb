@@ -323,18 +323,21 @@ class MbooksController < ApplicationController
       break if File.exists?(mbook.zipfile)
     end
 
+     file_size = round_to(File.size(mbook.zipfile) / (1000.0 * 1000.0), 1)
+     mbook.file_size = file_size
+     
      unzip(mbook, destination)    
      # get_xml_data_update(mbook)
      
      puts_message "unzip_uploaded_file finished"
   end
-   
+  
    def rezip_uploaded_file(mbook)
      path = mbook.zip_path
      zip_name = mbook.id.to_s + ".zip"
      
-     puts_message path
-     puts_message zip_name
+     # puts_message path
+     # puts_message zip_name
      
      # system "zip #{MBOOK_PATH+zip_name} #{mbook.id.to_s}/*.*"
      
@@ -379,7 +382,7 @@ class MbooksController < ApplicationController
               @folder_name = temp[0]
             end
             
-            puts_message "@folder_name::" + @folder_name
+            # puts_message "@folder_name::" + @folder_name
             
             # puts_message f.name
             file_names.each do |file|
