@@ -173,6 +173,12 @@ class Admin::MbooksController < ApplicationController
   def show
     @mbook = Mbook.get(params[:id])
     
+    if @mbook.file_size == nil
+      file_size = round_to(File.size(@mbook.zipfile) / (1000.0 * 1000.0), 1)
+      @mbook.file_size = file_size
+      @mbook.save
+    end
+    
     if @mbook != nil
       @board = "mbook"
       @section = "show"

@@ -578,6 +578,14 @@ ul.state .error {
 	background: url("/images/input_name/input_name_description.png") no-repeat center left;
 	background-color: #cfe8e6;
 }
+#detail_form table tr.size td.input_name {
+	background: url("/images/input_name/input_name_size.png") no-repeat center left;
+	background-color: #cfe8e6;
+}
+#detail_form table tr.pages td.input_name {
+    background-position: 0 -168px;
+}
+
 #detail_form table tr.state td.input_name {
 	background: url("/images/input_name/input_name_state.png") no-repeat center left;
 	background-color: #cfe8e6;

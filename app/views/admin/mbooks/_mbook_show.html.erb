@@ -39,6 +39,16 @@
 				</td>
 				<td class="error"></td>
 			</tr>
+			<tr class="pages">
+				<td class="input_name">페이지</td>
+				<td class="input_data" colspan="2"><%= @mbook.pages %></td>
+			</tr>
+			<tr class="size">
+				<td class="input_name">mBook 용량</td>
+				<td class="input_data" colspan="2">
+				<%= @mbook.file_size %> MB
+				</td>
+			</tr>
 			<tr class="writer">
 				<td class="input_name">저자</td>
 				<td class="input_data"><%= @mbook.writer %></td>
