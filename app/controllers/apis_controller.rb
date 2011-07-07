@@ -515,20 +515,19 @@ EOF
         
         
         categories.each do |sub|
+          category_count = Category.all(:parent_id => sub.id).count.to_s
           if limit > 0
             mbook_count = Mbook.all(:status => "승인완료", :subcategory1_id => sub.id, :limit => limit, :offset => offset).count.to_s
           else
             mbook_count = Mbook.all(:status => "승인완료",:subcategory1_id => sub.id, :offset => offset).count.to_s
           end
-          category_count = Category.all(:parent_id => sub.id, :display_fl => true).count.to_s
-          
           items = items + 
 "<item>
 <type>folder</type>
 <id>#{sub.id.to_s}</id>
 <name>#{Category.get(sub.id).name}</name>
 <subitems>#{category_count}</subitems>
-<books>#{mbooks_count}</books>
+<books>#{mbook_count}</books>
 <thumbnail>/images/category_icon/#{sub.icon_image}</thumbnail>
 </item>\n"
         end
