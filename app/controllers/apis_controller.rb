@@ -520,7 +520,7 @@ EOF
           else
             mbook_count = Mbook.all(:status => "승인완료",:subcategory1_id => sub.id, :offset => offset).count.to_s
           end
-          category_count = Category.all(:parent_id => sub.id, :display_fl => true)
+          category_count = Category.all(:parent_id => sub.id, :display_fl => true).count.to_s
           
           items = items + 
 "<item>
