@@ -75,6 +75,15 @@
 					<img src="/images/icon_dollar.png" alt="달러"> <%= @mbook.price %>
 				</td>
 			</tr>
+			<tr class="unlimit">
+				<td class="input_name">무제한 다운로드</td>
+				<td class="input_data">
+					<% val_str =  @mbook.unlimited_down_fl == false ? "제한":"무제한" %>
+					<% btn_str =  @mbook.unlimited_down_fl == true ? "제한":"무제한" %>
+					
+					<span id="val_str"><%= val_str %></span> &nbsp;<input id="btn_limit" type="button" str="<%= btn_str %>" value="<%= btn_str %>으로 변경">
+				</td>
+			</tr>
 			<tr class="state">
 				<td class="input_name">상태</td>
 				<td class="input_data">
@@ -93,7 +102,7 @@
 				</td>
 			</tr>
 		</table>
-		<p><img src="/images/bt/bt_cancel.png" alt="취소" onClick="history.go(-1);" style="cursor:pointer;"></p>
+		<p><img id="btn_list" src="/images/bt/bt_list.png" alt="취소" style="cursor:pointer;"></p>
 	</div>
 </div>
 
@@ -122,6 +131,36 @@ $(document).ready(function(){
 			url:'/mbooks/fetch_subcategories'
 		});
 	<%end %>
+})
+
+$('#btn_list').click(function(){
+	location.href = "/admin/mbooks?keyword=<%= params[:keyword] %>&search=<%= params[:search] %>&menu=<%= params[:menu_on] %>"
+})
+
+$('#btn_limit').live("click", function(){
+	$btn_value = $(this).attr("str");
+	$val_str = $('#val_str').text();
+	
+	if( window.confirm( $btn_value + "으로 변경하시겠습니까?")){
+		$.ajax({
+			data:'id=<%= @mbook.id %>&str='+$btn_value, 
+			dataType:'script', 
+			type:'post', 
+			url:'/admin/mbooks/update_downlimit',
+			success: function(request){
+				if(request == "success"){
+					$('#btn_limit').val($val_str + "으로 변경");
+					$('#btn_limit').attr("str", $val_str)
+					$('#val_str').text($btn_value);
+					alert("변경완료되었습니다!");
+				}else{
+					alert("오류가 발생했습니다! \n 시스템 관리자에게 문의해주세요!");
+				}
+			}
+		});
+	}else{
+		return false;
+	}
 })
 
 $('#btn_store').live("click", function(){

@@ -149,10 +149,23 @@ EOF
           dncount = Mbookdncount.new()
           dncount.userid = mbook.user_id
           dncount.mbookid = mbookid
-          dncount.mbook_title = mbook.title
+            dncount.mbook_title = mbook.title
           dncount.mbook_price = mbook.price
           dncount.dn_user_id = userid
           dncount.devicetype = devicetype
+          
+          mpoint = Mpoint.new()
+          mpoint.user_id = mbook.user_id
+
+          #관리자가 특정사용자에 대해서 무제한 다운로드 옵션을 허용한 경우 다운로드시 발생하는 포이트 차감이 없음.
+          if mbook.unlimited_down_fl == true
+            mpoint.point = 0
+            mpoint.info = "무제한 다운로드로 포인트차감 0"
+          else
+            mpoint.point = MDOWN_POINT
+            mpoint.info = "MBook 다운로드"
+          end
+          mpoint.account = "M01" #다운로드 
           
           if dncount.save
             if Userbook.all(:userid => userid, :mbookid => mbookid).count < 1
@@ -507,12 +520,15 @@ EOF
           else
             mbook_count = Mbook.all(:status => "승인완료",:subcategory1_id => sub.id, :offset => offset).count.to_s
           end
+          category_count = Category.all(:parent_id => sub.id, :display_fl => true)
+          
           items = items + 
 "<item>
 <type>folder</type>
 <id>#{sub.id.to_s}</id>
 <name>#{Category.get(sub.id).name}</name>
-<subitems>#{mbook_count}</subitems>
+<subitems>#{category_count}</subitems>
+<books>#{mbooks_count}</books>
 <thumbnail>/images/category_icon/#{sub.icon_image}</thumbnail>
 </item>\n"
         end

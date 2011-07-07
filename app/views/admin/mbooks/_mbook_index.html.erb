@@ -68,6 +68,7 @@
 			<li class="no">NO</li>
 			<li class="book">책표지</li>
 			<li class="mbook">mBook</li>
+			<li class="unlimit">무제한</li>
 			<li class="id">아이디</li>
 			<li class="date">등록일</li>
 			<li class="price">가격</li>
@@ -87,12 +88,17 @@
 			<ul class="list_data_white">
 				<li class="no"><%= @page_num %></li>
 				<li class="book"><img src="<%= mb.thumbnail_url %>" alt="책표지"></li>
-				<a href="/admin/mbooks/<%= mb.id %>?menu_on=<%= @menu_on %>">
+				<a href="/admin/mbooks/<%= mb.id %>?keyword=<%= params[:keyword] %>&search=<%= params[:search] %>&menu=<%= params[:menu] %>&menu_on=<%= @menu_on %>">
 					<li class="mbook">
 					<b><%= mb.title %></b><br/>
 					▶ 저자 : <b><%= mb.writer %></b> | 출판사 : <b>출판사<%= mb.publisher %></b> | 발행일 : <b><%= mb.issue_date %></b>
 					</li>
 				</a>
+				<li class="unlimit">
+					<% if mb.unlimited_down_fl == true %>
+						<input type="button" value="무제한">
+					<% end  %>
+				</li>
 				<li class="id"><%= User.get(mb.user_id).userid %>(<%= User.get(mb.user_id).name %>)</li>
 				<li class="date"><%= mb.created_at.strftime('%Y-%m-%d') %></li>
 				<li class="price"><img src="/images/icon_dollar.png" alt="달러"> <%= mb.price %></li>

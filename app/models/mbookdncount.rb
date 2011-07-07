@@ -22,7 +22,12 @@ class Mbookdncount
   property :free_or_not_fl,     Boolean
   property :mbook_price,        String  #다운로드 당시의 mbook 가격, 무료인 경우 0 
   property :dn_user_id,         String
-  property :devicetype,         String
+  
+  # 통계시 그룹핑시 유리하도록..
+  # 아이패드류는 IPAD // IP1 , IP2
+  # 겔럭시 GAL // G10.1, G7
+  property :devicetype_main,    String
+  property :devicetype_sub,     String
   
   timestamps :at
 

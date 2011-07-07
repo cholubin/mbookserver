@@ -26,13 +26,14 @@ class User
 
   # 메일인증을 위해서 추가 
   property :auth_code,          String, :length => 150  #인증코드 (메일인증)
-  property :auth_fl,          Boolean, :default => false
+  property :auth_fl,            Boolean, :default => false
   
   property :encrypted_password, String, :length => 150
   property :salt,               String, :length => 150
   property :remember_token,     Text,   :length => 150
 
   property :withdrawal_reason,  Text
+  
   timestamps :at
   
   

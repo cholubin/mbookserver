@@ -275,8 +275,12 @@ ul.state .error {
 	width: 456px;
 }
 .sub_mbook_in_store_admin .list_title ul li.mbook, .sub_mbook_in_store_admin .list_data ul li.mbook {
-	width: 402px;
+	width: 342px;
 }
+.list_title ul li.unlimit, .list_data ul li.unlimit {
+	width: 50px;
+}
+
 .sub_waiting .list_title ul li.mbook, .sub_waiting .list_data ul li.mbook {
 	width: 396px;
 }
@@ -580,6 +584,10 @@ ul.state .error {
 }
 #detail_form table tr.size td.input_name {
 	background: url("/images/input_name/input_name_size.png") no-repeat center left;
+	background-color: #cfe8e6;
+}
+#detail_form table tr.unlimit td.input_name {
+	background: url("/images/input_name/input_name_unlimit.png") no-repeat center left;
 	background-color: #cfe8e6;
 }
 #detail_form table tr.pages td.input_name {

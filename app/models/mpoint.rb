@@ -17,7 +17,8 @@ class Userbook
   property :userid,             Integer
   property :point,              Integer
 
-  #P- 플러스요소 / M- 마이너스 요소 (P)
+  #P- 플러스요소 / M- 마이너스 요소 
+  # M01 : MBook 다운로드 
   property :account,            String
   property :info,               String
   

@@ -168,6 +168,37 @@ class Admin::MbooksController < ApplicationController
     end
   end
   
+  def update_downlimit
+    mbookid = params[:id].to_i
+    str = params[:str]
+    status = ""
+    
+    if str == "제한"
+      bstr = false
+    elsif str == "무제한"
+      bstr = true
+    else
+      status = "fail"
+    end
+    
+    begin
+      mbook = Mbook.get(mbookid)
+      mbook.unlimited_down_fl = bstr
+      if mbook.save
+        status = "success"
+      else
+        status = "save failed"
+      end
+    rescue
+      status = "fail"
+    end
+    
+    if status == "success"
+      render :text => "success"
+    else
+      render :text => "fail"
+    end
+  end
   # GET /admin_mbooks/1
   # GET /admin_mbooks/1.xml
   def show

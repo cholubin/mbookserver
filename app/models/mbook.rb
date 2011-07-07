@@ -35,6 +35,9 @@ class Mbook
   property :thumbnail_name,     String
   property :file_size,          Float #단위:MB
 
+  #포인트관련 추가사항 
+  property :unlimited_down_fl,  Boolean, :default => false
+
   timestamps :at
   
   before :create, :file_path
