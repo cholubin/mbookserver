@@ -68,7 +68,11 @@
 			<tr class="bookdate">
 				<td class="input_name">발행일</td>
 				<td class="input_data">
+					<%if signed_in? and current_user.id == @mbook.user_id %>
 					<input type="text" id="issue_date" name="issue_date" value="<%= @mbook.issue_date %>"><img id="btn_issue_date" src="/images/bt/bt_date.png" alt="발행일 선택" style="cursor:pointer;">
+					<%else%>
+						<%= @mbook.issue_date %>
+					<%end %>
 				</td>
 				<td class="error"><!-- <img src="/images/icon_error.png" alt="error"> 발행일을 선택하세요. --></td>
 			</tr>
