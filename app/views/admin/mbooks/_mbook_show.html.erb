@@ -10,7 +10,7 @@
 			</tr>
 			<tr class="id">
 				<td class="input_name">아이디</td>
-				<td class="input_data"><%= @mbook.userid %></td>
+				<td class="input_data"><%= @mbook.userid %> (<%= User.get(@mbook.user_id).name %>)</td>
 			</tr>
 			<tr class="category1">
 				<td class="input_name">분류 (필수)</td>

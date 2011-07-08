@@ -7,20 +7,21 @@ require 'dm-pager'
 
 $:.unshift File.dirname(__FILE__) + '/../lib'
 
-class Userbook
+class Mpoint
   
   # Class Configurations ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
   include DataMapper::Resource
   
   # Attributes ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
   property :id,                 Serial
-  property :userid,             Integer
+  property :user_id,             Integer
   property :point,              Integer
 
   #P- 플러스요소 / M- 마이너스 요소 
   # M01 : MBook 다운로드 
   property :account,            String
   property :info,               String
+  property :mbookdncount_id,    Integer
   
   timestamps :at
 

@@ -308,6 +308,7 @@ ul.state .error {
 	height: 68px;
 	line-height:66px;
 }
+
 .list_data ul li.no {
 	background: url("/images/icon_number.png") no-repeat center center;
 }

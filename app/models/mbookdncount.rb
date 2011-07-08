@@ -14,7 +14,7 @@ class Mbookdncount
   
   # Attributes ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
   property :id,                 Serial
-  property :userid,             String, :required => true
+  property :userid,             String
   property :mbookid,            Integer
   
   # 포인트 관련 추가 속성
@@ -24,11 +24,13 @@ class Mbookdncount
   property :dn_user_id,         String
   
   # 통계시 그룹핑시 유리하도록..
-  # 아이패드류는 IPAD // IP1 , IP2
-  # 겔럭시 GAL // G10.1, G7
+  #devicetype : 100 - iPad, 101 - iPhone, 102 - iPod Touch, 200 - 갤럭시 탭, 201 - 갤럭시 10.9…
+	#* 1XX -> iOS Device, 2XX -> Android Device
+  property :deviceid,           String
   property :devicetype_main,    String
   property :devicetype_sub,     String
   
+  property :down_cnt,           Integer
   timestamps :at
 
 
