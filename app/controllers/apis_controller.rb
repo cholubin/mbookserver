@@ -90,8 +90,9 @@ EOF
   end
   
   def mbookdown
-    userid  = (params[:userid]  != nil and params[:userid]  != "") ? params[:userid]       : ""
-    userpw  = (params[:userpw]  != nil and params[:userpw]  != "") ? params[:userpw]       : ""
+    
+    # userid  = (params[:userid]  != nil and params[:userid]  != "") ? params[:userid]       : ""
+    # userpw  = (params[:userpw]  != nil and params[:userpw]  != "") ? params[:userpw]       : ""
     mbookid = (params[:mbookid] != nil and params[:mbookid] != "") ? params[:mbookid].to_i : ""
     admin_down = (params[:admin_down] != nil and params[:admin_down] != "") ? params[:admin_down] : ""
     
@@ -100,9 +101,9 @@ EOF
       mbook = Mbook.get(mbookid) if Mbook.get(mbookid) != nil
     else
       begin
-        result = user_authentication(userid, userpw)
+        # result = user_authentication(userid, userpw)
 
-        if result == 0
+        # if result == 0
           mbook = Mbook.get(mbookid)
           if mbook.nil?
             result = 6
@@ -113,7 +114,7 @@ EOF
               result = 6
             end
           end
-        end
+        # end
       rescue
         result = -1
       end
