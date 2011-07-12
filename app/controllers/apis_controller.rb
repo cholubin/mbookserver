@@ -155,7 +155,7 @@ EOF
     mbookid = (params[:mbookid] != nil and params[:mbookid] != "") ? params[:mbookid].to_i : ""
 
     
-    # begin
+    begin
       mbook = Mbook.get(mbookid) != nil ? Mbook.get(mbookid) : nil
       
       if mbook == nil
@@ -257,12 +257,6 @@ EOF
         mpoint.info = "MBook 다운로드"
       end
       
-      # puts_message mpoint.userid.to_s
-      # puts_message mpoint.point.to_s
-      # puts_message mpoint.account
-      # puts_message mpoint.info
-      # puts_message mpoint.mbookdncount_id
-      
       if mpoint.save
         result = 0
       else
@@ -270,9 +264,9 @@ EOF
         result = -1
       end
       
-    # rescue
-    #   result = -1
-    # end
+    rescue
+      result = -1
+    end
     
     result_xml = make_result_xml(result) 
 
