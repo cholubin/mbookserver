@@ -6,7 +6,7 @@
 		<table>
 			<tr class="book">
 				<td rowspan="15" class="book"><img src="<%= @mbook.coverimage_url %>" alt="책표지"></td>
-				<td colspan="2" class="mbook"><img src="/images/icon_book.png" alt="책아이콘">mBook 제목</td>
+				<td colspan="2" class="mbook"><img src="/images/icon_book.png" alt="책아이콘"><%= @mbook.title %></td>
 			</tr>
 			<tr class="id">
 				<td class="input_name">아이디</td>
@@ -84,6 +84,12 @@
 					<span id="val_str"><%= val_str %></span> &nbsp;<input id="btn_limit" type="button" str="<%= btn_str %>" value="<%= btn_str %>으로 변경">
 				</td>
 			</tr>
+			<tr class="down">
+				<td class="input_name">파일다운로드</td>
+				<td class="input_data">
+					<input type="button" id="zip_down" value="mBook 다운로드">
+				</td>
+			</tr>
 			<tr class="state">
 				<td class="input_name">상태</td>
 				<td class="input_data">
@@ -101,8 +107,9 @@
 					<%end %>
 				</td>
 			</tr>
+			
 		</table>
-		<p><img id="btn_list" src="/images/bt/bt_list.png" alt="취소" style="cursor:pointer;"></p>
+		<p><img id="btn_list" src="/images/bt/bt_list.png" alt="목록" style="cursor:pointer;"></p>
 	</div>
 </div>
 
@@ -133,7 +140,16 @@ $(document).ready(function(){
 	<%end %>
 })
 
-$('#btn_list').click(function(){
+$('#zip_down').click(function(){
+	if( window.confirm("MBook 파일을 다운로드 하시겠습니까?") ){
+		window.location.href = "/mbookdown.htm?admin_down=y&mbookid=<%= @mbook.id %>";
+		// window.open("/mbookdown.htm?admin_down=y&mbookid=<%= @mbook.id %>");
+	}else{
+		return false;
+	}
+})
+
+$('#btn_list').live("click", function(){
 	location.href = "/admin/mbooks?keyword=<%= params[:keyword] %>&search=<%= params[:search] %>&menu=<%= params[:menu_on] %>"
 })
 

@@ -95,27 +95,34 @@ EOF
     userid  = (params[:userid]  != nil and params[:userid]  != "") ? params[:userid]       : ""
     userpw  = (params[:userpw]  != nil and params[:userpw]  != "") ? params[:userpw]       : ""
     mbookid = (params[:mbookid] != nil and params[:mbookid] != "") ? params[:mbookid].to_i : ""
+    admin_down = (params[:admin_down] != nil and params[:admin_down] != "") ? params[:admin_down] : ""
     
-    begin
-      result = user_authentication(userid, userpw)
-      
-      if result == 0
-        mbook = Mbook.get(mbookid)
-        if mbook.nil?
-          result = 6
-        else
-          if File.exists?(mbook.zipfile)
-            result = 0
-          else
+    if admin_down == "y" and admin_signed_in?
+      result = 0
+      mbook = Mbook.get(mbookid) if Mbook.get(mbookid) != nil
+    else
+      begin
+        result = user_authentication(userid, userpw)
+
+        if result == 0
+          mbook = Mbook.get(mbookid)
+          if mbook.nil?
             result = 6
+          else
+            if File.exists?(mbook.zipfile)
+              result = 0
+            else
+              result = 6
+            end
           end
         end
+      rescue
+        result = -1
       end
-    rescue
-      result = -1
+
+      result_xml = make_result_xml(result)
     end
     
-    result_xml = make_result_xml(result)
 
     # result 값
     # 0 : OK  // 파일을 보내는 경우에는 xml을 보낼 수 없다. 렌더링을 동시에 두종류 할 수 없다. 
@@ -123,7 +130,7 @@ EOF
     # 7 : 사용자 구매리스트 업데이트 오류(구매하고 다운로드 한적이 없는 경우만 인서트)
 
     if result == 0
-      send_file mbook.zipfile, :filename => mbook.id.to_s + ".mbook.zip",  :type => "application/zip"# , :stream => "false", :disposition => 'attachment'
+      send_file mbook.zipfile, :filename => mbook.title + "(#{mbook.id.to_s})"  + ".mbook.zip",  :type => "application/zip"# , :stream => "false", :disposition => 'attachment'
     else
       render :xml => result_xml
     end
@@ -141,14 +148,16 @@ EOF
       # * 1XX -> iOS Device, 2XX -> Android Device
       devicetype  = (params[:devicetype]  != nil and params[:devicetype]  != "") ? params[:devicetype]       : ""
       deviceid  = (params[:deviceid]  != nil and params[:deviceid]  != "") ? params[:deviceid]       : ""
+      
+    else
+      userid  = (params[:userid]  != nil and params[:userid]  != "") ? params[:userid]       : ""
+      userpw  = (params[:userpw]  != nil and params[:userpw]  != "") ? params[:userpw]       : ""
     end
     
-    userid  = (params[:userid]  != nil and params[:userid]  != "") ? params[:userid]       : ""
-    userpw  = (params[:userpw]  != nil and params[:userpw]  != "") ? params[:userpw]       : ""
     mbookid = (params[:mbookid] != nil and params[:mbookid] != "") ? params[:mbookid].to_i : ""
 
     
-    begin
+    # begin
       mbook = Mbook.get(mbookid) != nil ? Mbook.get(mbookid) : nil
       
       if mbook == nil
@@ -226,6 +235,7 @@ EOF
         end  #if isfree = "y"
       end # if mbook != nil
       
+      
       mpoint = Mpoint.new()
       
       mpoint.user_id = mbook.user_id
@@ -259,9 +269,9 @@ EOF
         result = -1
       end
       
-    rescue
-      result = -1
-    end
+    # rescue
+    #   result = -1
+    # end
     
     result_xml = make_result_xml(result) 
 

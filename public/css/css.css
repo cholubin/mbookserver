@@ -755,7 +755,7 @@ body#sub {
 	vertical-align: middle;
 }
 #upload_form table tr td.input_name {
-	width: 140px;
+	width: 160px;
 	text-indent: -5000px;
 	background: url("/images/input_name/input_name_upload.png") no-repeat;
 	background-color: #cfe8e6;
@@ -789,6 +789,29 @@ body#sub {
 }
 #upload_form p {
 	text-align: center;
+}
+#upload_form table tr.price_android td.input_name {
+	background: url("/images/input_name/input_name_price_android.png") no-repeat 0% 50%;
+	background-color: #cfe8e6;
+}
+#upload_form table tr.price_ipad_usdollor td.input_name {
+	background: url("/images/input_name/input_name_blank.png") no-repeat 0% 50%;
+	background-color: #cfe8e6;
+}
+
+#upload_form table tr.price_ipad td.input_name {
+	background: url("/images/input_name/input_name_price_ipad.png") no-repeat 0% 50%;
+	background-color: #cfe8e6;
+}
+#upload_form table tr.price_ipad_usdollor td.input_name {
+	background-color: #ffffff;
+}
+
+#upload_form table tr.price_ipad_usdollor td.input_data table {
+	border: 1px solid #cfe8e6;
+}
+#upload_form table tr.price_ipad_usdollor td.input_data table tr td.gray{
+	background-color: #eee;
 }
 
 /* sub content 상세보기 */
