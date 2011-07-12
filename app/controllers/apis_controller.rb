@@ -207,6 +207,7 @@ EOF
               dncount.free_or_not_fl = false
               if dncount.save
                 result = 0
+                @dncount_id = dncount.id
               else
                 result = -1
               end
@@ -240,8 +241,8 @@ EOF
       
       mpoint.user_id = mbook.user_id
 
-      if dncount.id != nil
-        mpoint.mbookdncount_id = dncount.id
+      if @dncount_id != nil
+        mpoint.mbookdncount_id = @dncount_id
       end
       
       mpoint.account = "M01" #MBook 다운로드 계정
