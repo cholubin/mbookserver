@@ -11,11 +11,11 @@ class Mbook
   
   # Class Configurations ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
   include DataMapper::Resource
-  mount_uploader :mbook_file, MbookUploader
+  # mount_uploader :mbook_file, MbookUploader
   # Attributes ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-  property :mbook_file,         Text
-  property :original_filename,  String
+  # property :mbook_file,         Text
   property :id,                 Serial
+  property :original_filename,  String
   property :user_id,            Integer
   property :userid,             String
   property :category_id,        Integer
@@ -28,6 +28,7 @@ class Mbook
   property :issue_date,         String
   property :description,        Text
   property :price,              String
+  property :price_android,      String
   property :status,             String, :default => "대기"  # (status; "대기", "승인완료", "승인거부", "승인대기", "삭제대기")
   property :cancel_reason,      Text
   property :coverimage_name,    String

@@ -3,7 +3,7 @@
 </div>
 <div id="content">
 	<div id="upload_form" >
-		<% form_for @mbook, :html => {:multipart => true} do |f| %>
+		<% form_for :mbook, :url => { :action => "create" }, :html => {:multipart => true} do%>
 		<input type="hidden" name="sub1" id="sub1" value="">
 		<input type="hidden" name="sub2" id="sub2" value="">
 		<table>
@@ -46,16 +46,16 @@
 				<td class="input_name">안드로이드 가격</td>
 				<td class="input_data">
 					<img src="/images/icon_won.png" alt="원화">
-					<input id="price_android" name="price_android" type="text" value="">
+					<input id="price_android" name="price_android" type="text" value="0" disabled>
 				</td>
 				<td class="error"><span id="price_msg"></span></td>
 			</tr>
 			<tr class="price_ipad">
-				<td class="input_name" >아이패드 가격</td>
+				<td class="input_name">아이패드 가격</td>
 				<td  colspan="2" style="width:540px;">
 					<img src="/images/icon_dollar.png" alt="달러">
-					<input id="price_android" name="price_android" type="text" value="">
-					<input id="btn_view" type="button" value="보기">
+					<input id="price_ipad" name="price_ipad" type="text" value="0" disabled>
+					<input id="btn_view" type="button" value="가격표 보기">
 					<div id="price_list" style="display:none;width:440px;">
 					<table style="margin:10px 0 0 0;width:440px;border-top:0px solid gray;border-bottom:0px solid gray;">
 						<tr>
@@ -277,9 +277,6 @@
 </div>
 
 
-
-
-
 <script language="Javascript">
 $('.select_category').live("change", function(){
 	var $level = $(this).attr("level");
@@ -294,11 +291,21 @@ $('.select_category').live("change", function(){
 		});
 })
 $('.btn_radio').live("click", function(){
-	alert($(this).val();)
+	// $('#price_ipad').val($(this).val());
+	// $('#price_list').css("display", "none");
+	// $('#btn_view').val("가격표 보기");
+	
+	alert("현재는 베타서비스 기간으로 무료만 가능합니다!");
 })
 
 $('#btn_view').click(function(){
-	$('#price_list').css("display", "block");
+	if ($('#btn_view').val() == "가격표 보기"){
+		$('#price_list').css("display", "block");
+		$('#btn_view').val("가격표 닫기");
+	}else{
+		$('#price_list').css("display", "none");
+		$('#btn_view').val("가격표 보기");
+	}
 })
 
 $('#submit_btn').click(function(){

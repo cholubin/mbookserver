@@ -107,7 +107,7 @@ class Admin::MbooksController < ApplicationController
       @pid = @pid_temp
     else
       i = @pid_temp.length() -1
-      puts_message "pid 갯수"+i.to_s
+      # puts_message "pid 갯수"+i.to_s
       @pid_temp.each do |x|
         @pid[i] = x
         i = i -1
@@ -118,7 +118,7 @@ class Admin::MbooksController < ApplicationController
       @sid = @sid_temp
     else
       i = @sid_temp.length() -1
-      puts_message "sid 갯수"+i.to_s
+      # puts_message "sid 갯수"+i.to_s
       @sid_temp.each do |x|
         @sid[i] = x
         i = i -1
@@ -156,7 +156,7 @@ class Admin::MbooksController < ApplicationController
     
     # puts_message "id: "+ current_id.to_s + " // " + Mbook.all(:subcategory1_id => current_id).count.to_s
     @mbooks = @mbooks + ( Mbook.all(:subcategory1_id => current_id) || Mbook.all(:subcategory2_id => current_id) )
-    puts_message @mbooks.count.to_s
+    # puts_message @mbooks.count.to_s
     if Category.all(:parent_id => current_id).count > 0
       Category.all(:parent_id => current_id).each do |cat|
         @mbooks = get_mbooks(@mbooks, cat.id)
@@ -266,25 +266,24 @@ class Admin::MbooksController < ApplicationController
     chks = chk_ids.split(",")
 
     chks.each do |chk|
-      mbook = Mbook.get(chk.to_i)
-      if mbook != nil
-          puts_message mbook.zipfile
-          if File.exists?(mbook.zipfile)
-            FileUtils.rm_rf mbook.zipfile
+      @mbook = Mbook.get(chk.to_i)
+      mbook_id = @mbook.id
+      mbook = @mbook
+      
+      if @mbook != nil
+          if File.exists?(@mbook.zipfile)
+            FileUtils.rm_rf @mbook.zipfile
           end
           
-          puts_message mbook.zip_path
-          if File.exists?(mbook.zip_path)
-            FileUtils.rm_rf mbook.zip_path
+          if File.exists?(@mbook.zip_path)
+            FileUtils.rm_rf @mbook.zip_path
           end
           
-          puts_message MBOOK_PATH + mbook.id.to_s + ".zip"
-          if File.exists?(MBOOK_PATH + mbook.id.to_s + ".zip")
-            FileUtils.rm_rf MBOOK_PATH + mbook.id.to_s + ".zip"
+          if File.exists?(MBOOK_PATH + @mbook.id.to_s + ".zip")
+            FileUtils.rm_rf MBOOK_PATH + @mbook.id.to_s + ".zip"
           end
           
-          mbook_id = mbook.id
-          if mbook.destroy 
+          if @mbook.destroy 
             puts_message "mBook ("+mbook_id.to_s+") 삭제 성공"
           else
             puts_message "mBook ("+mbook_id.to_s+") 삭제 실패"

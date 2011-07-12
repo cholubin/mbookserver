@@ -8,18 +8,17 @@ class MbookUploader < CarrierWave::Uploader::Base
                                          
 
   def store_dir   
-    MBOOK_PATH
+    "#{RAILS_ROOT}" + "/public/mbook/"
   end
   
 
   def filename
-    if original_filename # mLayout 템플릿을 업로드 한 경우에만 적용 
+    puts "11111111111111111111111111"
+    if original_filename # MBook 파일을 업로드 한 경우에만 적용 
       file_ext_name = ".mbook.zip"
       file_name = model.id.to_s
 
       temp_filename = file_name + file_ext_name
-      
-      # puts temp_filename
       
       temp_filename
     end
