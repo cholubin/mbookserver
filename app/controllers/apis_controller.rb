@@ -69,6 +69,7 @@ EOF
     
     begin
       # result = user_authentication(userid, userpw)
+    mbook = Mbook.get(mbookid)
       
     if mbook.nil?
       result = 6
