@@ -59,8 +59,8 @@ EOF
   
   def mbookdownchk
     # isfree  = (params[:isfree]  != nil and params[:isfree]  != "") ? params[:isfree]       : ""
-    userid  = (params[:userid]  != nil and params[:userid]  != "") ? params[:userid]       : ""
-    userpw  = (params[:userpw]  != nil and params[:userpw]  != "") ? params[:userpw]       : ""
+    # userid  = (params[:userid]  != nil and params[:userid]  != "") ? params[:userid]       : ""
+    # userpw  = (params[:userpw]  != nil and params[:userpw]  != "") ? params[:userpw]       : ""
     mbookid = (params[:mbookid] != nil and params[:mbookid] != "") ? params[:mbookid].to_i : ""
     
     # isfree  = (params[:isfree]  != nil and params[:isfree]  != "") ? params[:isfree]       : ""
@@ -68,16 +68,13 @@ EOF
     # deviceid  = (params[:deviceid]  != nil and params[:deviceid]  != "") ? params[:deviceid]       : ""
     
     begin
-      result = user_authentication(userid, userpw)
+      # result = user_authentication(userid, userpw)
       
-      if result == 0
-        mbook = Mbook.get(mbookid)
-        if mbook.nil?
-          result = 6
-        else
-          result = File.exists?(mbook.zipfile) ? 0 : 7
-        end
-      end
+    if mbook.nil?
+      result = 6
+    else
+      result = File.exists?(mbook.zipfile) ? 0 : 7
+    end
       
     rescue
       result = -1
