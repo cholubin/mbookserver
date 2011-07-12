@@ -1,7 +1,6 @@
 # encoding: utf-8
 require 'rubygems'
 require 'carrierwave/orm/datamapper'   
-require 'carrierwave/datamapper'   
 require 'dm-core'
 require 'dm-validations'
 require 'dm-pager'
