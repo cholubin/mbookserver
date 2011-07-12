@@ -341,7 +341,7 @@ class MbooksController < ApplicationController
      mbook.file_size = file_size
      
      unzip(mbook, destination)    
-     # get_xml_data_update(mbook)
+     get_xml_data_update(mbook)
      
      puts_message "unzip_uploaded_file finished"
   end
