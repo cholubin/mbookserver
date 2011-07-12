@@ -189,6 +189,7 @@ EOF
             dncount_up = Mbookdncount.first(:deviceid => deviceid, :mbookid => mbook.id)
             dncount_up.down_cnt += 1
             if dncount_up.save
+              @dncount_id = dncount_up.id
               result = 0
             else
               result = -1
@@ -216,6 +217,7 @@ EOF
               dncount_up.down_cnt += 1
               if dncount_up.save
                 result = 0
+                @dncount_id = dncount.id
               else
                 result = -1
               end
