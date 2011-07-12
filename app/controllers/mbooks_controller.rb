@@ -2,6 +2,7 @@
 require 'rexml/document'
 include REXML
 class MbooksController < ApplicationController
+  skip_before_filter :verify_authenticity_token
   # before_filter :authenticate_user!
 
   def index
@@ -298,10 +299,11 @@ class MbooksController < ApplicationController
     
     @mbook.mbook_file = params[:mbook_file]
     @mbook.original_filename = params[:mbook_file].original_filename.gsub(".zip","")
-
-    mbook_upload(params[:mbook_file])
     
+    
+    # mbook_upload(params[:mbook_file])
     if @mbook.save
+      
       puts_message "unzip_uploaded_file start!"
       unzip_uploaded_file(@mbook)
       
@@ -314,13 +316,13 @@ class MbooksController < ApplicationController
     end
   end
 
-  def mbook_upload(file)
-    uploader = MbookUploader.new
-    uploader.store!(file)
-  end
+  # def mbook_upload(file)
+  #   uploader = MbookUploader.new
+  #   uploader.store!(file)
+  # end
   
   def unzip_uploaded_file(mbook) 
-    puts_message "unzip_uploaded_file start"
+    puts_message "unzip_uploaded_file in progress"
     
     destination = mbook.zip_path
 
@@ -331,9 +333,9 @@ class MbooksController < ApplicationController
       puts_message "mbook folder creation was failed!"
     end
 
-    # loop do 
-    #   break if File.exists?(mbook.zipfile)
-    # end
+    loop do 
+      break if File.exists?(mbook.zipfile)
+    end
 
      file_size = round_to(File.size(mbook.zipfile) / (1000.0 * 1000.0), 1)
      mbook.file_size = file_size
@@ -371,7 +373,7 @@ class MbooksController < ApplicationController
        else
          mbook.covermedium_name = mbook.thumbnail_name
        end
-       mbook.description = mb.elements["Description"].text
+       mbook.description = mb.elements["Description"].text if mb.elements["Description"] != nil
        if mbook.save
          puts_message "mBook 메타데이타 업데이트 완료!"
        else

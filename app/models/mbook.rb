@@ -1,6 +1,7 @@
 # encoding: utf-8
 require 'rubygems'
 require 'carrierwave/orm/datamapper'   
+require 'carrierwave/datamapper'   
 require 'dm-core'
 require 'dm-validations'
 require 'dm-pager'
@@ -11,9 +12,9 @@ class Mbook
   
   # Class Configurations ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
   include DataMapper::Resource
-  # mount_uploader :mbook_file, MbookUploader
+  mount_uploader :mbook_file, MbookUploader
   # Attributes ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-  # property :mbook_file,         Text
+  property :mbook_file,         Text
   property :id,                 Serial
   property :original_filename,  String
   property :user_id,            Integer

@@ -3,6 +3,7 @@
 class Admin::CategoriesController < ApplicationController
   layout 'admin_layout'
   before_filter :authenticate_admin!      
+  skip_before_filter :verify_authenticity_token
   # GET /admin_categories
   # GET /admin_categories.xml
   def index

@@ -21,6 +21,6 @@ class Category
   property :display_fl,   Boolean, :default => true
   timestamps :at
 
-  has n, :subcategories
-
 end
+
+DataMapper.auto_upgrade!

@@ -55,6 +55,7 @@ class User
 
   end
   
+  
   def self.search_admin(keyword, search, page)
       User.all(:name.like => "%#{search}%").page :page => page, :per_page => 12
   end

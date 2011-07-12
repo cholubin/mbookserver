@@ -84,3 +84,4 @@ class Myadmin
              
 end
 
+DataMapper.auto_upgrade!

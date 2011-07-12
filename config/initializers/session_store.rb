@@ -8,7 +8,7 @@
 
 
 ActionController::Base.session = {
-  :key         => '_webtop_session',
+  :key         => 'soluwin',
   :secret      => '7c77fc115b2229aa883273c6569ac9e088d35e7edf240e733665d7eb5180e6cc223a4d89ff228ebc0c67779939ed2d17e4bbbba1c6f8c5aefda34476ee43a725'
 }
 
