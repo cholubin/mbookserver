@@ -21,6 +21,7 @@ class Mpoint
   # M01 : MBook 다운로드 
   property :account,            String
   property :info,               String
+  property :mbook_id,           Integer
   property :mbookdncount_id,    Integer
   
   timestamps :at

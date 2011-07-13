@@ -141,119 +141,154 @@ EOF
     
   end
   
-  # 무료컨텐츠 다운의 경우는 회원정보는 필요없고, 디바이스정보만 저장한다.
+  # 무료컨텐츠 다운: 디바이스 정보만 저장
+  # 유료컨텐츠 다운: 사용자 정보만 저장 
   def mbookdownconfirm
     
     # 무료다운로드의 경우 사용자 정보는 제외하고 디바이스정보만 저장한다.
     isfree  = (params[:isfree]  != nil and params[:isfree]  != "") ? params[:isfree]       : ""
-    
-    if isfree == "y"
-      #  devicetype : 100 - iPad, 101 - iPhone, 200 - 갤럭시 탭, 201 - 갤럭시 10.9…
-      # * 1XX -> iOS Device, 2XX -> Android Device
-      devicetype  = (params[:devicetype]  != nil and params[:devicetype]  != "") ? params[:devicetype]       : ""
-      deviceid  = (params[:deviceid]  != nil and params[:deviceid]  != "") ? params[:deviceid]       : ""
-      
-    else
-      userid  = (params[:userid]  != nil and params[:userid]  != "") ? params[:userid]       : ""
-      userpw  = (params[:userpw]  != nil and params[:userpw]  != "") ? params[:userpw]       : ""
-    end
-    
     mbookid = (params[:mbookid] != nil and params[:mbookid] != "") ? params[:mbookid].to_i : ""
-
     
-    begin
-      mbook = Mbook.get(mbookid) != nil ? Mbook.get(mbookid) : nil
+    mbook = Mbook.get(mbookid) != nil ? Mbook.get(mbookid) : nil
+    
+    if mbook == nil
+      result = 6
+    else
+      if isfree == "y"
+        #  devicetype : 100 - iPad, 101 - iPhone, 200 - 갤럭시 탭, 201 - 갤럭시 10.9…
+        # * 1XX -> iOS Device, 2XX -> Android Device
+        devicetype  = (params[:devicetype]  != nil and params[:devicetype]  != "") ? params[:devicetype]       : ""
+        deviceid    = (params[:deviceid]    != nil and params[:deviceid]    != "") ? params[:deviceid]         : ""
       
-      if mbook == nil
-        result = 6
+        if devicetype != "" and deviceid != ""
+          is_first = download_first_by_device(mbookid, deviceid)
+          result = update_dncount_by_device(is_first, mbook, devicetype, deviceid)
+        else
+          result = 8
+        end
       else
-        
-        dncount = Mbookdncount.new()
-        # 공통 ==================================
-        dncount.mbookid     = mbook.id
-        dncount.mbook_title = mbook.title
-        dncount.mbook_price = mbook.price
-        #======================================
+        userid  = (params[:userid]  != nil and params[:userid]  != "") ? params[:userid]       : ""
+        userpw  = (params[:userpw]  != nil and params[:userpw]  != "") ? params[:userpw]       : ""
+      
+        result = user_authentication(userid, userpw)
+      
+        if result == 0
+          is_first = download_first_by_user(mbookid, userid)
+          result = update_dncount_by_user(is_first, mbook, userid)
+        end
+      end
+    end
+  
+    result_xml = make_result_xml(result) 
 
-        # 무료 다운로드
-        if isfree == "y"
-          if Mbookdncount.all(:deviceid => deviceid, :mbookid => mbook.id).count < 1 
-            dncount.free_or_not_fl = true
-            dncount.down_cnt = 1
-            dncount.devicetype_main = devicetype[0]
-            dncount.devicetype_sub = devicetype
-            dncount.deviceid = deviceid
-
-            if dncount.save
-              result = 0
-            else
-              result = -1
-            end
+    # result 값
+    # 0 : OK  // 파일을 보내는 경우에는 xml을 보낼 수 없다. 렌더링을 동시에 두종류 할 수 없다. 
+    # 6 : mBook not exist    
+    # 71: 다운로드 카운트 업데이트 에러 
+    # 72: MPoint 업데이트 에러 
+    # 73: Userbooklist(사용자 구매목록) 업데이트 에러 
+    # 8 : Device 정보 없슴 (device type, device id)
+    # ~ : Error
+    render :xml => result_xml
+  end
+  
+  def download_first_by_user(mbookid, userid)
+    if Mbookdncount.all(:mbookid => mbookid, :dn_user_id => userid).count > 0
+      return false
+    else
+      return true
+    end
+  end  
+  
+  def download_first_by_device(mbookid, deviceid)
+    if Mbookdncount.all(:mbookid => mbookid, :deviceid => deviceid).count > 0
+      return false
+    else
+      return true
+    end
+  end
+  
+    
+  def update_dncount_by_user(is_first, mbook, userid)  
+    if is_first
+      dncount = Mbookdncount.new(:mbookid => mbook.id, :dn_user_id => userid, :userid => mbook.user_id)
+      dncount.mbook_title = mbook.title
+      dncount.mbook_price = mbook.price
+      dncount.free_or_not_fl = false
+      dncount.down_cnt = 1
+      
+      if dncount.save
+        #최초의 다운로드인 경우 MPoint를 차감한다.
+        mpoint_update_result = mpoint_update(mbook, dncount.id)
+        if mpoint_update_result != 72 
+          if userbook_update(mbook, userid) == 0
+            return 0
           else
-            dncount_up = Mbookdncount.first(:deviceid => deviceid, :mbookid => mbook.id)
-            dncount_up.down_cnt += 1
-            if dncount_up.save
-              @dncount_id = dncount_up.id
-              result = 0
-            else
-              result = -1
-            end
+            puts_message "here"
+            dncount.destroy
+            Mpoint.get(mpoint_update_result).destroy
+            return 73
           end
-
-        # 유료 다운로드 isfree == "n"
-        else 
-          result = user_authentication(userid, userpw)
-
-          if result == 0
-            
-            if Mbookdncount.all(:dn_user_id => userid, :mbookid => mbook.id).count < 1 
-              dncount.dn_user_id = userid
-              dncount.down_cnt = 1
-              dncount.free_or_not_fl = false
-              if dncount.save
-                result = 0
-                @dncount_id = dncount.id
-              else
-                result = -1
-              end
-            else
-              dncount_up = Mbookdncount.first(:dn_user_id => userid, :mbookid => mbook.id)
-              dncount_up.down_cnt += 1
-              if dncount_up.save
-                result = 0
-                @dncount_id = dncount.id
-              else
-                result = -1
-              end
-            end
-            
-            
-            #유료다운로드의 경우만 userbook에 저장한다.
-            if Userbook.all(:userid => userid, :mbookid => mbookid).count < 1
-            
-              userbook = Userbook.new()
-              userbook.userid = userid
-              userbook.mbookid = mbookid
-              userbook.mbook_price = mbook.price
-              result = userbook.save ? 0 : 7
-            end
-
-          end #if result == o
-        end  #if isfree = "y"
-      end # if mbook != nil
-      
-      
-      mpoint = Mpoint.new()
-      
-      mpoint.user_id = mbook.user_id
-
-      if @dncount_id != nil
-        mpoint.mbookdncount_id = @dncount_id
+        else
+          dncount.destroy
+          return 72
+        end
+      else
+        return 71
       end
       
+    else
+      dncount = Mbookdncount.first(:mbookid => mbook.id, :dn_user_id => userid)
+      dncount.down_cnt += 1
+      if dncount.save
+        return 0
+      else
+        return 71
+      end
+    end
+    
+  end
+  
+  def update_dncount_by_device(is_first, mbook, devicetype, deviceid)  
+    if is_first
+      dncount = Mbookdncount.new(:mbookid => mbook.id, :userid => mbook.user_id, :deviceid => deviceid)
+      dncount.mbook_title = mbook.title
+      dncount.mbook_price = mbook.price
+      dncount.free_or_not_fl = true
+      dncount.down_cnt = 1
+      dncount.devicetype_main = devicetype[0]
+      dncount.devicetype_sub = devicetype
+      dncount.deviceid = deviceid
+      
+      if dncount.save
+        #최초의 다운로드인 경우 MPoint를 차감한다.
+        if mpoint_update(mbook, dncount.id) != 72
+          return 0
+        else
+          dncount.destroy
+          return 72
+        end
+      else
+        return 71
+      end
+      
+    else
+      dncount = Mbookdncount.first(:mbookid => mbook.id, :deviceid => deviceid)
+      dncount.down_cnt += 1
+      if dncount.save
+        return 0
+      else
+        return 71
+      end
+    end
+  end
+  
+  def mpoint_update(mbook, dncount_id)
+    begin
+      mpoint = Mpoint.new(:user_id => mbook.user_id, :mbook_id => mbook.id, :mbookdncount_id => dncount_id)
+    
       mpoint.account = "M01" #MBook 다운로드 계정
-      
-      
+    
       #관리자가 특정사용자에 대해서 무제한 다운로드 옵션을 허용한 경우 다운로드시 발생하는 포이트 차감이 없음.
       if mbook.unlimited_down_fl == true
         mpoint.point = 0
@@ -262,27 +297,146 @@ EOF
         mpoint.point = MDOWN_POINT
         mpoint.info = "MBook 다운로드"
       end
-      
+    
       if mpoint.save
-        result = 0
+        return mpoint.id
       else
         puts_message mpoint.errors.to_s
-        result = -1
-      end
-      
+        return 72
+      end    
     rescue
-      result = -1
+      return 72
     end
-    
-    result_xml = make_result_xml(result) 
-
-    # result 값
-    # 0 : OK  // 파일을 보내는 경우에는 xml을 보낼 수 없다. 렌더링을 동시에 두종류 할 수 없다. 
-    # 6 : mBook not exist    
-    # 7 : 다운로드 카운트 업데이트 에러 
-    # ~ : Error
-    render :xml => result_xml
   end
+  
+  def userbook_update(mbook, userid)
+    begin
+      userbook = Userbook.new(:userid => userid, :mbookid => mbook.id, :mbook_price => mbook.price)
+      if userbook.save
+        return 0
+      else
+        return 73
+      end
+    rescue
+      return 73
+    end
+  end
+  
+    # begin
+    #   mbook = Mbook.get(mbookid) != nil ? Mbook.get(mbookid) : nil
+    #   
+    #   if mbook == nil
+    #     result = 6
+    #   else
+    # 
+    #     # 무료 다운로드
+    #     if isfree == "y"
+    #       if Mbookdncount.all(:deviceid => deviceid, :mbookid => mbook.id).count < 1 
+    #         dncount = Mbookdncount.new()
+    #         # 공통 ==================================
+    #         dncount.mbookid     = mbook.id
+    #         dncount.mbook_title = mbook.title
+    #         dncount.mbook_price = mbook.price
+    #         #======================================
+    #         
+    #         dncount.free_or_not_fl = true
+    #         dncount.down_cnt = 1
+    #         dncount.devicetype_main = devicetype[0]
+    #         dncount.devicetype_sub = devicetype
+    #         dncount.deviceid = deviceid
+    # 
+    #         if dncount.save
+    #           @dncount_id = dncount_up.id
+    #           result = 0
+    #         else
+    #           result = -1
+    #         end
+    #       else
+    #         dncount_up = Mbookdncount.first(:deviceid => deviceid, :mbookid => mbook.id)
+    #         dncount_up.down_cnt += 1
+    #         if dncount_up.save
+    #           @dncount_id = dncount_up.id
+    #           result = 0
+    #         else
+    #           result = -1
+    #         end
+    #       end
+    # 
+    #     # 유료 다운로드 isfree == "n"
+    #     else 
+    #       result = user_authentication(userid, userpw)
+    # 
+    #       if result == 0
+    #         
+    #         if Mbookdncount.all(:dn_user_id => userid, :mbookid => mbook.id).count < 1 
+    #           dncount.dn_user_id = userid
+    #           dncount.down_cnt = 1
+    #           dncount.free_or_not_fl = false
+    #           if dncount.save
+    #             result = 0
+    #             @dncount_id = dncount.id
+    #           else
+    #             result = -1
+    #           end
+    #         else
+    #           dncount_up = Mbookdncount.first(:dn_user_id => userid, :mbookid => mbook.id)
+    #           dncount_up.down_cnt += 1
+    #           if dncount_up.save
+    #             result = 0
+    #             @dncount_id = dncount.id
+    #           else
+    #             result = -1
+    #           end
+    #         end
+    #         
+    #         
+    #         #유료다운로드의 경우만 userbook에 저장한다.
+    #         if Userbook.all(:userid => userid, :mbookid => mbookid).count < 1
+    #         
+    #           userbook = Userbook.new()
+    #           userbook.userid = userid
+    #           userbook.mbookid = mbookid
+    #           userbook.mbook_price = mbook.price
+    #           result = userbook.save ? 0 : 7
+    #         end
+    # 
+    #       end #if result == o
+    #     end  #if isfree = "y"
+    #   end # if mbook != nil
+    #   
+    #   
+    #   mpoint = Mpoint.new()
+    #   
+    #   mpoint.user_id = mbook.user_id
+    # 
+    #   if @dncount_id != nil
+    #     mpoint.mbookdncount_id = @dncount_id
+    #   end
+    #   
+    #   mpoint.account = "M01" #MBook 다운로드 계정
+    #   
+    #   
+    #   #관리자가 특정사용자에 대해서 무제한 다운로드 옵션을 허용한 경우 다운로드시 발생하는 포이트 차감이 없음.
+    #   if mbook.unlimited_down_fl == true
+    #     mpoint.point = 0
+    #     mpoint.info = "무제한 다운로드로 포인트차감 0"
+    #   else
+    #     mpoint.point = MDOWN_POINT
+    #     mpoint.info = "MBook 다운로드"
+    #   end
+    #   
+    #   if mpoint.save
+    #     result = 0
+    #   else
+    #     puts_message mpoint.errors.to_s
+    #     result = -1
+    #   end
+    #   
+    # rescue
+    #   result = -1
+    # end
+    
+    
   
   def mbookinfo
     begin
