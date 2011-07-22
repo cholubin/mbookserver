@@ -311,132 +311,21 @@ EOF
   
   def userbook_update(mbook, userid)
     begin
-      userbook = Userbook.new(:userid => userid, :mbookid => mbook.id, :mbook_price => mbook.price)
-      if userbook.save
-        return 0
+      if Userbook.all(:userid => userid, :mbookid => mbook.id).count < 1
+      
+        userbook = Userbook.new(:userid => userid, :mbookid => mbook.id, :mbook_price => mbook.price)
+        if userbook.save
+          return 0
+        else
+          return 73
+        end
       else
-        return 73
+        return 0
       end
     rescue
       return 73
     end
   end
-  
-    # begin
-    #   mbook = Mbook.get(mbookid) != nil ? Mbook.get(mbookid) : nil
-    #   
-    #   if mbook == nil
-    #     result = 6
-    #   else
-    # 
-    #     # 무료 다운로드
-    #     if isfree == "y"
-    #       if Mbookdncount.all(:deviceid => deviceid, :mbookid => mbook.id).count < 1 
-    #         dncount = Mbookdncount.new()
-    #         # 공통 ==================================
-    #         dncount.mbookid     = mbook.id
-    #         dncount.mbook_title = mbook.title
-    #         dncount.mbook_price = mbook.price
-    #         #======================================
-    #         
-    #         dncount.free_or_not_fl = true
-    #         dncount.down_cnt = 1
-    #         dncount.devicetype_main = devicetype[0]
-    #         dncount.devicetype_sub = devicetype
-    #         dncount.deviceid = deviceid
-    # 
-    #         if dncount.save
-    #           @dncount_id = dncount_up.id
-    #           result = 0
-    #         else
-    #           result = -1
-    #         end
-    #       else
-    #         dncount_up = Mbookdncount.first(:deviceid => deviceid, :mbookid => mbook.id)
-    #         dncount_up.down_cnt += 1
-    #         if dncount_up.save
-    #           @dncount_id = dncount_up.id
-    #           result = 0
-    #         else
-    #           result = -1
-    #         end
-    #       end
-    # 
-    #     # 유료 다운로드 isfree == "n"
-    #     else 
-    #       result = user_authentication(userid, userpw)
-    # 
-    #       if result == 0
-    #         
-    #         if Mbookdncount.all(:dn_user_id => userid, :mbookid => mbook.id).count < 1 
-    #           dncount.dn_user_id = userid
-    #           dncount.down_cnt = 1
-    #           dncount.free_or_not_fl = false
-    #           if dncount.save
-    #             result = 0
-    #             @dncount_id = dncount.id
-    #           else
-    #             result = -1
-    #           end
-    #         else
-    #           dncount_up = Mbookdncount.first(:dn_user_id => userid, :mbookid => mbook.id)
-    #           dncount_up.down_cnt += 1
-    #           if dncount_up.save
-    #             result = 0
-    #             @dncount_id = dncount.id
-    #           else
-    #             result = -1
-    #           end
-    #         end
-    #         
-    #         
-    #         #유료다운로드의 경우만 userbook에 저장한다.
-    #         if Userbook.all(:userid => userid, :mbookid => mbookid).count < 1
-    #         
-    #           userbook = Userbook.new()
-    #           userbook.userid = userid
-    #           userbook.mbookid = mbookid
-    #           userbook.mbook_price = mbook.price
-    #           result = userbook.save ? 0 : 7
-    #         end
-    # 
-    #       end #if result == o
-    #     end  #if isfree = "y"
-    #   end # if mbook != nil
-    #   
-    #   
-    #   mpoint = Mpoint.new()
-    #   
-    #   mpoint.user_id = mbook.user_id
-    # 
-    #   if @dncount_id != nil
-    #     mpoint.mbookdncount_id = @dncount_id
-    #   end
-    #   
-    #   mpoint.account = "M01" #MBook 다운로드 계정
-    #   
-    #   
-    #   #관리자가 특정사용자에 대해서 무제한 다운로드 옵션을 허용한 경우 다운로드시 발생하는 포이트 차감이 없음.
-    #   if mbook.unlimited_down_fl == true
-    #     mpoint.point = 0
-    #     mpoint.info = "무제한 다운로드로 포인트차감 0"
-    #   else
-    #     mpoint.point = MDOWN_POINT
-    #     mpoint.info = "MBook 다운로드"
-    #   end
-    #   
-    #   if mpoint.save
-    #     result = 0
-    #   else
-    #     puts_message mpoint.errors.to_s
-    #     result = -1
-    #   end
-    #   
-    # rescue
-    #   result = -1
-    # end
-    
-    
   
   def mbookinfo
     begin

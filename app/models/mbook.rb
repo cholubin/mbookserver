@@ -27,8 +27,8 @@ class Mbook
   property :pages,              String
   property :issue_date,         String
   property :description,        Text
-  property :price,              String
-  property :price_android,      String
+  property :price,              String, :default => "0"
+  property :price_android,      String, :default => "0"
   property :status,             String, :default => "대기"  # (status; "대기", "승인완료", "승인거부", "승인대기", "삭제대기")
   property :cancel_reason,      Text
   property :coverimage_name,    String
