@@ -10,44 +10,48 @@
 		<td>
 			<table class="box_pop_user_input">
 				<tr class="name">
-					<td class="input_name">이름</td>
+					<td style="text-align:left"><img src="/images/pop/input_pink.png"><b>이름</b></td>
 					<td class="input_data"><%= @user.name %></td>
 				</tr>
 				<tr class="id">
-					<td class="input_name">아이디</td>
+					<td style="text-align:left"><img src="/images/pop/input_pink.png"><b>아이디</b></td>
 					<td class="input_data"><%= @user.userid %></td>
 				</tr>
 				<tr class="pw">
-					<td class="input_name">비밀번호</td>
-					<td class="input_data"><input type="button" value="비밀번호 초기화" id="btn_password_init" user_id="<%=  @user.id.to_s %>"></td>
+					<td style="text-align:left"><img src="/images/pop/input_pink.png"><b>비밀번호</b></td>
+					<td class="input_data"><input type="button" value="비밀번호 초기화" id="btn_password_init" user_id="<%=  @user.id.to_s %>" style="cursor:pointer;"></td>
 				</tr>
 				<tr class="email">
-					<td class="input_name">이메일</td>
+					<td style="text-align:left"><img src="/images/pop/input_pink.png"><b>이메일</b></td>
 					<td class="input_data">
 						<%= @user.email %>
 					</td>
 				</tr>
 				<tr class="email">
-					<td class="input_name">이메일</td>
+					<td style="text-align:left"></td>
 					<td class="input_data">
-						<input type="button" value="<%= @user.auth_fl ? "인증취소":"인증" %>" id="btn_auth" val_str_post="<%= @user.auth_fl ? "인증":"인증취소" %>" user_id="<%=  @user.id.to_s %>">
+						<input type="button" value="<%= @user.auth_fl ? "인증취소":"인증" %>" id="btn_auth" val_str_post="<%= @user.auth_fl ? "인증":"인증취소" %>" user_id="<%=  @user.id.to_s %>" style="cursor:pointer;">
 					</td>
 				</tr>
 				<tr class="email">
-					<td class="input_name">이메일</td>
+					<td style="text-align:left"></td>
 					<td class="input_data">
-						<input type="button" value="인증메일 재발송" id="btn_resend" user_id="<%=  @user.id.to_s %>" user_email="<%= @user.email %>" >
+						<input type="button" value="인증메일 재발송" id="btn_resend" user_id="<%=  @user.id.to_s %>" user_email="<%= @user.email %>" style="cursor:pointer;">
 						<span id="loading_image"></span>
 					</td>
 				</tr>
 				
 				<tr class="publisher">
-					<td class="input_name">필명/출판사명</td>
+					<td style="text-align:left"><img src="/images/pop/input_pink.png"><b>필명/출판사명</b></td>
 					<td class="input_data"><%= @user.publisher %></td>
 				</tr>
 				<tr class="servicetype">
-					<td class="input_name">서비스 형태</td>
+					<td style="text-align:left"><img src="/images/pop/input_pink.png"><b>서비스 형태</b></td>
 					<td class="input_data"><%= @user.servicetype %></td>
+				</tr>
+				<tr class="servicetype">
+					<td style="text-align:left"><img src="/images/pop/input_pink.png"><b>가입일자</b></td>
+					<td class="input_data"><%= @user.created_at.strftime('%Y-%m-%d') %></td>
 				</tr>
 								
 			</table>

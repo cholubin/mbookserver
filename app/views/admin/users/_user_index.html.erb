@@ -77,13 +77,14 @@
 		<% form_tag "/admin/users?type=#{params[:type]}&auth=#{params[:auth]}", :method => 'get' do %>
 			<input type="hidden" name="type" value="<%= params[:type] %>">
 			<input type="hidden" name="auth" value="<%= params[:auth] %>">
-			<img src="/images/input_title/input_title_search.png" alt="조건별 검색">
-			<select name="keyword" id="keyword">
-				<option value="all">전체</option>
-				<option value="userid">아이디</option>
-				<option value="name">이름</option>
+			<img src="/images/input_title/input_title_search.png" alt="조건별 검색" >
+			<select name="keyword" id="keyword" style="vertical-align:middle;">
+				<option value="all" <%= "selected" if params[:keyword] == "all" %>>전체</option>
+				<option value="userid" <%= "selected" if params[:keyword] == "userid" %>>아이디</option>
+				<option value="name" <%= "selected" if params[:keyword] == "name" %>>이름</option>
+				<option value="email" <%= "selected" if params[:keyword] == "email" %>>이메일</option>
 			</select>
-	    	<input type="text" name="search" id="search" value="">
+	    	<input type="text" name="search" id="search" value="" style="vertical-align:middle;">
 	    	<input type="image" src="/images/bt/bt_search.png" alt="검색" style="cursor:pointer;vertical-align:middle;"></a>
 		<%end %>
 	</div>

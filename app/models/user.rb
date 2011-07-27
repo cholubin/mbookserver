@@ -61,8 +61,10 @@ class User
       User.all(:userid.like => "%#{search}%").page :page => page, :per_page => 12
     elsif keyword == "name"
       User.all(:name.like => "%#{search}%").page :page => page, :per_page => 12
+    elsif keyword == "email"
+      User.all(:email.like => "%#{search}%").page :page => page, :per_page => 12
     else
-      (User.all(:name.like => "%#{search}%") | User.all(:userid.like => "%#{search}%")).page :page => page, :per_page => 12
+      (User.all(:name.like => "%#{search}%") | User.all(:userid.like => "%#{search}%") | User.all(:email.like => "%#{search}%")).page :page => page, :per_page => 12
     end
   end
 
