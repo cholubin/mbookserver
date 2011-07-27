@@ -128,4 +128,61 @@ class Admin::UsersController < ApplicationController
       render :text => "fail"
     end
   end
+  
+  def auth_user_email
+    user_id = (params[:user_id] != nil and params[:user_id] != "") ? params[:user_id].to_i : nil
+    begin
+      if user_id != nil
+        user = User.get(user_id)
+        user.auth_fl = user.auth_fl ? false:true
+        if user.save
+          render :text => "success"
+        else
+          render :text => "fail"
+        end
+      else
+        render :text => "fail"
+      end
+    rescue
+      render :text => "fail"
+    end
+  end
+
+  def auth_email_resend
+    user_id = (params[:user_id] != nil and params[:user_id] != "") ? params[:user_id].to_i : nil
+    begin
+      if user_id != nil
+        user = User.get(user_id)
+        
+        if emailing(user_id, user.email, user.auth_code)
+          puts_message "auth email resended!"
+          render :text => "success"
+        else
+          render :text => "fail"
+        end
+      else
+        render :text => "fail"
+      end
+    rescue
+      render :text => "fail"
+    end
+  end
+
+  def emailing(userid, email, auth_code)
+    begin
+      Emailer.deliver_email(
+        :recipients => email,
+        :subject => "[엠북스토어] 고객님, 인증메일 입니다.",
+        :from => "mbookserver@gmail.com<엠북스토어>",
+        :body => "<html><head><body><a href='#{HOSTING_URL}auth.htm?userid=#{userid}&code=#{auth_code}'>여기를 클릭하시면 인증이 완료됩니다!~</a></body></head></html>"
+      )
+      return true
+    
+    rescue  
+      return false
+    end
+    
+    
+  end
+  
 end

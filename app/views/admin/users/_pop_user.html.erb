@@ -23,8 +23,24 @@
 				</tr>
 				<tr class="email">
 					<td class="input_name">이메일</td>
-					<td class="input_data"><%= @user.email %></td>
+					<td class="input_data">
+						<%= @user.email %>
+					</td>
 				</tr>
+				<tr class="email">
+					<td class="input_name">이메일</td>
+					<td class="input_data">
+						<input type="button" value="<%= @user.auth_fl ? "인증취소":"인증" %>" id="btn_auth" val_str_post="<%= @user.auth_fl ? "인증":"인증취소" %>" user_id="<%=  @user.id.to_s %>">
+					</td>
+				</tr>
+				<tr class="email">
+					<td class="input_name">이메일</td>
+					<td class="input_data">
+						<input type="button" value="인증메일 재발송" id="btn_resend" user_id="<%=  @user.id.to_s %>" user_email="<%= @user.email %>" >
+						<span id="loading_image"></span>
+					</td>
+				</tr>
+				
 				<tr class="publisher">
 					<td class="input_name">필명/출판사명</td>
 					<td class="input_data"><%= @user.publisher %></td>
@@ -37,12 +53,6 @@
 			</table>
 		</td>
 	</tr>
-	<!-- <tr class="bt">
-		<td>
-			<a href=""><img src="/images/bt/bt_upload_re_ok.png" alt="수정완료"></a>
-			<a href=""><img src="/images/bt/bt_cancel.png" alt="취소"></a>
-		</td>
-	</tr> -->
 	<tr class="error">
 		<td>
 		<!-- <p class="error"><img src="/images/icon_error.png" alt="error"> 이름을 입력하세요.</p> -->
@@ -73,4 +83,61 @@ $('#btn_password_init').live("click", function(){
 		return false;
 	}
 })
+
+$('#btn_auth').live("click", function(){
+	var $user_id = $('#btn_auth').attr("user_id");
+	var $val_str = $('#btn_auth').val();
+	var $val_str_post = $('#btn_auth').attr("val_str_post");
+	
+	if(confirm("해당 사용자를 "+$val_str+" 하시겠습니까?")){
+		$.ajax({
+			data:'user_id='+ $user_id, 
+			dataType:'script', 
+			type:'post', 
+			url:'/admin/users/auth_user_email',
+			success: function(request){
+				if ( request == "success"){
+					$('#btn_auth').val($val_str_post);
+					$('#btn_auth').attr("val_str_post", $val_str);
+					alert($val_str +" 되었습니다!");
+				}else{
+					alert("인증 진행중 오류가 발생했습니다! 관리자에게 문의해 주세요.");
+				}
+				
+			}
+		});
+	}else{
+		return false;
+	}
+})
+
+$('#btn_resend').live("click", function(){
+	var $user_id = $('#btn_resend').attr("user_id");
+	var $user_email = $('#btn_resend').attr("user_email");
+	
+	if(confirm("인증메일을 재발송하시겠습니까?")){
+		$('#btn_resend').val("발송중");
+		$('#loading_image').empty().html("<img src='/images/ajax_load.gif'>");		
+		$.ajax({
+			data:'user_id='+ $user_id, 
+			dataType:'script', 
+			type:'post', 
+			url:'/admin/users/auth_email_resend',
+			success: function(request){
+				if ( request == "success"){
+					$('#loading_image').empty();
+					$('#btn_resend').val("발송완료");
+					alert("인증메일이 발송되었습니다!");
+					$('#btn_resend').val("인증메일 재발송");
+				}else{
+					alert("인증메일 발송중 오류가 발생했습니다! 관리자에게 문의해 주세요.");
+				}
+				
+			}
+		});
+	}else{
+		return false;
+	}
+})
+
 </script>

@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class UsersController < ApplicationController
-  
   # GET /users
   # GET /users.xml
   def show
@@ -49,22 +48,13 @@ class UsersController < ApplicationController
       if not User.first(:userid => userid).nil? # 아이디 중복인 경우 ========================== 
         render 'user'    
       else
-        @user = User.new
-        @user.userid = userid
-        @user.name = name
-        @user.password = password
-        @user.email = email
-        @user.type = "writer"
-        @user.servicetype = servicetype
+        @user = User.new(:userid => userid, :name => name, :password => password, :email => email, :type => "writer", :servicetype => servicetype)
         
         auth_code = @user.make_authcode
         @user.auth_code = auth_code
         
         
         if emailing(userid, email, auth_code) and @user.save
-          # render :update do |page|
-          #    page.replace_html 'message', :partial => 'user_join_finished', :object => @message
-          # end
           render :text => "success"
         else
           render :text => "fail"
@@ -83,7 +73,7 @@ class UsersController < ApplicationController
   
   
   def emailing(userid, email, auth_code)
-    begin
+    
       Emailer.deliver_email(
         :recipients => email,
         :subject => "[엠북스토어] 고객님, 인증메일 입니다.",
@@ -91,10 +81,7 @@ class UsersController < ApplicationController
         :body => "<html><head><body><a href='#{HOSTING_URL}auth.htm?userid=#{userid}&code=#{auth_code}'>여기를 클릭하시면 인증이 완료됩니다!~</a></body></head></html>"
       )
       
-      return true
-    rescue
-      return false
-    end
+      # return true
     
   end
   # GET /users/1/edit
@@ -126,7 +113,7 @@ class UsersController < ApplicationController
       if params[:password] != ""
 
         @user.update_password(params[:password])
-        @user.email = params[:email]
+        # @user.email = params[:email]
         @user.publisher = params[:publisher]
         
         if @user.save
@@ -138,7 +125,7 @@ class UsersController < ApplicationController
           render 'user'
         end
       else  #메일만 수정하는 경우       
-        @user.email = params[:email]
+        # @user.email = params[:email]
         @user.publisher = params[:publisher]
 
         if @user.save
@@ -146,7 +133,7 @@ class UsersController < ApplicationController
           @board = "mbook"
           @section = "index"
           
-          redirect_to '/mbook'
+          redirect_to '/mbooks'
         else
           render 'user'
         end 
@@ -224,7 +211,4 @@ class UsersController < ApplicationController
      end   
 
   end
-
-    
-    
 end
