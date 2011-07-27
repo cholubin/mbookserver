@@ -116,6 +116,7 @@ $('#btn_resend').live("click", function(){
 	var $user_email = $('#btn_resend').attr("user_email");
 	
 	if(confirm("인증메일을 재발송하시겠습니까?")){
+		$('#btn_resend').attr("disabled", true);
 		$('#btn_resend').val("발송중");
 		$('#loading_image').empty().html("<img src='/images/ajax_load.gif'>");		
 		$.ajax({
@@ -128,6 +129,7 @@ $('#btn_resend').live("click", function(){
 					$('#loading_image').empty();
 					$('#btn_resend').val("발송완료");
 					alert("인증메일이 발송되었습니다!");
+					$('#btn_resend').attr("disabled", false);
 					$('#btn_resend').val("인증메일 재발송");
 				}else{
 					alert("인증메일 발송중 오류가 발생했습니다! 관리자에게 문의해 주세요.");

@@ -57,7 +57,13 @@ class User
   
   
   def self.search_admin(keyword, search, page)
+    if keyword == "userid"
+      User.all(:userid.like => "%#{search}%").page :page => page, :per_page => 12
+    elsif keyword == "name"
       User.all(:name.like => "%#{search}%").page :page => page, :per_page => 12
+    else
+      (User.all(:name.like => "%#{search}%") | User.all(:userid.like => "%#{search}%")).page :page => page, :per_page => 12
+    end
   end
 
   
