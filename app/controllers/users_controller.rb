@@ -54,7 +54,7 @@ class UsersController < ApplicationController
         @user.auth_code = auth_code
         
         
-        if emailing(userid, email, auth_code) and @user.save
+        if emailing(userid, email, auth_code, @user.name) and @user.save
           render :text => "success"
         else
           render :text => "fail"
@@ -72,16 +72,19 @@ class UsersController < ApplicationController
   end
   
   
-  def emailing(userid, email, auth_code)
-    
+  def emailing(userid, email, auth_code, user_name)
+    begin
       Emailer.deliver_email(
         :recipients => email,
-        :subject => "[엠북스토어] 고객님, 인증메일 입니다.",
-        :from => "mbookserver@gmail.com",
+        :subject => "[엠북스토어] #{user_name} 고객님, 앰북스토어 인증메일 입니다.",
+        :from => "앰북스토어<mbookserver@gmail.com>",
         :body => "<html><head><body><a href='#{HOSTING_URL}auth.htm?userid=#{userid}&code=#{auth_code}'>여기를 클릭하시면 인증이 완료됩니다!~</a></body></head></html>"
       )
-      
-      # return true
+    rescue
+      return false
+    end  
+    
+    return true  
     
   end
   # GET /users/1/edit

@@ -149,7 +149,7 @@ class Admin::UsersController < ApplicationController
       if user_id != nil
         user = User.get(user_id)
         
-        if emailing(user_id, user.email, user.auth_code)
+        if emailing(user_id, user.email, user.auth_code, user.name)
           puts_message "auth email resended!"
           render :text => "success"
         else
@@ -163,12 +163,12 @@ class Admin::UsersController < ApplicationController
     end
   end
 
-  def emailing(userid, email, auth_code)
+  def emailing(userid, email, auth_code, user_name)
     begin
       Emailer.deliver_email(
         :recipients => email,
-        :subject => "[엠북스토어] 고객님, 인증메일 입니다.",
-        :from => "mbookserver@gmail.com<엠북스토어>",
+        :subject => "[엠북스토어] #{user_name} 고객님, 앰북스토어 인증메일 입니다.",
+        :from => "앰북스토어<mbookserver@gmail.com>",
         :body => "<html><head><body><a href='#{HOSTING_URL}auth.htm?userid=#{userid}&code=#{auth_code}'>여기를 클릭하시면 인증이 완료됩니다!~</a></body></head></html>"
       )
       return true
