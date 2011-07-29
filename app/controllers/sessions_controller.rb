@@ -96,4 +96,15 @@ class SessionsController < ApplicationController
       render :text => "fail"
     end
   end
+  
+  def check_email_duplication
+    email = params[:email]
+    
+    if User.first(:email => email) != nil
+      render :text => "success"
+    else
+      render :text => "fail"
+    end
+  end
+  
 end

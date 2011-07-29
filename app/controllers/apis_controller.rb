@@ -726,42 +726,51 @@ EOF
   
   def authentication
     auth_code = (params[:code] != nil and params[:code] != "") ? params[:code] : ""
-    userid = (params[:userid] != nil and params[:userid] != "") ? params[:userid] : ""
+    userid = (params[:userid] != nil and params[:userid] != "") ? params[:userid].to_i : ""
     
     begin
       if auth_code != nil and userid != ""
-        @user = User.first(:userid => userid)
-        if @user.auth_fl == false
-          if @user.auth_code == auth_code
-            @user.auth_fl = true
-            if @user.save
-              result = 0
+        @user = User.get(userid)
+        
+        if @user != nil
+          if @user.auth_fl == false
+            if @user.auth_code == auth_code
+              @user.auth_fl = true
+              if @user.save
+                result = 0
+              else
+                result = 2
+              end
             else
-              result = 2
+              result = 1
             end
           else
-            result = 1
+            #이미 인증완료!
+            result = 0
           end
         else
-          #이미 인증완료!
-          result = 0
+          #사용자 정보 없음
+          reuslt = -11
         end
       else
-        result = -1
+        result = 3
       end
     rescue
       result = -1
     end
     
       # result값 
-      # 0 : 인증완료 
-      # 1 : 인증실패 
+      # 0 : 인증완료 또는 이미 인증완료 
+      # -1 : 인증실패 
       # 2 : 인증정보 업데이트 에러 
-      # ~ : Error
+      # 3 : 이미 인증 
       puts_message "인증결과::::" + result.to_s
       if result == 0 
         render :text => "인증성공"
+      elsif result == -11
+        render :text => "인증실패:사용자 정보 없음"
       else
         render :text => "인증실패"
-      end  end
+      end 
+    end
 end

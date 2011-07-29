@@ -143,10 +143,30 @@ $('#email').live("blur", function(){
 	    $('#email').css("background-color","yellow");
 		$('#email_check_string').html("※ 정확한 이메일을 입력하세요. <br>(해당 이메일주소로 승인코드가 발송됩니다.)");
 		$('#email_check_fl').val("false")
+		
+		// email 중복체크 
 	}else{
 		$('#email').css("background-color","");
 		$('#email_check_string').html("");
 		$('#email_check_fl').val("true")
+		
+		$.ajax({
+			data:'email='+ $('#email').val(), 
+			dataType:'script', 
+			type:'post', 
+			url:'/sessions/check_email_duplication',
+			success: function(request){
+				if(request == "fail"){
+					$('#email').css("background-color","");
+					$('#email_check_string').html("");
+					$('#email_check_fl').val("true")
+				}else if(request == "success"){
+				    $('#email').css("background-color","yellow");
+					$('#email_check_string').html("※ 이미 등록돈 이메일 주소입니다!");
+					$('#email_check_fl').val("false")
+				}
+			}
+		});
 	}
 	
 	return false;

@@ -176,8 +176,23 @@ class Admin::UsersController < ApplicationController
     rescue  
       return false
     end
+  end
+  
+  def modify_user_email
+    email = (params[:email] != nil and params[:email] != "") ? params[:email] : nil
+    user_id = (params[:user_id] != nil and params[:user_id] != "") ? params[:user_id].to_i : nil
     
-    
+    if email != nil and user_id != nil
+      user = User.get(user_id)
+      user.email = email
+      if user.save
+        render :text => "success"
+      else
+        render :text => "fail"
+      end
+    else
+      render :text => "fail"
+    end
   end
   
 end
