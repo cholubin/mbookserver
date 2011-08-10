@@ -21,10 +21,10 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :subcategories, :categories
   map.resources :categories, :has_many => :subcategories
   map.resources :users
-  map.resources :mbooks
+  map.resources :mbooks, :mpoints
   
   map.namespace :admin do |admin|
-      admin.resources :users, :temps, :categories, :subcategories, :myadmins, :mbooks
+      admin.resources :users, :temps, :categories, :subcategories, :myadmins, :mbooks, :mpoints
   end 
   
   

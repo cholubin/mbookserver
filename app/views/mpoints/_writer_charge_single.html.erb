@@ -1,0 +1,72 @@
+<div id="content_header" class="point">
+	<h2 class="sub_title">판매/포인트/HDD</h2>
+</div>
+<div id="content" class="point_writer_charge_point">
+	<!-- Sub Menu -->
+	<%= render :partial => "/mpoints/pagetype", :object => @page_type %>
+	<!-- Page -->
+	<div id="page">
+		<!-- Page User -->
+		<table id="page_user">
+			<tr>
+				<td id="page_user_information"><b class="page_user_information_name"><%= current_user.name %></b> 님은 <b class="page_user_information_type">Single Category</b> 사용자입니다.</td>
+				<td id="page_date">■ 기준일 : <%= Time.now.strftime('%Y년 %m월 %d일') %></td>
+			</tr>
+		</table>
+		<!-- Table Charge Point -->
+		<div id="table_charge_point">
+			<!-- Table Charge Point Title -->
+			<table id="table_charge_point_title" class="table_title">
+				<tr>
+					<td><img src="/images/icon_point_orange.png"> 포인트 충전</td>
+				</tr>
+			</table>
+			<!-- Table Charge Point Input -->
+			<table id="table_charge_point_user_input" class="table_input">
+				<tr>
+					<td rowspan="2" class="table_input_title">충전 요청액</td>
+					<td>
+						■ POINT 추가 : 
+						<input type="button" name="10000" value="1만">
+						<input type="button" name="50000" value="5만">
+						<input type="button" name="100000" value="10만">
+					</td>
+					<td rowspan="3" class="table_input_title">
+						<input type="button" name="point_charge_bt" value="충전하기">
+					</td>
+				</tr>
+				<tr>
+					<td>
+						■ POINT 충전액 : 
+						<input type="text" disabled="disabled" value="직접 입력 불가"> p
+						<input type="button" name="point_delete" value="정정">
+					</td>
+				</tr>
+				<tr>
+					<td class="table_input_title">결제 방법 선택</td>
+					<td>
+						<input type="radio" name="pay" value="">실시간 계좌 이체
+						<input type="radio" name="pay" value="">신용카드
+					</td>
+				</tr>
+			</table>
+			<!-- Table Charge Point Info -->
+			<table id="table_charge_point_info" class="table_info">
+				<tr>
+					<td>
+						<pre>
+※ 단위 : 1point = 1won
+※ 결제 방법 안내
+1. 실시간 계좌이체가 가능한 은행 종류
+1) 국민은행   2) 우리은행   3) 신한은행   4) 기업은행  ...
+2. 신용카드 결제 종류
+1) 국민카드   2) 우리카드   3) 신한카드   4) 기업카드  ...
+						</pre>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<!-- End Table Charge Point -->
+	</div>	
+	<!-- End Page -->
+</div>

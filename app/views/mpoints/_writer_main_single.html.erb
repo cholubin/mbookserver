@@ -1,0 +1,673 @@
+<div id="content_header" class="point">
+	<h2 class="sub_title">판매/포인트/HDD</h2>
+</div>
+<div id="content" class="point_writer_main_category_magazine">
+	<!-- Sub Menu -->
+	<%= render :partial => "/mpoints/pagetype", :object => @page_type %>
+	<!-- Page -->
+	<div id="page">
+		<!-- Page User -->
+		<table id="page_user">
+			<tr>
+				<td id="page_user_information"><b class="page_user_information_name"><%= current_user.name %></b> 님은 <b class="page_user_information_type">Single Category</b> 사용자입니다.</td>
+				<td id="page_date">■ 기준일 : <%= Time.now.strftime('%Y년 %m월 %d일') %></td>
+			</tr>
+		</table>
+		<!-- thumbnail -->
+		<table id="thumbnail_category_magazine_total" class="thumbnail_total">
+			<tr>
+				<td id="thumbnail_sales">
+					<table id="thumbnail_sales_table">
+						<tr class="thumbnail_title">
+							<td colspan="3"><b><%= Time.now.strftime('%Y') %></b>년 <b><%= Time.now.strftime('%m') %></b>월의 <b>MBook 판매</b> 현황</td>
+						</tr>
+						<tr>
+							<td rowspan="2" class="thumbnail_download_condition">제한</td>
+							<td>무료 MBook 다운로드 수</td>
+							<td class="thumbnail_num"><b><%= @selling_status["1"] %></b> 건</td>
+						</tr>
+						<tr>
+							<td>유료 MBook 다운로드 수</td>
+							<td class="thumbnail_num"><b><%= @selling_status["2"] %></b> 건</td>
+						</tr>
+						<tr>
+							<td rowspan="2" class="thumbnail_download_condition">무제한</td>
+							<td>무료 MBook 다운로드 수</td>
+							<td class="thumbnail_num"><b><%= @selling_status["3"] %></b> 건</td>
+						</tr>
+						<tr>
+							<td>유료 MBook 다운로드 수</td>
+							<td class="thumbnail_num"><b><%= @selling_status["4"] %></b> 건</td>
+						</tr>
+						<tr class="thumbnail_sub_total">
+							<td colspan="2">다운로드 수 합계</td>
+							<td class="thumbnail_num"><b><%= @selling_status["5"] %></b> 건</td>
+						</tr>
+						<tr>
+							<td rowspan="2" class="thumbnail_download_condition">제한</td>
+							<td>무료 MBook 다운로드 차감</td>
+							<td class="thumbnail_num"><b>- <%= @selling_status["6"] %></b> p</td>
+						</tr>
+						<tr>
+							<td>유료 MBook 다운로드 차감</td>
+							<td class="thumbnail_num"><b>- <%= @selling_status["7"] %></b> p</td>
+						</tr>
+						<tr class="thumbnail_sub_total">
+							<td colspan="2">다운로드 차감 포인트 합계</td>
+							<td class="thumbnail_num"><b>- <%= @selling_status["8"] %></b> p</td>
+						</tr>
+					</table>
+				</td>
+				<td id="thumbnail_point">
+					<table id="thumbnail_point_table">
+						<tr class="thumbnail_title">
+							<td colspan="2"><b><%= Time.now.strftime('%Y') %></b>년 <b><%= Time.now.strftime('%m') %></b>월의 <b>포인트</b> 현황</td>
+						</tr>
+						<tr>
+							<td>이월된 포인트</td>
+							<td class="thumbnail_num"><b><%= @point_status["1"] %></b> p</td>
+						</tr>
+						<tr>
+							<td>충전 포인트</td>
+							<td class="thumbnail_num"><b><%= @point_status["2"] %></b> p</td>
+						</tr>
+						<tr>
+							<td>보너스 포인트</td>
+							<td class="thumbnail_num"><b><%= @point_status["3"] %></b> p</td>
+						</tr>
+						<tr>
+							<td>마이너스 포인트</td>
+							<td class="thumbnail_num"><b>- <%= @point_status["4"] %></b> p</td>
+						</tr>
+						<tr>
+							<td>MBook 다운로드 차감</td>
+							<td class="thumbnail_num"><b>- <%= @point_status["5"] %></b> p</td>
+						</tr>
+						<tr class="thumbnail_sub_total">
+							<td>잔여 포인트</td>
+							<td class="thumbnail_num"><b><%= @point_status["6"] %></b> p</td>
+						</tr>
+					</table>
+				</td>
+				<td id="thumbnail_hdd">
+					<table id="thumbnail_hdd_table">
+						<tr class="thumbnail_title">
+							<td>전체 <b>HDD</b> 현황</td>
+							<td class="thumbnail_num">
+								<input type="button" name="thumbnail_hdd_detail" value="상세조회">
+							</td>
+						</tr>
+						<tr>
+							<td>등록된 MBook 수</td>
+							<td class="thumbnail_num"><b><%= @hdd_status["mbook_cnt"] %></b> 건</td>
+						</tr>
+						<tr>
+							<td>전체 HDD</td>
+							<td class="thumbnail_num"><b><%= @hdd_status["hdd_max"] %></b> MB</td>
+						</tr>
+						<tr>
+							<td>사용중인 HDD 합계</td>
+							<td class="thumbnail_num"><b>- <%= @hdd_status["mbook_filesize"] %></b> MB</td>
+						</tr>
+						<tr class="thumbnail_sub_total">
+							<td>잔여 HDD</td>
+							<td class="thumbnail_num"><b><%= @hdd_status["hdd_left"] %></b> MB</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+		<!-- End thumbnail -->
+		<!-- Table Sales -->
+		<div id="table_sales">
+			<!-- Table Sales Title -->
+			<table id="table_sales_title" class="table_title">
+				<tr>
+					<td><img src="/images/icon_dollar_orange.png"> MBook 판매 내역</td>
+				</tr>
+			</table>
+			<!-- Table Sales Search -->
+			<table id="table_sales_search" class="table_search">
+				<tr>
+					<td rowspan="2" id="table_sales_search_title" class="table_search_title">선택 조회</td>
+					<td>
+						■ 기간 선택 : 
+						<input type="text" class="sales_date" id="from_date" name="issue_date" value=""><input type="button" id="btn_del_from" value="X" style="color:red">
+						<input type="button" id="btn_from_date" name="table_sales_search_startdate" value="시작 날짜 선택"> ~
+						<input type="text" class="sales_date" id="to_date" name="to_date" value=""><input type="button" id="btn_del_to" value="X" style="color:red">
+						<input type="button" id="btn_to_date" name="table_sales_search_finishdate" value="마지막 날짜 선택">
+					</td>
+					<td rowspan="2" id="table_sales_search_detail" class="table_search_detail">
+						<input type="button" id="btn_sales_search" name="table_sales_search_detail" value="내역 조회">
+					</td>
+				</tr>
+				<tr>
+					<td>
+						■ MBook 선택 : 
+						<select name="table_sales_search_mbook" id="sales_select_mbook">
+							<option value="all">선택 안함 (전체)</option>
+							<%@mbooks.each do |mbook| %>
+								<option value="<%= mbook.id %>"><%= mbook.title %></option>
+							<%end %>
+						</select>
+					</td>
+				</tr>
+			</table>
+			
+			<!-- Table Sales Search Condition -->
+			<table id="table_sales_search_condition" class="table_search_condition">
+				<tr>
+					<td>■ 기간 : <span id="span_sales_date">선택안함 (전체)</span> / ■ MBook : <span id="span_sales_mbook_title"></span></td>
+				</tr>
+			</table>
+			<!-- Table Sales Table -->
+			<div id="sales_history_table_block" style="display:block;"> 
+			<table id="table_sales_table" class="table_table">
+				<tr class="table_table_title">
+					<td class="table_table_title_no">No</td>
+					<td class="table_table_title_download_condition">제한 여부</td>
+					<td class="table_table_title_download_type">다운로드 종류</td>
+					<td class="table_table_title_viewertype">뷰어 종류</td>
+					<td class="table_table_title_num">건수</td>
+					<td class="table_table_title_point">차감 포인트</td>
+					<td class="table_table_title_sales">판매 총액</td>
+				</tr>
+				<tr class="table_table_content">
+					<td rowspan="3" class="table_table_content_no">1</td>
+					<td rowspan="6" class="table_table_content_download_condition">제한</td>
+					<td rowspan="3">무료 MBook 다운로드</td>
+					<td>아이패드</td>
+					<td class="table_table_num"><b>500</b> 건</td>
+					<td class="table_table_num"><b>- 50,000</b> p</td>
+					<td class="table_table_num">-</td>
+				</tr>
+				<tr class="table_table_content">
+					<td>안드로이드</td>
+					<td class="table_table_num"><b>500</b> 건</td>
+					<td class="table_table_num"><b>- 50,000</b> p</td>
+					<td class="table_table_num">-</td>
+				</tr>
+				<tr class="table_table_content_sub_total">
+					<td>합계</td>
+					<td class="table_table_num"><b>1,000</b> 건</td>
+					<td class="table_table_num"><b>- 100,000</b> p</td>
+					<td class="table_table_num">-</td>
+				</tr>
+				<tr class="table_table_content">
+					<td rowspan="3" class="table_table_content_no">2</td>
+					<td rowspan="3">유료 MBook 다운로드</td>
+					<td>아이패드</td>
+					<td class="table_table_num"><b>1,000</b> 건</td>
+					<td class="table_table_num"><b>- 100,000</b> p</td>
+					<td class="table_table_num">＄ <b>10,000.00</b></td>
+				</tr>
+				<tr class="table_table_content">
+					<td>안드로이드</td>
+					<td class="table_table_num"><b>1,000</b> 건</td>
+					<td class="table_table_num"><b>- 100,000</b> p</td>
+					<td class="table_table_num">￦ <b>1,000.00</b></td>
+				</tr>
+				<tr class="table_table_content_sub_total">
+					<td>합계</td>
+					<td class="table_table_num"><b>2,000</b> 건</td>
+					<td class="table_table_num"><b>- 200,000</b> p</td>
+					<td class="table_table_num">-</td>
+				</tr>
+				<tr class="table_table_content">
+					<td rowspan="3" class="table_table_content_no">3</td>
+					<td rowspan="6" class="table_table_content_download_condition">무제한</td>
+					<td rowspan="3">무료 MBook 다운로드</td>
+					<td>아이패드</td>
+					<td class="table_table_num"><b>1,000</b> 건</td>
+					<td class="table_table_num">-</td>
+					<td class="table_table_num">-</td>
+				</tr>
+				<tr class="table_table_content">
+					<td>안드로이드</td>
+					<td class="table_table_num"><b>1,000</b> 건</td>
+					<td class="table_table_num">-</td>
+					<td class="table_table_num">-</td>
+				</tr>
+				<tr class="table_table_content_sub_total">
+					<td>합계</td>
+					<td class="table_table_num"><b>2,000</b> 건</td>
+					<td class="table_table_num">-</td>
+					<td class="table_table_num">-</td>
+				</tr>
+				<tr class="table_table_content">
+					<td rowspan="3" class="table_table_content_no">4</td>
+					<td rowspan="3">유료 MBook 다운로드</td>
+					<td>아이패드</td>
+					<td class="table_table_num"><b>1,000</b> 건</td>
+					<td class="table_table_num">-</td>
+					<td class="table_table_num">＄ <b>10,000.00</b></td>
+				</tr>
+				<tr class="table_table_content">
+					<td>안드로이드</td>
+					<td class="table_table_num"><b>2,000</b> 건</td>
+					<td class="table_table_num">-</td>
+					<td class="table_table_num">￦ <b>1,000.00</b></td>
+				</tr>
+				<tr class="table_table_content_sub_total">
+					<td>합계</td>
+					<td class="table_table_num"><b>3,000</b> 건</td>
+					<td class="table_table_num">-</td>
+					<td class="table_table_num">-</td>
+				</tr>
+				<tr class="table_table_content_total">
+					<td rowspan="3" class="table_table_content_no">5</td>
+					<td rowspan="6" colspan="2" class="table_table_content_total_title">다운로드 합계</td>
+					<td>아이패드</td>
+					<td class="table_table_num"><b>3,500</b> 건</td>
+					<td class="table_table_num"><b>- 150,000</b> p</td>
+					<td class="table_table_num">＄ <b>20,000.00</b></td>
+				</tr>
+				<tr class="table_table_content">
+					<td>안드로이드</td>
+					<td class="table_table_num"><b>4,500</b> 건</td>
+					<td class="table_table_num"><b>- 150,000</b> p</td>
+					<td class="table_table_num">￦ <b>2,000.00</b></td>
+				</tr>
+				<tr class="table_table_content_sub_total">
+					<td>합계</td>
+					<td class="table_table_num"><b>8,000</b> 건</td>
+					<td class="table_table_num"><b>- 300,000</b> p</td>
+					<td class="table_table_num">-</td>
+				</tr>
+			</table>
+			</div>
+		</div>
+		<!-- End Table Sales -->
+		<!-- Table Point -->
+		<div id="table_point">
+			<!-- Table Point Title -->
+			<table id="table_point_title" class="table_title">
+				<tr>
+					<td><img src="/images/icon_point_orange.png"> 포인트 내역</td>
+				</tr>
+			</table>
+			<!-- Table Point Search -->
+			<table id="table_point_search" class="table_search">
+				<tr>
+					<td rowspan="4" id="table_point_search_title" class="table_search_title">선택 조회</td>
+					<td>
+						■ 기간 선택 : 
+						<select name="table_point_search_date">
+							<option value="">선택 안함</option>
+							<option value="">전체</option>
+							<option value="">2011년 12월</option>
+							<option value="">2011년 11월</option>
+						</select>
+					</td>
+					<td rowspan="4" id="table_point_search_detail" class="table_search_detail">
+						<input type="button" name="table_point_search_detail" value="내역 조회">
+					</td>
+				</tr>
+				<tr>
+					<td>
+						■ 포인트 종류 선택 : 
+						<select name="table_point_search_pointtype">
+							<option value="">선택 안함</option>
+							<option value="">전체</option>
+							<option value="">충전 포인트</option>
+							<option value="">보너스 포인트</option>
+							<option value="">마이너스 포인트</option>
+							<option value="">MBook 다운로드 차감</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						■ 뷰어 종류 선택 : 
+						<select name="table_point_search_viewertype">
+							<option value="">선택 안함</option>
+							<option value="">전체</option>
+							<option value="">아이패드</option>
+							<option value="">안드로이드</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						■ MBook 선택 : 
+						<select name="table_point_search_mbook">
+							<option value="">선택 안함</option>
+							<option value="">전체</option>
+							<option value="">MBook List 1</option>
+							<option value="">MBook List 2</option>
+						</select>
+					</td>
+				</tr>
+			</table>
+			<!-- Table Point Search Condition -->
+			<table id="table_point_search_condition" class="table_search_condition">
+				<tr>
+					<td>■ 기간 : 2011년 12월 / ■ 포인트 종류 : 포인트 종류 or 전체 or 선택 안함 /  ■ 뷰어 종류 : 뷰어 종류 or 전체 or 선택 안함 / ■ MBook : 선택된 MBook 제목 or 전체 or 선택 안함</td>
+				</tr>
+			</table>
+			<!-- Table Point Search Total -->
+			<table id="table_point_search_tatal" class="table_search_total">
+				<tr>
+					<td rowspan="2" id="table_point_search_total_title" class="table_search_total_title">합계</td>
+					<td>이월된 포인트</td>
+					<td>충전 포인트</td>
+					<td>보너스 포인트</td>
+					<td>마이너스 포인트</td>
+					<td colspan="2">MBook 다운로드 차감</td>
+					<td class="table_search_total_total">잔여 포인트</td>
+				</tr>
+				<tr>
+					<td class="table_search_num"><b>100,000</b> p</td>
+					<td class="table_search_num"><b>400,000</b> p</td>
+					<td class="table_search_num"><b>200,000</b> p</td>
+					<td class="table_search_num"><b>- 100,000</b> p</td>
+					<td class="table_search_num"><b>30</b> 건</td>
+					<td class="table_search_num"><b>- 300,000</b> p</td>
+					<td class="table_search_total_total_num"><b>100,000</b> p</td>
+				</tr>
+			</table>
+			<!-- Table Point Table -->
+			<table id="table_point_table" class="table_table">
+				<tr class="table_table_title">
+					<td class="table_table_title_no">No</td>
+					<td class="table_table_title_date">날짜</td>
+					<td class="table_table_title_point_type">포인트 종류</td>
+					<td class="table_table_title_viewertype">뷰어 종류</td>
+					<td class="table_table_title_num">건수</td>
+					<td class="table_table_title_point">포인트</td>
+					<td class="table_table_title_memo">내용</td>
+				</tr>
+				<tr class="table_table_content">
+					<td class="table_table_content_no">20</td>
+					<td class="table_table_content_date">2011-12-31</td>
+					<td>MBook 다운로드 차감</td>
+					<td>아이패드</td>
+					<td class="table_table_num"><b>30</b> 건</td>
+					<td class="table_table_num"><b>- 30,000</b> p</td>
+					<td>-</td>
+				</tr>
+				<tr class="table_table_content">
+					<td class="table_table_content_no">19</td>
+					<td class="table_table_content_date">2011-12-30</td>
+					<td>MBook 다운로드 차감</td>
+					<td>안드로이드</td>
+					<td class="table_table_num"><b>30</b> 건</td>
+					<td class="table_table_num"><b>- 30,000</b> p</td>
+					<td>-</td>
+				</tr>
+				<tr class="table_table_content">
+					<td class="table_table_content_no">18</td>
+					<td class="table_table_content_date">2011-12-29</td>
+					<td>충전 포인트</td>
+					<td>-</td>
+					<td class="table_table_num">-</td>
+					<td class="table_table_num"><b>400,000</b> p</td>
+					<td>
+						<input type="button" name="" value="결제 취소 요청하기">
+					</td>
+				</tr>
+				<tr class="table_table_content">
+					<td class="table_table_content_no">17</td>
+					<td class="table_table_content_date">2011-12-28</td>
+					<td>보너스 포인트</td>
+					<td>-</td>
+					<td class="table_table_num">-</td>
+					<td class="table_table_num"><b>200,000</b> p</td>
+					<td>가입 축하 이벤트</td>
+				</tr>
+				<tr class="table_table_content">
+					<td class="table_table_content_no">16</td>
+					<td class="table_table_content_date">2011-12-27</td>
+					<td>마이너스 포인트</td>
+					<td>-</td>
+					<td class="table_table_num">-</td>
+					<td class="table_table_num"><b>- 100,000</b> p</td>
+					<td>충전 오류 처리</td>
+				</tr>
+				<tr class="table_table_content">
+					<td class="table_table_content_no">2</td>
+					<td class="table_table_content_date">2011-12-02</td>
+					<td>MBook 다운로드 차감</td>
+					<td>안드로이드</td>
+					<td class="table_table_num"><b>30</b> 건</td>
+					<td class="table_table_num"><b>- 30,000</b> p</td>
+					<td>-</td>
+				</tr>
+				<tr class="table_table_content">
+					<td class="table_table_content_no">1</td>
+					<td class="table_table_content_date">2011-12-01</td>
+					<td>이월 포인트</td>
+					<td>-</td>
+					<td class="table_table_num">-</td>
+					<td class="table_table_num"><b>100,000</b> p</td>
+					<td>2011년 11월분 잔여포인트 이월</td>
+				</tr>
+			</table>
+			<!-- Table Point Pager -->
+			<table id="table_point_pager" class="table_pager">
+				<tr>
+					<td>
+						<ul class="pager">
+							<li class="first jump">
+								<a href="">First</a>
+							</li>
+							<li class="previous jump">
+								<a href="">Previous</a>
+							</li>
+							<li class="page-1 active">
+								<a href="">1</a>
+							</li>
+							<li class="page-2">
+								<a href="">2</a>
+							</li>
+							<li class="next jump">
+								<a href="">Next</a>
+							</li>
+							<li class="last jump">
+								<a href="">Last</a>
+							</li>
+						</ul>
+					</td>
+				</tr>				
+			</table>
+			<!-- Table Point Info -->
+			<table id="table_point_info" class="table_info">
+				<tr>
+					<td>
+						※ 단위 : 1point = 1won <br>
+						※ 포인트가 부족할 경우 Viewer의 MBook 다운로드 서비스에 제한을 받습니다.
+					</td>
+				</tr>
+			</table>
+		</div>
+		<!-- End Table Point -->
+		<!-- Pop HDD MBook-->
+		<div id="pop_hdd" style="top: 40%; left: 30%; ;display: none; position: absolute; z-index: 0;">
+			<table id="table_pop_hdd_mbook" class="table_pop">
+				<tr class="close_pop">
+					<td><a href=""><img src="/images/bt/bt_close.png" id="pop_close"></a></td>
+				</tr>
+				<tr class="title_pop">
+					<td><img src="/images/pop/title_pop_point_hdd_mbook_pop.png"></td>
+				</tr>
+				<tr class="content_pop">
+					<td class="content_pop_td">
+						<div class="content_pop_table_scroll">
+						<table id="content_pop_table_hdd_mbook" class="content_pop_table">
+							<tr class="content_pop_table_title">
+								<td class="content_pop_table_title_no">No</td>
+								<td class="content_pop_table_title_title">MBook 제목</td>
+								<td class="content_pop_table_title_hdd">용량</td>
+							</tr>
+							<tr class="content_pop_table_content">
+								<td class="content_pop_table_content_no">200</td>
+								<td>MBook 제목 20</td>
+								<td class="content_pop_table_num"><b>50</b> MB</td>
+							</tr>
+							<tr class="content_pop_table_content">
+								<td class="content_pop_table_content_no">199</td>
+								<td>MBook 제목 19</td>
+								<td class="content_pop_table_num"><b>50</b> MB</td>
+							</tr>
+							<tr class="content_pop_table_content">
+								<td class="content_pop_table_content_no">198</td>
+								<td>MBook 제목 18</td>
+								<td class="content_pop_table_num"><b>50</b> MB</td>
+							</tr>
+							<tr class="content_pop_table_content">
+								<td class="content_pop_table_content_no">197</td>
+								<td>MBook 제목 17</td>
+								<td class="content_pop_table_num"><b>50</b> MB</td>
+							</tr>
+							<tr class="content_pop_table_content">
+								<td class="content_pop_table_content_no">196</td>
+								<td>MBook 제목 16</td>
+								<td class="content_pop_table_num"><b>50</b> MB</td>
+							</tr>
+							<tr class="content_pop_table_content">
+								<td class="content_pop_table_content_no">195</td>
+								<td>MBook 제목 15</td>
+								<td class="content_pop_table_num"><b>50</b> MB</td>
+							</tr>
+							<tr class="content_pop_table_content">
+								<td class="content_pop_table_content_no">194</td>
+								<td>MBook 제목 14</td>
+								<td class="content_pop_table_num"><b>50</b> MB</td>
+							</tr>
+							<tr class="content_pop_table_content">
+								<td class="content_pop_table_content_no">193</td>
+								<td>MBook 제목 13</td>
+								<td class="content_pop_table_num"><b>50</b> MB</td>
+							</tr>
+							<tr class="content_pop_table_content">
+								<td class="content_pop_table_content_no">192</td>
+								<td>MBook 제목 12</td>
+								<td class="content_pop_table_num"><b>50</b> MB</td>
+							</tr>
+							<tr class="content_pop_table_content">
+								<td class="content_pop_table_content_no">191</td>
+								<td>MBook 제목 11</td>
+								<td class="content_pop_table_num"><b>50</b> MB</td>
+							</tr>
+						</table>
+						</div>
+					</td>
+				</tr>				
+				<tr class="bottom_pop">
+					<td></td>
+				</tr>
+			</table>		
+		</div>
+		<!-- End Pop HDD MBook-->
+	</div>	
+	<!-- End Page -->
+</div>
+
+<script>
+$(function(){
+	$( "#from_date" ).datepicker();
+	$( "#from_date" ).datepicker( "option", "dateFormat", "yy년 mm월 dd일" );
+	$( "#from_date" ).datepicker( $.datepicker.regional[ "ko" ] );
+	
+	$( "#to_date" ).datepicker();
+	$( "#to_date" ).datepicker( "option", "dateFormat", "yy년 mm월 dd일" );
+	$( "#to_date" ).datepicker( $.datepicker.regional[ "ko" ] );
+})	
+
+$('#btn_from_date').live("click", function(){
+	$( "#from_date" ).focus();
+})
+
+$('#btn_to_date').live("click", function(){
+	$("#to_date" ).focus();
+})
+
+function date_init() {
+	var $date_str = $('#from_date').val() + " ~ " + $('#to_date').val();
+
+	if ($date_str == " ~ "){
+		$('#span_sales_date').html("선택안함 (전체)");
+	}else{
+		$('#span_sales_date').html($date_str);	
+	}
+}
+
+$('.sales_date').live("change", function(){
+	date_init();
+	
+})
+
+$('#btn_del_from').live("click", function(){
+	$('#from_date').val("");
+	date_init();
+})
+	
+$('#btn_del_to').live("click", function(){
+	$('#to_date').val("");
+	date_init();
+})
+
+$('#btn_sales_search').live("click", function(){
+	var $from_date = "";
+	var $to_date = "";
+	var $mbook_id =  $('#sales_select_mbook option:selected').val();
+	
+	if( !($('#from_date').val() == "" & $('#to_date').val() == "") &&  ($('#from_date').val() == "" || $('#to_date').val() == "")){
+		alert("검색할 날짜를 선택하세요!");
+		return false;
+	}else{
+		if( !($('#from_date').val() == "" & $('#to_date').val() == "") ){
+			$from_date = $('#from_date').val().replace("년 ","-").replace("월 ","-").replace("일","")
+			$to_date = $('#to_date').val().replace("년 ","-").replace("월 ","-").replace("일","")
+		}else{
+			$from_date = "";
+			$to_date = "";
+		}
+		
+		
+		if (stringToDate($from_date) > stringToDate($to_date)){
+			alert("시작일자가 끝일자보다 큽니다. 날짜를 다시 선택해주세요!");
+			return false;
+		}
+		
+		$.ajax({
+			data:'mbook_id=' + $mbook_id +'&from_date=' + $from_date + '&to_date=' +$to_date, 
+			dataType:'script', 
+			type:'post', 
+			url:'/mpoints/sales_history',
+			success: function(request){
+				$("#sales_history_table_block").html(request);
+			}
+		});
+
+	}
+})
+
+$('#sales_select_mbook').live("change", function(){
+	var $mbook_title = $('#sales_select_mbook option:selected').text();
+	$('#span_sales_mbook_title').html($mbook_title);
+})
+
+function stringToDate(sDate) {
+    var date;
+    var nYear = 0;
+    var nMonth = 8;
+    var nDay = 0;
+    if(sDate.length==8) {
+        nYear = parseInt(sDate.substr(0,4),10);
+        nMonth = parseInt(sDate.substr(4,2),10);
+        nDay = parseInt(sDate.substr(6,2),10);
+    } else if(sDate.length==10) {
+        var arrDate = sDate.split("-");
+        if(arrDate.length==3) {
+            nYear = parseInt(arrDate[0],10);
+            nMonth = parseInt(arrDate[1],10);
+            nDay = parseInt(arrDate[2],10);
+        }
+    }
+    date = new Date(nYear, nMonth - 1, nDay);
+
+    return date;
+}
+
+</script>

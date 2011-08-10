@@ -224,7 +224,6 @@ EOF
           if userbook_update(mbook, userid) == 0
             return 0
           else
-            puts_message "here"
             dncount.destroy
             Mpoint.get(mpoint_update_result).destroy
             return 73

@@ -7,7 +7,7 @@
 		<li class="my_mbook"><a href="/mbooks?me=y&store=n" class="<%= "on" if @menu_on == "my_mb"%>">나의 mBook</a></li>
 		<li class="my_mbook_in_store">
 			<a href="/mbooks?me=y&store=y" class="<%= "on" if @menu_on == "my_mb_store"%>">나의 mBook in Store</a></li>
-		<li class="point"><a href="">포인트 관리</a></li>
+		<li class="point"><a href="/mpoints" class="<%= "on" if @menu_on == "mpoint"%>">포인트 관리</a></li>
 		<li class="user_information"><a href="/users/<%= current_user.id %>/edit" class="<%= "on" if @board == "user" and @section == "edit"%>">나의 정보 수정</a></li>
 		<li class="logout"><a href="/logout">로그아웃</a></li>
 	</ul>

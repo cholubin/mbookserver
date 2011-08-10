@@ -687,6 +687,30 @@ class MbooksController < ApplicationController
     
   end
   
+  
+  def mbook_status_request
+    mbook_id = params[:mbook_id].to_i
+    request = (params[:req] == nil or params[:req] == "") ? "":params[:req]
+    
+    mbook = Mbook.get(mbook_id)
+    
+    if  mbook != nil
+      if request == "cancel_auth_req"
+        mbook.status = "대기"
+      elsif request == "cancel_auth"
+        mbook.status = "삭제대기"
+      end
+      
+      
+      if mbook.save
+        render :text => "success"
+      else
+        render :text => "fail"
+      end  
+    else
+      render :text => "fail"
+    end
+  end
 end
 
 

@@ -1,0 +1,11 @@
+<body id="sub">
+	<div id="header">
+		<%= render :partial => "/shared/menu", :object =>@menu_on %>
+	</div>
+	
+	<%= render :partial => "#{@user_type}_#{@page_type}_#{@service}" ,:object => @hdd_status%>
+	
+	<div id="footer">
+		<%= render :partial => "/shared/footer", :object => @mode = "2" %>
+	</div>
+</body>

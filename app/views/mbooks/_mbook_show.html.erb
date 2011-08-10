@@ -96,10 +96,6 @@
 					</td>
 					<td class="error"><span id="price_msg"></span></td>
 				</tr>
-				<!-- <tr class="book_image">
-					<td class="input_name">책표지 이미지 파일</td>
-					<td class="input_data" colspan="2">image.jpg</td>
-				</tr>			 -->
 				<tr class="mbookzip">
 					<td class="input_name">mBook Zip 파일</td>
 					<td class="input_data">
@@ -111,7 +107,14 @@
 				
 			<tr class="state">
 				<td class="input_name">상태</td>
-				<td class="input_data" colspan="2"><span id="span_stuats" status="<%= @mbook.status %>"><%= @mbook.status %></span></td>
+				<td class="input_data" colspan="2">
+					<span id="span_status" status="<%= @mbook.status %>"><%= @mbook.status %></span>
+						<%if @mbook.status == "승인완료" %>
+							<input type="button" value="승인취소 요청" req="cancel_auth" class="req_auth">
+						<%elsif @mbook.status == "승인대기" %>
+							<input type="button" value="승인요청 취소" req="cancel_auth_req" class="req_auth">
+						<%end %>
+				</td>
 			</tr>
 		</table>
 		
@@ -119,10 +122,12 @@
 			<table>
 				<tr>
 					<td width="170">&nbsp;</td>
-					<!-- <td width="300"><a href=""><img src="/images/bt/bt_store_request.png" id="store_req" alt="Store로 등록 신청" <%= "style=\"opacity:0.4;filter:alpha(opacity=40)\"" if @mbook.status == "승인대기" %>></a></td> -->
-					<td width="300"><a href=""><img src="/images/bt/bt_store_request.png" id="store_req" alt="Store로 등록 신청" <%= "class=\"img_disabled\"" if @mbook.status != "대기" %>></a></td>
+					<td width="300">
+						<%if  @mbook.status != "삭제대기" %>
+						<a href=""><img src="/images/bt/bt_store_request.png" id="store_req" alt="Store로 등록 신청" <%= "class=\"img_disabled\"" if @mbook.status != "대기" %>></a>
+						<%end %>
+					</td>
 					<td align="left"><input id="submit_btn" type="image" src="/images/bt/bt_upload_re_ok.png" alt="수정완료" style="cursor:pointer;" <%= "disabled class=\"img_disabled\"" if @mbook.status != "대기" %> >
-					<!-- <a href="Javascript:history.back(-1);"><img src="/images/bt/bt_cancel.png" alt="취소"></a> --></td>
 				</tr>
 			</table>
 		<%end %>
@@ -193,10 +198,10 @@ $('#submit_btn').click(function(){
 })
 
 $('#store_req').live("click", function(){
-	if( $('#span_stuats').attr("status") == "승인대기" ){
+	if( $('#span_status').attr("status") == "승인대기" ){
 		alert("이미 승인대기 중 입니다!");
 		return false;
-	}else if( $('#span_stuats').attr("status") == "승인완료" ){
+	}else if( $('#span_status').attr("status") == "승인완료" ){
 		alert("이미 승인완료 되었습니다!");
 		return false;
 	}else{
@@ -208,12 +213,15 @@ $('#store_req').live("click", function(){
 				url:'/mbooks/registration_request_in_store',
 				success: function(request){
 					if( request == "success"){
-						$('#span_stuats').text("승인대기");
-						$('#span_stuats').attr("status","승인대기");
+						$('#span_status').text("승인대기");
+						$('#span_status').attr("status","승인대기");
 						$('#store_req').hide("slow", function(){
 							$(this).addClass("img_disabled");
 							$(this).show("slow");
-						})
+							$('#span_status').append("<input type='button' value='승인요청 취소' req='cancel_auth_req' class='req_auth'>");
+							$('#submit_btn').addClass("img_disabled");
+							$('#submit_btn').attr("disabled", true);
+						});
 						alert("신청이 완료되었습니다.");
 					}else{return false;}
 
@@ -235,4 +243,41 @@ $(function(){
 	$( "#issue_date" ).datepicker( $.datepicker.regional[ "ko" ] );
 })
 
+$('.req_auth').live("click", function(){
+	var $req = $(this).attr("req");
+	var $result_str = "";
+	if($req == "cancel_auth"){
+		$result_str = "삭제대기";
+	}else{
+		$result_str = "대기";
+	}
+	
+	var $mbook_id = "<%= @mbook.id %>";
+	if(window.confirm($(this).val() + "하시겠습니까?")){
+		$.ajax({
+			data:'mbook_id='+$mbook_id + '&req=' + $req, 
+			dataType:'script', 
+			type:'post', 
+			url:'/mbooks/mbook_status_request',
+			success: function(request){
+				if( request == "success"){
+					$('#span_status').html($result_str);
+					$('.req_auth').remove();
+					if($req == "cancel_auth_req"){
+						$('#store_req').removeClass("img_disabled");
+						$('#span_status').attr("status", "대기");
+						$('#submit_btn').removeClass("img_disabled");	
+					}else{
+						$('#store_req').remove();
+					}
+					
+					alert("정상적으로 요청처리 되었습니다!");
+					return false;
+					
+				}else{return false;}
+
+			}
+		});
+	}
+})
 </script>

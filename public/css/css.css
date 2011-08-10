@@ -363,10 +363,17 @@ body#sub {
 	background-position: -724px 0;
 	width: 64px;
 }
+/* css.css의 366줄 수정 */
 #sub #header ul#nav_writer li.point a {
-	background-position: -1060px 0px;
-	width: 100px;
+	background-position: -1162px 0px;
+	width: 115px;
 }
+/* css.css의 366줄 수정 밑에 추가 */
+#sub #header ul#nav_writer li.my_point a {
+	background-position: -1332px 0px;
+	width: 134px;
+}
+
 #sub #header ul#nav_writer li.user_information a {
 	background-position: -820px 0;
 	width: 86px;
@@ -1056,3 +1063,6 @@ body#sub {
 	color: #ccc;
 	text-align: center;
 }
+
+
+

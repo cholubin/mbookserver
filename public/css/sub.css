@@ -76,10 +76,19 @@ body {
 	background-position: -538px 0;
 	width: 126px;
 }
-#header ul#nav_admin li.point a {
-	background-position: -1006px 0px;
-	width: 100px;
+
+
+/* sub.css의 79줄 수정 */
+#sub #header ul#nav_admin li.point a {
+	background-position: -1122px 0px;
+	width: 136px;
 }
+/* sub.css의 79줄 수정 밑에 추가 */
+#sub #header ul#nav_admin li.my_point a {
+	background-position: -1290px 0px;
+	width: 134px;
+}
+
 #header ul#nav_admin li.user a {
 	background-position: -686px 0;
 	width: 174px;
@@ -839,3 +848,4 @@ ul.state .error {
 .pager .more {
 	color: #bbb;
 }
+

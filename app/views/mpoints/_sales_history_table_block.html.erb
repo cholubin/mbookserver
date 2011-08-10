@@ -1,0 +1,113 @@
+<table id="table_sales_table" class="table_table">
+	<tr class="table_table_title">
+		<td class="table_table_title_no">No</td>
+		<td class="table_table_title_download_condition">제한 여부</td>
+		<td class="table_table_title_download_type">다운로드 종류</td>
+		<td class="table_table_title_viewertype">뷰어 종류</td>
+		<td class="table_table_title_num">건수</td>
+		<td class="table_table_title_point">차감 포인트</td>
+		<td class="table_table_title_sales">판매 총액</td>
+	</tr>
+	<tr class="table_table_content">
+		<td rowspan="3" class="table_table_content_no">1</td>
+		<td rowspan="6" class="table_table_content_download_condition">제한</td>
+		<td rowspan="3">무료 MBook 다운로드</td>
+		<td>아이패드</td>
+		<td class="table_table_num"><b><%= @sales_history_cnt["1-1"] %></b> 건</td>
+		<td class="table_table_num"><b>- 50,000</b> p</td>
+		<td class="table_table_num">-</td>
+	</tr>
+	<tr class="table_table_content">
+		<td>안드로이드</td>
+		<td class="table_table_num"><b><%= @sales_history_cnt["1-2"] %></b> 건</td>
+		<td class="table_table_num"><b>- 50,000</b> p</td>
+		<td class="table_table_num">-</td>
+	</tr>
+	<tr class="table_table_content_sub_total">
+		<td>합계</td>
+		<td class="table_table_num"><b><%= @sales_history_cnt["1-3"] %></b> 건</td>
+		<td class="table_table_num"><b>- 100,000</b> p</td>
+		<td class="table_table_num">-</td>
+	</tr>
+	<tr class="table_table_content">
+		<td rowspan="3" class="table_table_content_no">2</td>
+		<td rowspan="3">유료 MBook 다운로드</td>
+		<td>아이패드</td>
+		<td class="table_table_num"><b><%= @sales_history_cnt["2-1"] %></b> 건</td>
+		<td class="table_table_num"><b>- 100,000</b> p</td>
+		<td class="table_table_num">＄ <b>10,000.00</b></td>
+	</tr>
+	<tr class="table_table_content">
+		<td>안드로이드</td>
+		<td class="table_table_num"><b><%= @sales_history_cnt["2-2"] %></b> 건</td>
+		<td class="table_table_num"><b>- 100,000</b> p</td>
+		<td class="table_table_num">￦ <b>1,000.00</b></td>
+	</tr>
+	<tr class="table_table_content_sub_total">
+		<td>합계</td>
+		<td class="table_table_num"><b><%= @sales_history_cnt["2-3"] %></b> 건</td>
+		<td class="table_table_num"><b>- 200,000</b> p</td>
+		<td class="table_table_num">-</td>
+	</tr>
+	<tr class="table_table_content">
+		<td rowspan="3" class="table_table_content_no">3</td>
+		<td rowspan="6" class="table_table_content_download_condition">무제한</td>
+		<td rowspan="3">무료 MBook 다운로드</td>
+		<td>아이패드</td>
+		<td class="table_table_num"><b><%= @sales_history_cnt["3-1"] %></b> 건</td>
+		<td class="table_table_num">-</td>
+		<td class="table_table_num">-</td>
+	</tr>
+	<tr class="table_table_content">
+		<td>안드로이드</td>
+		<td class="table_table_num"><b><%= @sales_history_cnt["3-2"] %></b> 건</td>
+		<td class="table_table_num">-</td>
+		<td class="table_table_num">-</td>
+	</tr>
+	<tr class="table_table_content_sub_total">
+		<td>합계</td>
+		<td class="table_table_num"><b><%= @sales_history_cnt["3-3"] %></b> 건</td>
+		<td class="table_table_num">-</td>
+		<td class="table_table_num">-</td>
+	</tr>
+	<tr class="table_table_content">
+		<td rowspan="3" class="table_table_content_no">4</td>
+		<td rowspan="3">유료 MBook 다운로드</td>
+		<td>아이패드</td>
+		<td class="table_table_num"><b><%= @sales_history_cnt["4-1"] %></b> 건</td>
+		<td class="table_table_num">-</td>
+		<td class="table_table_num">＄ <b>10,000.00</b></td>
+	</tr>
+	<tr class="table_table_content">
+		<td>안드로이드</td>
+		<td class="table_table_num"><b><%= @sales_history_cnt["4-2"] %></b> 건</td>
+		<td class="table_table_num">-</td>
+		<td class="table_table_num">￦ <b>1,000.00</b></td>
+	</tr>
+	<tr class="table_table_content_sub_total">
+		<td>합계</td>
+		<td class="table_table_num"><b><%= @sales_history_cnt["4-3"] %></b> 건</td>
+		<td class="table_table_num">-</td>
+		<td class="table_table_num">-</td>
+	</tr>
+	<tr class="table_table_content_total">
+		<td rowspan="3" class="table_table_content_no">5</td>
+		<td rowspan="6" colspan="2" class="table_table_content_total_title">다운로드 합계</td>
+		<td>아이패드</td>
+		<td class="table_table_num"><b><%= @sales_history_cnt["5-1"] %></b> 건</td>
+		<td class="table_table_num"><b>- 150,000</b> p</td>
+		<td class="table_table_num">＄ <b>20,000.00</b></td>
+	</tr>
+	<tr class="table_table_content">
+		<td>안드로이드</td>
+		<td class="table_table_num"><b><%= @sales_history_cnt["5-2"] %></b> 건</td>
+		<td class="table_table_num"><b>- 150,000</b> p</td>
+		<td class="table_table_num">￦ <b>2,000.00</b></td>
+	</tr>
+	<tr class="table_table_content_sub_total">
+		<td>합계</td>
+		<td class="table_table_num"><b><%= @sales_history_cnt["5-3"] %></b> 건</td>
+		<td class="table_table_num"><b>- 300,000</b> p</td>
+		<td class="table_table_num">-</td>
+	</tr>
+</table>
